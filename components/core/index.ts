@@ -4,3 +4,4 @@ export * from "./Portal";
 export * from "./Preloader";
 export * from "./ClientProvider";
 export * from "./Share";
+export * from "./HistoryList";

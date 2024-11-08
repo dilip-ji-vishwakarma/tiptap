@@ -1,13 +1,13 @@
 import React from 'react'
-import { Comment, Share } from '../core'
+import { Comment, HistoryList, Share } from '../core'
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {  History } from 'lucide-react';
+
 
 export const ButtonAction = () => {
 
     return (
         <>
-            <History />
+           <HistoryList />
             <Comment />
            <Share />
             <Avatar>
