@@ -5,7 +5,8 @@ import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/Header";
 import { EditorProvider, TipTapEditor, Toolbar } from "@/components/TipTapEditor";
-import { ClientProvider, Portal } from "@/components/core";
+import { AppSidebar, ClientProvider, Portal } from "@/components/core";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
 const googlesanse = localFont({
   src: [
@@ -32,7 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={cn(googlesanse.className)}>
         <ClientProvider>
-          <div className="space-y-3">
+          <div className="space-y-3 fixed top-0 z-[1] bg-white">
             <Header />
             <EditorProvider>
               <Toolbar />
@@ -42,7 +43,14 @@ export default function RootLayout({
             </EditorProvider>
             <div className="border-b  border-[#c7c7c7]"></div>
           </div>
-          {children}
+          <SidebarProvider>
+            <div className="w-1/5">
+              <AppSidebar />
+            </div>
+            <main className="mt-[121px] w-4/5">
+              {children}
+            </main>
+          </SidebarProvider>
         </ClientProvider>
       </body>
     </html>

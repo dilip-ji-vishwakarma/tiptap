@@ -1,10 +1,15 @@
 "use client";
-import React from 'react'
+import React, { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-const page = () => {
-  return (
-    <div id='tooltip-editor'></div>
-  )
-}
+const Page = () => {
+  const router = useRouter();
 
-export default page
+  useEffect(() => {
+    router.push('/course');
+  }, [router]);
+
+  return <></>;
+};
+
+export default Page;
