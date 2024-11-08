@@ -1,16 +1,21 @@
+// app/layout.tsx (or similar layout file in your Next.js project)
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { cn } from "@/lib/utils";
+import { Header } from "@/components/Header";
+import { EditorProvider, TipTapEditor, Toolbar } from "@/components/TipTapEditor";
+import { ClientProvider, Portal } from "@/components/core";
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
+const googlesanse = localFont({
+  src: [
+    { path: "../public/fonts/google-sans/ProductSans-Thin.ttf", weight: "100" },
+    { path: "../public/fonts/google-sans/ProductSans-Light.ttf", weight: "200" },
+    { path: "../public/fonts/google-sans/ProductSans-Regular.ttf", weight: "300" },
+    { path: "../public/fonts/google-sans/ProductSans-Medium.ttf", weight: "400" },
+    { path: "../public/fonts/google-sans/ProductSans-Bold.ttf", weight: "600" },
+  ],
+  variable: "--googlesanse",
 });
 
 export const metadata: Metadata = {
@@ -25,10 +30,20 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        {children}
+      <body className={cn(googlesanse.className)}>
+        <ClientProvider>
+          <div className="space-y-3">
+            <Header />
+            <EditorProvider>
+              <Toolbar />
+              <Portal id="tooltip-editor">
+                <TipTapEditor />
+              </Portal>
+            </EditorProvider>
+            <div className="border-b border-border border-[#c7c7c7]"></div>
+          </div>
+          {children}
+        </ClientProvider>
       </body>
     </html>
   );
