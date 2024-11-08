@@ -40,7 +40,7 @@ export default function RootLayout({
                 <TipTapEditor />
               </Portal>
             </EditorProvider>
-            <div className="border-b border-border border-[#c7c7c7]"></div>
+            <div className="border-b  border-[#c7c7c7]"></div>
           </div>
           {children}
         </ClientProvider>
