@@ -23,9 +23,9 @@ export const ToolTip = ({ title, children }: ToolTipProps) => {
 
     return (
         <TooltipProvider>
-            <Tooltip>
+            <Tooltip >
                 <TooltipTrigger>{children}</TooltipTrigger>
-                <TooltipContent>
+                <TooltipContent className='bg-black text-white'>
                     <p>{title}</p>
                 </TooltipContent>
             </Tooltip>

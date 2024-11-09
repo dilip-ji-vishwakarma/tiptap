@@ -8,3 +8,5 @@ export * from "./HistoryList";
 export * from "./AppSidebar";
 export * from "./InputText";
 export * from "./DashboardSidebar";
+export * from "./Legend";
+export * from "./FontChanger";

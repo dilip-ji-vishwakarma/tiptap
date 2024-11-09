@@ -147,7 +147,7 @@ export const Toolbar = () => {
 
   return (
     <div className="containers">
-    <div className="rounded-full toolbar flex justify-between gap-2 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
+    <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
       <ToolTip title="Bold"><Toggle onClick={handleBold} pressed={activeFormats.bold}>
         <BoldIcon className="h-4 w-4" />
       </Toggle></ToolTip>

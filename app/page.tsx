@@ -6,7 +6,7 @@ const Page = () => {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/course');
+    router.push('course?id=introduction-to-react');
   }, [router]);
 
   return <></>;
