@@ -1,8 +1,11 @@
+import { DashboardSidebar } from '@/components/core'
 import React from 'react'
 
 const page = () => {
   return (
-    <div id='tooltip-editor'></div>
+    <div>
+      <DashboardSidebar />
+      </div>
   )
 }
 

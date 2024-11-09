@@ -3,30 +3,30 @@ import connection from '@/lib/mysql';
 
 export async function GET() {
   return new Promise((resolve, reject) => {
-    // Query to get all tutorial steps
-    const querySteps = 'SELECT * FROM tutorial_steps';
+    // Query to get all courses
+    const queryCourses = 'SELECT * FROM courses';
 
-    connection.query(querySteps, (err, steps: any[]) => {  // Explicitly define the result type as any[]
+    connection.query(queryCourses, (err, courses: any[]) => {  // Explicitly define the result type as any[]
       if (err) {
-        console.error('Error fetching tutorial steps:', err);
-        return reject(new NextResponse('Error fetching tutorial steps', { status: 500 }));
+        console.error('Error fetching courses:', err);
+        return reject(new NextResponse('Error fetching courses', { status: 500 }));
       }
 
-      // Query to get all submenu items
-      const querySubmenu = 'SELECT * FROM submenu_items';
+      // Query to get all course steps (submenus)
+      const queryCourseSteps = 'SELECT * FROM course_steps';
 
-      connection.query(querySubmenu, (err, submenu: any[]) => {  // Explicitly define the result type as any[]
+      connection.query(queryCourseSteps, (err, courseSteps: any[]) => {  // Explicitly define the result type as any[]
         if (err) {
-          console.error('Error fetching submenu items:', err);
-          return reject(new NextResponse('Error fetching submenu items', { status: 500 }));
+          console.error('Error fetching course steps:', err);
+          return reject(new NextResponse('Error fetching course steps', { status: 500 }));
         }
 
-        // Now steps and submenu are properly typed as arrays
-        const result = steps.map((step) => {
-          const submenusForStep = submenu.filter((item) => item.step_id === step.id);
+        // Now courses and courseSteps are properly typed as arrays
+        const result = courses.map((course) => {
+          const stepsForCourse = courseSteps.filter((step) => step.course_id === course.id);
           return {
-            ...step,
-            submenu: submenusForStep
+            ...course,
+            submenu: stepsForCourse
           };
         });
 

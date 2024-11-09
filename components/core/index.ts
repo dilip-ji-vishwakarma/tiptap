@@ -7,3 +7,4 @@ export * from "./Share";
 export * from "./HistoryList";
 export * from "./AppSidebar";
 export * from "./InputText";
+export * from "./DashboardSidebar";

@@ -4,9 +4,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/Header";
-import { EditorProvider, TipTapEditor, Toolbar } from "@/components/TipTapEditor";
-import { AppSidebar, ClientProvider, Portal } from "@/components/core";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { ClientProvider } from "@/components/core";
 
 const googlesanse = localFont({
   src: [
@@ -35,22 +33,12 @@ export default function RootLayout({
         <ClientProvider>
           <div className="space-y-3 fixed top-0 z-[1] bg-white">
             <Header />
-            <EditorProvider>
-              <Toolbar />
-              <Portal id="tooltip-editor">
-                <TipTapEditor />
-              </Portal>
-            </EditorProvider>
+            <div id="tooltip-toolbar"></div>
             <div className="border-b  border-[#c7c7c7]"></div>
           </div>
-          <SidebarProvider>
-            <div className="w-1/5">
-              <AppSidebar />
-            </div>
-            <main className="mt-[121px] w-4/5">
-              {children}
-            </main>
-          </SidebarProvider>
+          <main>
+            {children}
+          </main>
         </ClientProvider>
       </body>
     </html>
