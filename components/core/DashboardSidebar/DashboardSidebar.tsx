@@ -2,9 +2,10 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { fetchDataFromApi } from "@/lib/api";
-import { EditorProvider, TapEditor } from "@/components/TipTapEditor";
+import { EditorProvider, TapEditor, Toolbar } from "@/components/TipTapEditor";
 import { AppSidebar } from "../AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
+import { Header } from "@/components/Header";
 
 const templates: any = {
   "tiptap-editor": TapEditor,
@@ -39,7 +40,6 @@ export const DashboardSidebar = () => {
 
   useEffect(() => {
     if (courses.length > 0 && id) {
-      // Find the course based on the `id` query param
       const tempStartStep = courses.find(course => course.url === `/course/?id=${id}`);
       setCurrentStep(tempStartStep);
     }
@@ -54,35 +54,38 @@ export const DashboardSidebar = () => {
   }
 
   return (
-    <div className="flex">
-      <div className="max-w-[20%] w-full">
-        {courses.length > 0 ? (
-          <SidebarProvider>
-            {courses.map((course, index) => (
-              <AppSidebar key={index} data={course} />
-            ))}
-          </SidebarProvider>
-        ) : (
-          <div>No data available for the sidebar</div>
-        )}
+    <EditorProvider>
+      <div className="space-y-3 fixed top-0 z-[1] bg-white">
+        <Header />
+        <Toolbar />
+        <div className="border-b  border-[#c7c7c7]"></div>
       </div>
+      <div className="flex">
+        <div className="max-w-[20%] w-full">
+          {courses.length > 0 ? (
+            <SidebarProvider>
+              {courses.map((course, index) => (
+                <AppSidebar key={index} data={course} />
+              ))}
+            </SidebarProvider>
+          ) : (
+            <div>No data available for the sidebar</div>
+          )}
+        </div>
 
-      {/* Render the steps (submenu) of the selected course */}
-      {currentStep && (
-        <EditorProvider>
+        {currentStep && (
           <React.Fragment key={currentStep.id}>
             {templates[currentStep?.template] ? (
-              // Render the corresponding component (e.g., TipTapEditor)
               React.createElement(templates[currentStep.template], {
-                step: currentStep, // Pass currentStep data as a prop to the template component
-                courses: courses,   // Pass the entire courses data
+                step: currentStep, 
+                courses: courses,   
               })
             ) : (
               <div className="bg-white p-5 ">Template Not Found</div>
             )}
           </React.Fragment>
-        </EditorProvider>
-      )}
-    </div>
+        )}
+      </div>
+    </EditorProvider>
   );
 };

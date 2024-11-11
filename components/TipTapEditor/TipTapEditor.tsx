@@ -8,13 +8,14 @@ import Highlight from '@tiptap/extension-highlight';
 import TextAlign from '@tiptap/extension-text-align';
 import { useEditorContext } from "./EditorContext";
 import { CustomHeading } from "@/lib/IdExtension";
-
+import Link from '@tiptap/extension-link'
 interface TipTapEditorProps {
   content: string; // Assuming content is a string; change if it's different
 }
 
 export const TipTapEditor = ({ content }: TipTapEditorProps) => {
   const { setCurrentEditor } = useEditorContext();
+
 
   const editor = useEditor({
     extensions: [
@@ -25,6 +26,11 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       Highlight,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
+      }),
+      Link.configure({
+        openOnClick: true,
+        autolink: true,
+        defaultProtocol: 'https',
       }),
       CustomHeading,
     ],

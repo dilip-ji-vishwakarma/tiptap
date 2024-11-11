@@ -58,3 +58,17 @@ body {
   background-color: #C2E7FF;
   margin-top: 30px;
 }
+
+.minimal-tiptap-editor a {
+  cursor: pointer;
+  color: blue; 
+  text-decoration: underline; 
+}
+
+.ProseMirror-focused {
+  outline: none;
+}
+
+.containers [data-state="on"] {
+  background-color: black;
+}

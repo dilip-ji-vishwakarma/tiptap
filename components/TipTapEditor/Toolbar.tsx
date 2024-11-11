@@ -1,15 +1,12 @@
 "use client"
 import { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off  } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 
-
-
 export const Toolbar = () => {
   const { currentEditor } = useEditorContext();
-
   const [activeFormats, setActiveFormats] = useState({
     bold: false,
     italic: false,
@@ -29,6 +26,7 @@ export const Toolbar = () => {
     redo: false,
     bullet: false,
     ordered: false,
+    link: false,
   });
 
   const checkActiveFormats = useCallback(() => {
@@ -55,6 +53,7 @@ export const Toolbar = () => {
       redo: currentEditor.isActive("redo"),
       bullet: currentEditor.isActive("bullet"),
       ordered: currentEditor.isActive("ordered"),
+      link: currentEditor.isActive("link"),
     });
   }, [currentEditor]);
 
@@ -145,6 +144,17 @@ export const Toolbar = () => {
     currentEditor?.chain().focus().toggleOrderedList().run();
   }, [currentEditor]);
 
+  const handleLink = useCallback(() => {
+    const url = prompt("Enter the URL");
+    if (url) {
+      currentEditor?.chain().focus().extendMarkRange('link').setLink({ href: url }).run();
+    }
+  }, [currentEditor]);
+
+  const handleRemoveLink = useCallback(() => {
+      currentEditor?.chain().focus().unsetLink().run()
+  }, [currentEditor]);
+
   return (
     <div className="containers">
     <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
@@ -225,8 +235,17 @@ export const Toolbar = () => {
           <ListOrdered className="h-4 w-4" />
         </Toggle></ToolTip>
       </div>
+
+      <div>
+        <ToolTip title="Link"><Toggle onClick={handleLink} pressed={activeFormats.link}>
+          <Link2 className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Ordered list"><Toggle onClick={handleRemoveLink} pressed={activeFormats.link}>
+          <Link2Off className="h-4 w-4" />
+        </Toggle></ToolTip>
+      </div>
     </div>
     </div>
   );
 };
-
