@@ -1,12 +1,14 @@
 "use client"
 import { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off  } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 
 export const Toolbar = () => {
   const { currentEditor } = useEditorContext();
+  const [color, setColor] = useState(false);
+
   const [activeFormats, setActiveFormats] = useState({
     bold: false,
     italic: false,
@@ -27,6 +29,7 @@ export const Toolbar = () => {
     bullet: false,
     ordered: false,
     link: false,
+    textStyle: false,
   });
 
   const checkActiveFormats = useCallback(() => {
@@ -54,6 +57,7 @@ export const Toolbar = () => {
       bullet: currentEditor.isActive("bullet"),
       ordered: currentEditor.isActive("ordered"),
       link: currentEditor.isActive("link"),
+      textStyle: currentEditor.isActive("textStyle"),
     });
   }, [currentEditor]);
 
@@ -152,100 +156,147 @@ export const Toolbar = () => {
   }, [currentEditor]);
 
   const handleRemoveLink = useCallback(() => {
-      currentEditor?.chain().focus().unsetLink().run()
+    currentEditor?.chain().focus().unsetLink().run()
   }, [currentEditor]);
+
+
 
   return (
     <div className="containers">
-    <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
-      <ToolTip title="Bold"><Toggle onClick={handleBold} pressed={activeFormats.bold}>
-        <BoldIcon className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <ToolTip title="Italic"><Toggle onClick={handleItalic} pressed={activeFormats.italic}>
-        <ItalicIcon className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <ToolTip title="Strike"><Toggle onClick={handleStrike} pressed={activeFormats.strike}>
-        <StrikethroughIcon className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <ToolTip title="Underline"><Toggle onClick={handleUnderline} pressed={activeFormats.underline}>
-        <UnderlineIcon className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <ToolTip title="Subscript"><Toggle onClick={handleSubscript} pressed={activeFormats.subscript}>
-        <SubscriptIcon className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <ToolTip title="Superscript"><Toggle onClick={handleSuperscript} pressed={activeFormats.superscript}>
-        <SuperscriptIcon className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <ToolTip title="Code"><Toggle onClick={handleCode} pressed={activeFormats.code}>
-        <CodeIcon className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <ToolTip title="Paragraph"><Toggle onClick={handleParagraph} pressed={activeFormats.paragraph}>
-        <Pilcrow className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <ToolTip title="Highlight"><Toggle onClick={handlehighlighter} pressed={activeFormats.highlight}>
-        <Highlighter className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <div className="textAlign">
-        <ToolTip title="Left"><Toggle onClick={handleLeftAlign} pressed={activeFormats.left}>
-          <AlignLeft className="h-4 w-4" />
+      <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
+        <ToolTip title="Bold"><Toggle onClick={handleBold} pressed={activeFormats.bold}>
+          <BoldIcon className="h-4 w-4" />
         </Toggle></ToolTip>
 
-        <ToolTip title="Center"><Toggle onClick={handleCenterAlign} pressed={activeFormats.center} >
-          <AlignCenter className="h-4 w-4" />
+        <ToolTip title="Italic"><Toggle onClick={handleItalic} pressed={activeFormats.italic}>
+          <ItalicIcon className="h-4 w-4" />
         </Toggle></ToolTip>
 
-        <ToolTip title="Right"><Toggle onClick={handleRightAlign} pressed={activeFormats.right} >
-          <AlignRight className="h-4 w-4" />
+        <ToolTip title="Strike"><Toggle onClick={handleStrike} pressed={activeFormats.strike}>
+          <StrikethroughIcon className="h-4 w-4" />
         </Toggle></ToolTip>
 
-        <ToolTip title="Justify"><Toggle onClick={handleJustifyAlign} pressed={activeFormats.justify} >
-          <AlignJustify className="h-4 w-4" />
+        <ToolTip title="Underline"><Toggle onClick={handleUnderline} pressed={activeFormats.underline}>
+          <UnderlineIcon className="h-4 w-4" />
         </Toggle></ToolTip>
+
+        <ToolTip title="Subscript"><Toggle onClick={handleSubscript} pressed={activeFormats.subscript}>
+          <SubscriptIcon className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Superscript"><Toggle onClick={handleSuperscript} pressed={activeFormats.superscript}>
+          <SuperscriptIcon className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Code"><Toggle onClick={handleCode} pressed={activeFormats.code}>
+          <CodeIcon className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Paragraph"><Toggle onClick={handleParagraph} pressed={activeFormats.paragraph}>
+          <Pilcrow className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Highlight"><Toggle onClick={handlehighlighter} pressed={activeFormats.highlight}>
+          <Highlighter className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <div className="textAlign">
+          <ToolTip title="Left"><Toggle onClick={handleLeftAlign} pressed={activeFormats.left}>
+            <AlignLeft className="h-4 w-4" />
+          </Toggle></ToolTip>
+
+          <ToolTip title="Center"><Toggle onClick={handleCenterAlign} pressed={activeFormats.center} >
+            <AlignCenter className="h-4 w-4" />
+          </Toggle></ToolTip>
+
+          <ToolTip title="Right"><Toggle onClick={handleRightAlign} pressed={activeFormats.right} >
+            <AlignRight className="h-4 w-4" />
+          </Toggle></ToolTip>
+
+          <ToolTip title="Justify"><Toggle onClick={handleJustifyAlign} pressed={activeFormats.justify} >
+            <AlignJustify className="h-4 w-4" />
+          </Toggle></ToolTip>
+        </div>
+
+        <ToolTip title="Horizontal rule"><Toggle onClick={handleHorizontalRue} pressed={activeFormats.horizontal}>
+          <SquareMinus className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <div>
+          <ToolTip title="Undo"><Toggle onClick={handleundo} pressed={activeFormats.horizontal}>
+            <Undo2 className="h-4 w-4" />
+          </Toggle></ToolTip>
+
+          <ToolTip title="Redo"><Toggle onClick={handleredo} pressed={activeFormats.horizontal}>
+            <Redo2 className="h-4 w-4" />
+          </Toggle></ToolTip>
+        </div>
+
+        <div>
+          <ToolTip title="Bullet list"><Toggle onClick={handleBullet} pressed={activeFormats.bullet}>
+            <List className="h-4 w-4" />
+          </Toggle></ToolTip>
+
+          <ToolTip title="Ordered list"><Toggle onClick={handleOrdered} pressed={activeFormats.ordered}>
+            <ListOrdered className="h-4 w-4" />
+          </Toggle></ToolTip>
+        </div>
+
+        <div>
+          <ToolTip title="Link"><Toggle onClick={handleLink} pressed={activeFormats.link}>
+            <Link2 className="h-4 w-4" />
+          </Toggle></ToolTip>
+
+          <ToolTip title="Ordered list"><Toggle onClick={handleRemoveLink} pressed={activeFormats.link}>
+            <Link2Off className="h-4 w-4" />
+          </Toggle></ToolTip>
+        </div>
+
+        <div >
+          <Toggle type="button" onClick={() => setColor(!color)}><Palette className="h-4 w-4" /></Toggle>
+
+          {color ? (
+            <div className="absolute bg-[#F9FBFD] p-2.5 rounded-[10px] ">
+            <div >
+              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} pressed={activeFormats.textStyle}>
+                <div className="bg-[#958DF1] w-[15px] h-[15px]"></div>
+              </Toggle>
+
+              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} pressed={activeFormats.textStyle}>
+                <div className="bg-[#F98181] w-[15px] h-[15px]"></div>
+              </Toggle>
+
+              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} pressed={activeFormats.textStyle}>
+                <div className="bg-[#FBBC88] w-[15px] h-[15px]"></div>
+              </Toggle>
+
+              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} pressed={activeFormats.textStyle}>
+                <div className="bg-[#FAF594] w-[15px] h-[15px]"></div>
+              </Toggle>
+
+              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} pressed={activeFormats.textStyle}>
+                <div className="bg-[#70CFF8] w-[15px] h-[15px]"></div>
+              </Toggle>
+
+              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} pressed={activeFormats.textStyle}>
+                <div className="bg-[#94FADB] w-[15px] h-[15px]"></div>
+              </Toggle>
+
+              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} pressed={activeFormats.textStyle}>
+                <div className="bg-[#B9F18D] w-[15px] h-[15px]"></div>
+              </Toggle>
+            </div>
+            <input
+                type="color"
+                onInput={event => currentEditor?.chain().focus().setColor((event.target as HTMLInputElement).value).run()}
+                value={currentEditor?.getAttributes('textStyle').color}
+                data-testid="setColor"
+              />
+            </div>
+          ) : null}
+
+        </div>
       </div>
-
-      <ToolTip title="Horizontal rule"><Toggle onClick={handleHorizontalRue} pressed={activeFormats.horizontal}>
-        <SquareMinus className="h-4 w-4" />
-      </Toggle></ToolTip>
-
-      <div>
-        <ToolTip title="Undo"><Toggle onClick={handleundo} pressed={activeFormats.horizontal}>
-          <Undo2 className="h-4 w-4" />
-        </Toggle></ToolTip>
-
-        <ToolTip title="Redo"><Toggle onClick={handleredo} pressed={activeFormats.horizontal}>
-          <Redo2 className="h-4 w-4" />
-        </Toggle></ToolTip>
-      </div>
-
-      <div>
-        <ToolTip title="Bullet list"><Toggle onClick={handleBullet} pressed={activeFormats.bullet}>
-          <List className="h-4 w-4" />
-        </Toggle></ToolTip>
-
-        <ToolTip title="Ordered list"><Toggle onClick={handleOrdered} pressed={activeFormats.ordered}>
-          <ListOrdered className="h-4 w-4" />
-        </Toggle></ToolTip>
-      </div>
-
-      <div>
-        <ToolTip title="Link"><Toggle onClick={handleLink} pressed={activeFormats.link}>
-          <Link2 className="h-4 w-4" />
-        </Toggle></ToolTip>
-
-        <ToolTip title="Ordered list"><Toggle onClick={handleRemoveLink} pressed={activeFormats.link}>
-          <Link2Off className="h-4 w-4" />
-        </Toggle></ToolTip>
-      </div>
-    </div>
     </div>
   );
 };
