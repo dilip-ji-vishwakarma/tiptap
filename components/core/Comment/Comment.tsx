@@ -1,4 +1,5 @@
-import React from 'react'
+"use client"
+import React, { useEffect, useState } from 'react';
 import { MessageSquareText } from 'lucide-react';
 import {
   Sheet,
@@ -7,86 +8,70 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/components/ui/sheet"
-import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
-import { Textarea } from "@/components/ui/textarea"
-import { Button } from "@/components/ui/button"
+} from "@/components/ui/sheet";
 
-
+// Comment component
 export const Comment = () => {
+  const [comments, setComments] = useState<any[]>([]);  // State to store comments
+  const [error, setError] = useState<string | null>(null);  // State to store any error message
+
+  // Fetch comments when the component mounts
+  useEffect(() => {
+    const fetchComments = async () => {
+      try {
+        const response = await fetch('/api/getcomment');  // Make API call to fetch comments
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch comments');
+        }
+
+        const data = await response.json();
+        setComments(data);  // Set the fetched comments into state
+      } catch (error: any) {
+        setError(error.message);  // Set error message in case of failure
+      }
+    };
+
+    fetchComments();
+  }, []);  // Empty dependency array ensures this runs once on mount
+
   return (
     <Sheet>
       <SheetTrigger><MessageSquareText /></SheetTrigger>
-      <SheetContent className='bg-[whitesmoke]'>
+      <SheetContent className="bg-[whitesmoke]">
         <SheetHeader>
-          <SheetTitle className='text-2xl font-bold'>Comment</SheetTitle>
+          <SheetTitle className="text-2xl font-bold">Comments</SheetTitle>
           <SheetDescription>
-            <div className="w-full max-w-2xl mx-auto space-y-8">
-              <div className="space-y-4">
-                <div className="flex items-start gap-4">
-                  <Avatar className="w-10 h-10 border">
-                    <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
-                  <div className="flex-1">
-                    <Textarea placeholder="Write your comment..." className="mb-2 resize-none" rows={3} />
-                    <Button type="submit" className="ml-auto">
-                      Submit
-                    </Button>
-                  </div>
-                </div>
-              </div>
-              <div className="space-y-6">
-                <div className="flex items-start gap-4">
-                  <Avatar className="w-10 h-10 border">
-                    <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <div className="font-medium">John Doe</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">2 days ago</div>
-                    </div>
-                    <div className="text-gray-700 dark:text-gray-300">
-                      {`This is a great product! I've been using it for a week and it's been a game-changer.`}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <Avatar className="w-10 h-10 border">
-                    <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <div className="font-medium">Jane Smith</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">1 week ago</div>
-                    </div>
-                    <div className="text-gray-700 dark:text-gray-300">
-                      {`I'm really impressed with the quality of this product. It's exceeded my expectations.`}
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-start gap-4">
-                  <Avatar className="w-10 h-10 border">
-                    <AvatarImage src="/placeholder-user.jpg" alt="@shadcn" />
-                    <AvatarFallback>JD</AvatarFallback>
-                  </Avatar>
-                  <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <div className="font-medium">Michael Johnson</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-400">3 weeks ago</div>
-                    </div>
-                    <div className="text-gray-700 dark:text-gray-300">
-                      {`I've been using this product for a month now and it's been fantastic. Highly recommended!`}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+            {error && <p className="text-red-500">{error}</p>}  {/* Display error if any */}
+
+            {/* Display comments in a table format */}
+            <table className="table-auto w-full mt-4">
+              <thead>
+                <tr>
+                  <th className="px-4 py-2 border">ID</th>
+                  <th className="px-4 py-2 border">Text</th>
+                  <th className="px-4 py-2 border">Position</th>
+                </tr>
+              </thead>
+              <tbody>
+                {comments.length === 0 ? (
+                  <tr>
+                    <td colSpan={3} className="px-4 py-2 text-center">No comments available</td>
+                  </tr>
+                ) : (
+                  comments.map((comment) => (
+                    <tr key={comment.id}>
+                      <td className="px-4 py-2">{comment.id}</td>
+                      <td className="px-4 py-2">{comment.text}</td>
+                      <td className="px-4 py-2">{comment.position}</td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+            </table>
           </SheetDescription>
         </SheetHeader>
       </SheetContent>
     </Sheet>
-  )
-}
+  );
+};

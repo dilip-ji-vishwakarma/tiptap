@@ -1,13 +1,18 @@
 "use client"
 import { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, MessageCircle } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
-import { ToolTip } from "../core";
+import { Portal, ToolTip } from "../core";
+import { CommentStore } from "./CommentStore";
 
 export const Toolbar = () => {
   const { currentEditor } = useEditorContext();
   const [color, setColor] = useState(false);
+  const [comments, setComments] = useState<{
+    [key: string]: { text: string; position: number };
+  }>({});
+
 
   const [activeFormats, setActiveFormats] = useState({
     bold: false,
@@ -30,6 +35,7 @@ export const Toolbar = () => {
     ordered: false,
     link: false,
     textStyle: false,
+    comment: false,
   });
 
   const checkActiveFormats = useCallback(() => {
@@ -58,6 +64,7 @@ export const Toolbar = () => {
       ordered: currentEditor.isActive("ordered"),
       link: currentEditor.isActive("link"),
       textStyle: currentEditor.isActive("textStyle"),
+      comment: currentEditor.isActive("comment"),
     });
   }, [currentEditor]);
 
@@ -159,6 +166,54 @@ export const Toolbar = () => {
     currentEditor?.chain().focus().unsetLink().run()
   }, [currentEditor]);
 
+  const saveCommentToApi = async ({ commentId, commentData }: any) => {
+    try {
+      const response = await fetch("/api/comment", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id: commentId, ...commentData }),
+       
+      });
+      console.log(response);
+      if (!response.ok) {
+        throw new Error("Failed to save comment");
+      }
+      console.log("Comment saved successfully");
+    } catch (error) {
+      console.error("Error saving comment:", error);
+    }
+  };
+  
+  const handleComment = useCallback(() => {
+    if (!currentEditor) return;
+  
+    const commentText = prompt("Enter your comment:");
+    if (!commentText) return;
+  
+    const selection = currentEditor.state.selection;
+    const position = selection.$from.pos;
+    const newCommentId = `${Date.now()}`;
+  
+    // Update comments in state
+    setComments((prevComments) => ({
+      ...prevComments,
+      [newCommentId]: { text: commentText, position },
+    }));
+  
+    // Save the comment to API
+    saveCommentToApi({ commentId: newCommentId, commentData: { text: commentText, position } });
+  }, [currentEditor]);
+  
+  const handleDeleteComment = (commentId: any) => {
+    setComments((prevComments) => {
+      const newComments = { ...prevComments };
+      delete newComments[commentId];
+      return newComments;
+    });
+  };
+
 
 
   return (
@@ -257,36 +312,38 @@ export const Toolbar = () => {
 
           {color ? (
             <div className="absolute bg-[#F9FBFD] p-2.5 rounded-[10px] ">
-            <div >
-              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} pressed={activeFormats.textStyle}>
-                <div className="bg-[#958DF1] w-[15px] h-[15px]"></div>
-              </Toggle>
+              <div >
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} pressed={activeFormats.textStyle}>
+                  <div className="bg-[#958DF1] w-[15px] h-[15px]"></div>
+                </Toggle>
 
-              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} pressed={activeFormats.textStyle}>
-                <div className="bg-[#F98181] w-[15px] h-[15px]"></div>
-              </Toggle>
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} pressed={activeFormats.textStyle}>
+                  <div className="bg-[#F98181] w-[15px] h-[15px]"></div>
+                </Toggle>
 
-              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} pressed={activeFormats.textStyle}>
-                <div className="bg-[#FBBC88] w-[15px] h-[15px]"></div>
-              </Toggle>
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} pressed={activeFormats.textStyle}>
+                  <div className="bg-[#FBBC88] w-[15px] h-[15px]"></div>
+                </Toggle>
 
-              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} pressed={activeFormats.textStyle}>
-                <div className="bg-[#FAF594] w-[15px] h-[15px]"></div>
-              </Toggle>
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} pressed={activeFormats.textStyle}>
+                  <div className="bg-[#FAF594] w-[15px] h-[15px]"></div>
+                </Toggle>
 
-              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} pressed={activeFormats.textStyle}>
-                <div className="bg-[#70CFF8] w-[15px] h-[15px]"></div>
-              </Toggle>
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} pressed={activeFormats.textStyle}>
+                  <div className="bg-[#70CFF8] w-[15px] h-[15px]"></div>
+                </Toggle>
 
-              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} pressed={activeFormats.textStyle}>
-                <div className="bg-[#94FADB] w-[15px] h-[15px]"></div>
-              </Toggle>
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} pressed={activeFormats.textStyle}>
+                  <div className="bg-[#94FADB] w-[15px] h-[15px]"></div>
+                </Toggle>
 
-              <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} pressed={activeFormats.textStyle}>
-                <div className="bg-[#B9F18D] w-[15px] h-[15px]"></div>
-              </Toggle>
-            </div>
-            <input
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} pressed={activeFormats.textStyle}>
+                  <div className="bg-[#B9F18D] w-[15px] h-[15px]"></div>
+                </Toggle>
+
+
+              </div>
+              <input
                 type="color"
                 onInput={event => currentEditor?.chain().focus().setColor((event.target as HTMLInputElement).value).run()}
                 value={currentEditor?.getAttributes('textStyle').color}
@@ -294,7 +351,13 @@ export const Toolbar = () => {
               />
             </div>
           ) : null}
+          <ToolTip title="Add Comment">
+            <Toggle onClick={handleComment} pressed={activeFormats.comment}>
+              <MessageCircle className="h-4 w-4" />
+            </Toggle>
+          </ToolTip>
 
+          
         </div>
       </div>
     </div>
