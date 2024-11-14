@@ -9,29 +9,31 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Link from 'next/link';
 
 // Comment component
 export const Comment = () => {
   const [comments, setComments] = useState<any[]>([]);  // State to store comments
   const [error, setError] = useState<string | null>(null);  // State to store any error message
 
+  // Function to fetch comments
+  const fetchComments = async () => {
+    try {
+      const response = await fetch('/api/getcomment');  // Make API call to fetch comments
+
+      if (!response.ok) {
+        throw new Error('Failed to fetch comments');
+      }
+
+      const data = await response.json();
+      setComments(data);  // Set the fetched comments into state
+    } catch (error: any) {
+      setError(error.message);  // Set error message in case of failure
+    }
+  };
+
   // Fetch comments when the component mounts
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await fetch('/api/getcomment');  // Make API call to fetch comments
-
-        if (!response.ok) {
-          throw new Error('Failed to fetch comments');
-        }
-
-        const data = await response.json();
-        setComments(data);  // Set the fetched comments into state
-      } catch (error: any) {
-        setError(error.message);  // Set error message in case of failure
-      }
-    };
-
     fetchComments();
   }, []);  // Empty dependency array ensures this runs once on mount
 
@@ -43,6 +45,14 @@ export const Comment = () => {
           <SheetTitle className="text-2xl font-bold">Comments</SheetTitle>
           <SheetDescription>
             {error && <p className="text-red-500">{error}</p>}  {/* Display error if any */}
+
+            {/* Refresh button */}
+            <button
+              onClick={fetchComments}  // Refresh comments when clicked
+              className="mb-4 bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
+            >
+              Refresh Comments
+            </button>
 
             {/* Display comments in a table format */}
             <table className="table-auto w-full mt-4">
@@ -62,7 +72,7 @@ export const Comment = () => {
                   comments.map((comment) => (
                     <tr key={comment.id}>
                       <td className="px-4 py-2">{comment.id}</td>
-                      <td className="px-4 py-2">{comment.text}</td>
+                      <td className="px-4 py-2"><Link href={`#${comment.id}`}>{comment.text}</Link></td>
                       <td className="px-4 py-2">{comment.position}</td>
                     </tr>
                   ))

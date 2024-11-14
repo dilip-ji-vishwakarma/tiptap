@@ -19,6 +19,7 @@ body {
 
 @layer base {
   :root {
+    --radius: 10px;
     --sidebar-background: 0 0% 98%;
     --sidebar-foreground: 240 5.3% 26.1%;
     --sidebar-primary: 240 5.9% 10%;
@@ -101,4 +102,8 @@ body {
 }
 .dropdown-menu button.is-selected {
   background-color: #D3E3FD;
+}
+
+.comment {
+  background-color: #FEF2CD;
 }

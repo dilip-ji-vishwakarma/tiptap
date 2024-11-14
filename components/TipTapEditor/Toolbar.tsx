@@ -173,8 +173,10 @@ export const Toolbar = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ id: commentId, ...commentData }),
-       
+        body: JSON.stringify({ 
+          'id': commentId,  // Send the comment ID with the appropriate key
+          ...commentData 
+        }),
       });
       console.log(response);
       if (!response.ok) {
@@ -186,35 +188,43 @@ export const Toolbar = () => {
     }
   };
   
-  const handleComment = useCallback(() => {
-    if (!currentEditor) return;
+  const handleComment = () => {
+    const commentContent = prompt('Enter your comment:');
+    
+    if (commentContent) {
+      const commentId = new Date().getTime().toString();
   
-    const commentText = prompt("Enter your comment:");
-    if (!commentText) return;
+      // Access the current selection position
+      const selection = currentEditor?.state.selection;
+      const position = selection ? selection.from : 0;
   
-    const selection = currentEditor.state.selection;
-    const position = selection.$from.pos;
-    const newCommentId = `${Date.now()}`;
+      if (selection) {
+        currentEditor?.chain()
+          .focus()
+          .setMark('comment', {
+            class: 'comment', 
+            backgroundColor: 'gray', 
+            'data-comment-id': commentId // Set the comment ID for this selection
+          })
+          .run();
+      }
   
-    // Update comments in state
-    setComments((prevComments) => ({
-      ...prevComments,
-      [newCommentId]: { text: commentText, position },
-    }));
+      // Save the comment in the state
+      setComments(prevComments => ({
+        ...prevComments,
+        [commentId]: { text: commentContent, position },
+      }));
   
-    // Save the comment to API
-    saveCommentToApi({ commentId: newCommentId, commentData: { text: commentText, position } });
-  }, [currentEditor]);
-  
-  const handleDeleteComment = (commentId: any) => {
-    setComments((prevComments) => {
-      const newComments = { ...prevComments };
-      delete newComments[commentId];
-      return newComments;
-    });
+      // Save the comment to an external API with the 'data-comment-id'
+      saveCommentToApi({
+        commentId,
+        commentData: { text: commentContent, position },
+      });
+    }
   };
-
-
+  
+  
+  
 
   return (
     <div className="containers">

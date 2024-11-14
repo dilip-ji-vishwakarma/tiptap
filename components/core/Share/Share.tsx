@@ -32,7 +32,7 @@ export const Share = () => {
                     <LockKeyhole /> Share
                 </Button>
             </DialogTrigger>
-            <DialogContent className='bg-[whitesmoke]'>
+            <DialogContent className='bg-[whitesmoke] rounded-md'>
                 <DialogHeader className='space-y-5'>
                     <DialogTitle>Share Notes</DialogTitle>
                     <DialogDescription className='flex items-center border-[#c7c7c7] border justify-between px-2.5'>

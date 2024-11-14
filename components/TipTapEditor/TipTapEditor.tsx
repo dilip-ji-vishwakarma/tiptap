@@ -13,14 +13,16 @@ import { Color } from '@tiptap/extension-color'
 import TextStyle from '@tiptap/extension-text-style'
 import Mention from '@tiptap/extension-mention'
 import suggestion from '../core/Mention/Suggestion'
-import { CommentStore } from "./CommentStore";
+import { CommentMark } from "@/lib/CommentMark";
+
+
+
 interface TipTapEditorProps {
   content: string; // Assuming content is a string; change if it's different
 }
 
 export const TipTapEditor = ({ content }: TipTapEditorProps) => {
   const { setCurrentEditor } = useEditorContext();
-  const [commentStorage, setCommentStorage] = useState<string[]>([]);
 
   const editor = useEditor({
     extensions: [
@@ -30,6 +32,7 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       Underline,
       Subscript,
       Superscript,
+      CommentMark,
       Highlight,
       TextAlign.configure({
         types: ['heading', 'paragraph'],
@@ -82,7 +85,6 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
         className="minimal-tiptap-editor overflow-auto h-full p-10 border-destructive focus-within:border-destructive min-h-[200px]"
         placeholder="Type your description here"
       />
-      <CommentStore comments={commentStorage} />
     </div>
   );
 };
