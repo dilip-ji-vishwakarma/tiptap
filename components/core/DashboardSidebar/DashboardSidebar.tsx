@@ -87,6 +87,9 @@ export const DashboardSidebar = () => {
             </React.Fragment>
           )}
         </div>
+        <div className="max-w-[22%]">
+            
+        </div>
       </div>
     </EditorProvider>
   );

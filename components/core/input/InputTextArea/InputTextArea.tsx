@@ -4,14 +4,13 @@ import { Controller, Control, FieldValues, DeepMap, FieldError } from 'react-hoo
 
 type InputProps = {
     column_name: string,
-    label?: string,
     required: boolean,
     placeholder?: string;
     control: Control<FieldValues>;
     errors: DeepMap<FieldValues, FieldError>;
 }
 
-export const InputTextArea = ({ column_name, label, required, placeholder, control, errors }: InputProps) => {
+export const InputTextArea = ({ column_name, required, placeholder, control, errors }: InputProps) => {
     return (
         <div className='w-full'>
             <Controller
@@ -22,11 +21,6 @@ export const InputTextArea = ({ column_name, label, required, placeholder, contr
                 render={({ field: { onChange, value } }) => (
                     <>
                         <div className='flex items-center space-x-1'>
-                            {required && (
-                                <label className='text-[#777777] text-sm font-medium leading-[21px] tracking-[0px] text-left'>
-                                    {label} {required && <span className='text-red-500'>*</span>}
-                                </label>
-                            )}
                         </div>
                         <span className='input-border flex items-center border rounded-md border-solid border-[#BEBEBE] mt-[12px]'>
                             <textarea
@@ -38,10 +32,13 @@ export const InputTextArea = ({ column_name, label, required, placeholder, contr
                             />
                         </span>
                     </>
-
                 )}
             />
-            {errors[column_name] && <span className="text-red-500 text-sm">Please Enter {label}</span>}
+            {errors[column_name] && (
+            <span className="text-red-500 text-xs">
+              {errors[column_name]?.message || "This field is required"}
+            </span>
+          )}
         </div>
     )
 }
