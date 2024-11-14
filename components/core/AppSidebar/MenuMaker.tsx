@@ -1,7 +1,7 @@
 "use client"
 import React from 'react'
 import { useForm } from 'react-hook-form';
-import { InputText } from '../InputText';
+import { InputText } from '../input/InputText';
 import {
     Dialog,
     DialogContent,

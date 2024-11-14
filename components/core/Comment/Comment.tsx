@@ -1,5 +1,5 @@
 "use client"
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { MessageSquareText } from 'lucide-react';
 import {
   Sheet,
@@ -9,76 +9,82 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Link from 'next/link';
+import { InputTextArea } from '../input';
+import { useForm } from 'react-hook-form';
+import { useEditorContext } from '@/components/TipTapEditor';
+import { v4 as uuidv4 } from 'uuid';
 
-// Comment component
 export const Comment = () => {
-  const [comments, setComments] = useState<any[]>([]);  // State to store comments
-  const [error, setError] = useState<string | null>(null);  // State to store any error message
+  const { handleSubmit, control, formState: { errors }, reset } = useForm();
+  const { currentEditor } = useEditorContext();  // Access editor from context
+  const [comments, setComments] = useState({});
 
-  // Function to fetch comments
-  const fetchComments = async () => {
+  const saveCommentToApi = async ({ commentId, commentData }:any) => {
     try {
-      const response = await fetch('/api/getcomment');  // Make API call to fetch comments
-
-      if (!response.ok) {
-        throw new Error('Failed to fetch comments');
-      }
-
-      const data = await response.json();
-      setComments(data);  // Set the fetched comments into state
-    } catch (error: any) {
-      setError(error.message);  // Set error message in case of failure
+      const response = await fetch("/api/comment", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ id: commentId, ...commentData }),
+      });
+      if (!response.ok) throw new Error("Failed to save comment");
+      console.log("Comment saved successfully");
+    } catch (error) {
+      console.error("Error saving comment:", error);
     }
   };
 
-  // Fetch comments when the component mounts
-  useEffect(() => {
-    fetchComments();
-  }, []);  // Empty dependency array ensures this runs once on mount
+  const handleAddComment = (data:any) => {
+    const commentId = uuidv4();
+    const commentContent = data.comment_area;
+    const selection = currentEditor?.state.selection;
+    const position = selection ? selection.from : 0;
+
+    if (selection && commentContent) {
+      currentEditor.chain()
+        .focus()
+        .setMark('comment', {
+          class: 'comment',
+          backgroundColor: 'gray',
+          'data-comment-id': commentId
+        })
+        .run();
+
+      // Save comment in component state and to API
+      setComments(prev => ({
+        ...prev,
+        [commentId]: { text: commentContent, position },
+      }));
+      saveCommentToApi({
+        commentId,
+        commentData: { text: commentContent, position },
+      });
+
+      reset();  // Clear the form
+    }
+  };
 
   return (
     <Sheet>
-      <SheetTrigger><MessageSquareText /></SheetTrigger>
+      <SheetTrigger><span><MessageSquareText /></span></SheetTrigger>
       <SheetContent className="bg-[whitesmoke]">
         <SheetHeader>
           <SheetTitle className="text-2xl font-bold">Comments</SheetTitle>
           <SheetDescription>
-            {error && <p className="text-red-500">{error}</p>}  {/* Display error if any */}
-
-            {/* Refresh button */}
-            <button
-              onClick={fetchComments}  // Refresh comments when clicked
-              className="mb-4 bg-blue-500 text-white p-2 rounded hover:bg-blue-700"
-            >
-              Refresh Comments
-            </button>
-
-            {/* Display comments in a table format */}
-            <table className="table-auto w-full mt-4">
-              <thead>
-                <tr>
-                  <th className="px-4 py-2 border">ID</th>
-                  <th className="px-4 py-2 border">Text</th>
-                  <th className="px-4 py-2 border">Position</th>
-                </tr>
-              </thead>
-              <tbody>
-                {comments.length === 0 ? (
-                  <tr>
-                    <td colSpan={3} className="px-4 py-2 text-center">No comments available</td>
-                  </tr>
-                ) : (
-                  comments.map((comment) => (
-                    <tr key={comment.id}>
-                      <td className="px-4 py-2">{comment.id}</td>
-                      <td className="px-4 py-2"><Link href={`#${comment.id}`}>{comment.text}</Link></td>
-                      <td className="px-4 py-2">{comment.position}</td>
-                    </tr>
-                  ))
-                )}
-              </tbody>
-            </table>
+            <form onSubmit={handleSubmit(handleAddComment)} className="space-y-3">
+              <InputTextArea
+                column_name="comment_area"
+                required={true}
+                control={control}
+                errors={errors}
+                label="Enter Comment"
+              />
+              <button
+                type="submit"
+                className="border cursor-pointer text-lg font-medium h-10 bg-[#0b57d0] text-white px-6 py-2 rounded"
+              >
+                Save
+              </button>
+            </form>
           </SheetDescription>
         </SheetHeader>
       </SheetContent>

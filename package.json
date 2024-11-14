@@ -39,7 +39,8 @@
     "react-hook-form": "^7.53.1",
     "tailwind-merge": "^2.5.4",
     "tailwindcss-animate": "^1.0.7",
-    "tippy.js": "^6.3.7"
+    "tippy.js": "^6.3.7",
+    "uuid": "^11.0.3"
   },
   "devDependencies": {
     "@types/node": "^20",

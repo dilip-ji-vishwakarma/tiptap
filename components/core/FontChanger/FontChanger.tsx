@@ -11,7 +11,6 @@ export const FontChanger = () => {
   };
 
   return (
-    <div>
       <select id="font-selector " className='border p-[5px] rounded-[20px] border-solid border-[#c7c7c7]' value={selectedFont} onChange={handleFontChange}>
         <option value="Roboto">Roboto</option>
         <option value="Open Sans">Open Sans</option>
@@ -19,6 +18,5 @@ export const FontChanger = () => {
         <option value="Lora">Lora</option>
         <option value="Inter">Inter</option>
       </select>
-    </div>
   );
 };

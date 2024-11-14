@@ -1,12 +1,11 @@
-"use client"
 import React from 'react'
+import { TipTapEditor } from './TipTapEditor';
 
-import { TipTapEditor } from './TipTapEditor'
-
-export const TapEditor = ({ courses }: any) => {
-
+const TapEditor = ({ courses }: any) => {
     const string = courses.map((item: any) => item.editor_string).join(' ');
-    return (
-        <TipTapEditor content={string} />
-    )
+  return (
+    <><TipTapEditor content={string} /></>
+  )
 }
+
+export default TapEditor

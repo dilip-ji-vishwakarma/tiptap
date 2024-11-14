@@ -2,10 +2,11 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { fetchDataFromApi } from "@/lib/api";
-import { EditorProvider, TapEditor, Toolbar } from "@/components/TipTapEditor";
+import { EditorProvider, Toolbar } from "@/components/TipTapEditor";
 import { AppSidebar } from "../AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "@/components/Header";
+import TapEditor from "@/components/TipTapEditor/TapEditor";
 
 const templates: any = {
   "tiptap-editor": TapEditor,

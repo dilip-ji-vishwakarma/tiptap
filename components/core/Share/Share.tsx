@@ -27,19 +27,19 @@ export const Share = () => {
 
     return (
         <Dialog>
-            <DialogTrigger>
-                <Button variant="outline" className="flex gap-3 items-center rounded-full bg-[#C2E7FF] border border-solid border-[#C2E7FF]">
-                    <LockKeyhole /> Share
-                </Button>
+            <DialogTrigger className='flex gap-3 items-center rounded-full bg-[#C2E7FF] border border-solid border-[#C2E7FF] px-3 py-2 text-sm'>
+
+                <LockKeyhole width={20} /> Share
+
             </DialogTrigger>
             <DialogContent className='bg-[whitesmoke] rounded-md'>
                 <DialogHeader className='space-y-5'>
                     <DialogTitle>Share Notes</DialogTitle>
-                    <DialogDescription className='flex items-center border-[#c7c7c7] border justify-between px-2.5'>
+                    <DialogDescription className='flex items-center border-[#c7c7c7] border justify-between p-2.5 '>
                         <p>{window.location.href}</p>
-                        <Button onClick={handleCopyLink} className='shadow-none'>
+                        <span onClick={handleCopyLink} className='shadow-none cursor-pointer'>
                             {copy ? <Files /> : <Clipboard />}
-                        </Button>
+                        </span>
                     </DialogDescription>
                 </DialogHeader>
             </DialogContent>
