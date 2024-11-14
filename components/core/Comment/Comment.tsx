@@ -1,26 +1,55 @@
 "use client"
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { MessageSquareText } from 'lucide-react';
-import {
-  Sheet,
-  SheetContent,
-  SheetDescription,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { InputTextArea } from '../input';
 import { useForm } from 'react-hook-form';
 import { useEditorContext } from '@/components/TipTapEditor';
 import { v4 as uuidv4 } from 'uuid';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Portal } from '../Portal';
 
 export const Comment = () => {
   const { handleSubmit, control, formState: { errors, isValid }, reset } = useForm({
-    mode: "onChange",  // Ensure form validation happens on each change
+    mode: "onChange",
   });
-  const { currentEditor } = useEditorContext();  // Access editor from context
-  const [comments, setComments] = useState({});
+  const { currentEditor } = useEditorContext();
+  const [comments, setComments] = useState<any[]>([]);
+  const [commentbox, setCommentbox] = useState(false);
+  const commentBoxRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: any) => {
+      if (commentBoxRef.current && !commentBoxRef.current.contains(event.target)) {
+        setCommentbox(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  useEffect(() => {
+    fetchComments(); 
+  }, []);
+
+  const fetchComments = async () => {
+    try {
+      const response = await fetch("/api/getcomment", {
+        method: "GET",
+        headers: { "Content-Type": "application/json" },
+      });
+      if (response.ok) {
+        const data = await response.json();
+        setComments(data.comments);
+      } else {
+        console.error("Failed to fetch comments");
+      }
+    } catch (error) {
+      console.error("Error fetching comments:", error);
+    }
+  };
 
   const saveCommentToApi = async ({ commentId, commentData }: any) => {
     try {
@@ -31,78 +60,94 @@ export const Comment = () => {
       });
       if (!response.ok) throw new Error("Failed to save comment");
       console.log("Comment saved successfully");
+      fetchComments();
     } catch (error) {
       console.error("Error saving comment:", error);
     }
   };
 
   const handleAddComment = (data: any) => {
-    const commentId = uuidv4(); // Generate a unique ID for the comment
+    const commentId = uuidv4();
     const commentContent = data.comment_area;
     const selection = currentEditor?.state.selection;
 
     if (selection && commentContent) {
-      // Apply the comment mark with the generated commentId
       currentEditor.chain()
         .focus()
         .setMark('comment', {
-          id: commentId, // Pass data-comment-id
-          class: 'comment', // Add class as well
+          id: commentId,
+          class: 'comment',
         })
         .run();
 
-      // Save comment in component state and to API
       setComments(prev => ({
         ...prev,
         [commentId]: { text: commentContent, position: selection.from },
       }));
 
-      // Save comment to API
       saveCommentToApi({
         commentId,
         commentData: { text: commentContent, position: selection.from },
       });
 
-      reset(); // Clear the form
+      reset();
     }
   };
 
   return (
 
-    <Sheet>
-      <SheetTrigger><MessageSquareText /></SheetTrigger>
-      <SheetContent className="bg-[whitesmoke]">
-        <SheetHeader>
-          <SheetTitle className="text-2xl font-bold">Comments</SheetTitle>
-          <SheetDescription>
-            <div className='shadow-[0_1px_3px_rgba(0,0,0,0.3),0_4px_8px_3px_rgba(0,0,0,0.15)] p-3 rounded-md bg-white'>
-              <div className='flex items-center gap-3'>
-                <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" className="w-10 h-10 min-w-[40px] p-[3px] rounded-[100%] border-2 border-solid border-[rgba(112,100,233,0.3019607843)]" />
-                  <AvatarFallback>CN</AvatarFallback>
-                </Avatar>
-                <span className='text-md'>Dilip Vishwakarma</span>
+    <>
+      <span className='cursor-pointer' onClick={() => setCommentbox(true)}><MessageSquareText /></span>
+      <Portal id='comment-portal' >
+        <div ref={commentBoxRef}>
+          {commentbox ? (
+
+            <div className="bg-[whitesmoke] w-full mt-[132px]" >
+              <div className='shadow-[0_1px_3px_rgba(0,0,0,0.3),0_4px_8px_3px_rgba(0,0,0,0.15)] p-3 rounded-md bg-white space-y-3'>
+                <div className='flex items-center gap-3'>
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" className="w-10 h-10 min-w-[40px] p-[3px] rounded-[100%] border-2 border-solid border-[rgba(112,100,233,0.3019607843)]" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <span className='text-md'>Dilip Vishwakarma</span>
+                </div>
+                <form onSubmit={handleSubmit(handleAddComment)} className='space-y-3'>
+                  <InputTextArea
+                    column_name="comment_area"
+                    required={true}
+                    control={control}
+                    errors={errors}
+                  />
+                  <button
+                    type="submit"
+                    className={`border cursor-pointer text-md font-medium h-10   px-6 py-2 rounded-md leading-[0px] ${isValid ? "bg-[#0b57d0] text-white" : "border border-[#0b57d0] text-[#0b57d0] cursor-not-allowed"}`}
+                    disabled={!isValid}
+                  >
+                    Comment
+                  </button>
+                </form>
               </div>
-              <form onSubmit={handleSubmit(handleAddComment)} className='space-y-3'>
-                <InputTextArea
-                  column_name="comment_area"
-                  required={true}
-                  control={control}
-                  errors={errors}
-                />
-                <button
-                  type="submit"
-                  className={`border cursor-pointer text-md font-medium h-10   px-6 py-2 rounded-md leading-[0px] ${isValid ? "bg-[#0b57d0] text-white" : "border border-[#0b57d0] text-[#0b57d0] cursor-not-allowed"}`}
-                  disabled={!isValid}
-                >
-                  Comment
-                </button>
-              </form>
             </div>
-          </SheetDescription>
-        </SheetHeader>
-      </SheetContent>
-    </Sheet>
+          ) : null}
+          {comments.length > 0 && (
+          <div className="comments-list mt-5">
+            {comments.map((comment: any) => (
+              <div key={comment.id} className="comment-item space-y-3 p-3 rounded-md bg-[#EDF2FA]" id={comment.id}>
+                <div className='flex items-center gap-3'>
+                  <Avatar>
+                    <AvatarImage src="https://github.com/shadcn.png" className="w-10 h-10 min-w-[40px] p-[3px] rounded-[100%] border-2 border-solid border-[rgba(112,100,233,0.3019607843)]" />
+                    <AvatarFallback>CN</AvatarFallback>
+                  </Avatar>
+                  <span className='text-md'>Dilip Vishwakarma</span>
+                </div>
+                <p className="text-sm">{comment.text}</p>
+              </div>
+            ))}
+          </div>
+          ) }
+        </div>
+      </Portal>
+    </>
 
   );
 };

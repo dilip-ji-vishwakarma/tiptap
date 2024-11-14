@@ -61,7 +61,7 @@ export const DashboardSidebar = () => {
         <Toolbar />
         <div className="border-b  border-[#c7c7c7]"></div>
       </div>
-      <div className="flex">
+      <div className="flex gap-5 px-5">
         <div className="max-w-[20%] w-full">
           {courses.length > 0 ? (
             <SidebarProvider>
@@ -73,7 +73,7 @@ export const DashboardSidebar = () => {
             <div>No data available for the sidebar</div>
           )}
         </div>
-        <div className="max-w-[58%]"> 
+        <div className="max-w-[58%] w-full"> 
           {currentStep && (
             <React.Fragment key={currentStep.id}>
               {templates[currentStep?.template] ? (
@@ -87,8 +87,8 @@ export const DashboardSidebar = () => {
             </React.Fragment>
           )}
         </div>
-        <div className="max-w-[22%]">
-            
+        <div className="max-w-[22%] w-full">
+            <div id="comment-portal" className="sticky top-[130px]"></div>
         </div>
       </div>
     </EditorProvider>

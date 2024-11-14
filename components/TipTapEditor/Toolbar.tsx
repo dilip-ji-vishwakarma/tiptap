@@ -35,7 +35,6 @@ export const Toolbar = () => {
     ordered: false,
     link: false,
     textStyle: false,
-    comment: false,
   });
 
   const checkActiveFormats = useCallback(() => {
@@ -64,7 +63,6 @@ export const Toolbar = () => {
       ordered: currentEditor.isActive("ordered"),
       link: currentEditor.isActive("link"),
       textStyle: currentEditor.isActive("textStyle"),
-      comment: currentEditor.isActive("comment"),
     });
   }, [currentEditor]);
 
@@ -166,66 +164,7 @@ export const Toolbar = () => {
     currentEditor?.chain().focus().unsetLink().run()
   }, [currentEditor]);
 
-  // const saveCommentToApi = async ({ commentId, commentData }: any) => {
-  //   try {
-  //     const response = await fetch("/api/comment", {
-  //       method: "POST",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //       },
-  //       body: JSON.stringify({ 
-  //         'id': commentId,  // Send the comment ID with the appropriate key
-  //         ...commentData 
-  //       }),
-  //     });
-  //     console.log(response);
-  //     if (!response.ok) {
-  //       throw new Error("Failed to save comment");
-  //     }
-  //     console.log("Comment saved successfully");
-  //   } catch (error) {
-  //     console.error("Error saving comment:", error);
-  //   }
-  // };
-
-  // const handleComment = () => {
-  //   const commentContent = prompt('Enter your comment:');
-
-  //   if (commentContent) {
-  //     const commentId = new Date().getTime().toString();
-
-  //     // Access the current selection position
-  //     const selection = currentEditor?.state.selection;
-  //     const position = selection ? selection.from : 0;
-
-  //     if (selection) {
-  //       currentEditor?.chain()
-  //         .focus()
-  //         .setMark('comment', {
-  //           class: 'comment', 
-  //           backgroundColor: 'gray', 
-  //           'data-comment-id': commentId // Set the comment ID for this selection
-  //         })
-  //         .run();
-  //     }
-
-  //     // Save the comment in the state
-  //     setComments(prevComments => ({
-  //       ...prevComments,
-  //       [commentId]: { text: commentContent, position },
-  //     }));
-
-  //     // Save the comment to an external API with the 'data-comment-id'
-  //     saveCommentToApi({
-  //       commentId,
-  //       commentData: { text: commentContent, position },
-  //     });
-  //   }
-  // };
-
-
-
-
+  
   return (
     <div className="containers">
       <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
@@ -344,11 +283,6 @@ export const Toolbar = () => {
               />
             </div>
           ) : null}
-          {/* <ToolTip title="Add Comment">
-            <Toggle onClick={handleComment} pressed={activeFormats.comment}>
-              <MessageCircle className="h-4 w-4" />
-            </Toggle>
-          </ToolTip> */}
         </div>
       </div>
     </div>

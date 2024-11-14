@@ -19,19 +19,17 @@ export const InputTextArea = ({ column_name, required, placeholder, control, err
                 defaultValue=""
                 rules={{ required: required }}
                 render={({ field: { onChange, value } }) => (
-                    <>
-                        <div className='flex items-center space-x-1'>
-                        </div>
-                        <span className='input-border flex items-center border rounded-md border-solid border-[#BEBEBE] mt-[12px]'>
+                   
+                       
                             <textarea
-                                className="form-control w-full border-none rounded-md focus:outline-none focus:shadow-none shadow-none h-[100px] placeholder:text-[#9D9D9D] text-[14px] p-3"
+                                className="form-control w-full rounded-md focus:outline-none focus:shadow-none shadow-none h-[100px] placeholder:text-[#9D9D9D] text-[14px] p-3 border border-solid border-[#c7c7c7]"
                                 placeholder={placeholder}
                                 autoComplete="off"
                                 value={value}
                                 onChange={onChange}
                             />
-                        </span>
-                    </>
+                       
+             
                 )}
             />
             {errors[column_name] && (

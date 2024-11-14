@@ -11,15 +11,11 @@ const connection = await mysql.createPool({
 
 export async function GET(req: NextRequest) {
   try {
-    // Query the database to get all comments
-    const [rows]: [any[], any] = await connection.execute(
-      'SELECT * FROM comments ORDER BY position'
-    );
-
-    // Return the list of comments
-    return NextResponse.json(rows, { status: 200 });
+    // Fetch all comments from the database
+    const [comments] = await connection.execute('SELECT id, text, position FROM comments');
+    return NextResponse.json({ comments }, { status: 200 });
   } catch (error) {
-    console.error('Error retrieving comments:', error);
-    return NextResponse.json({ error: 'Failed to retrieve comments' }, { status: 500 });
+    console.error('Error fetching comments:', error);
+    return NextResponse.json({ error: 'Failed to fetch comments' }, { status: 500 });
   }
 }
