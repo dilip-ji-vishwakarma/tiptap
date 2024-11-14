@@ -73,19 +73,20 @@ export const DashboardSidebar = () => {
             <div>No data available for the sidebar</div>
           )}
         </div>
-
-        {currentStep && (
-          <React.Fragment key={currentStep.id}>
-            {templates[currentStep?.template] ? (
-              React.createElement(templates[currentStep.template], {
-                step: currentStep, 
-                courses: courses,   
-              })
-            ) : (
-              <div className="bg-white p-5 ">Template Not Found</div>
-            )}
-          </React.Fragment>
-        )}
+        <div className="max-w-[58%]"> 
+          {currentStep && (
+            <React.Fragment key={currentStep.id}>
+              {templates[currentStep?.template] ? (
+                React.createElement(templates[currentStep.template], {
+                  step: currentStep,
+                  courses: courses,
+                })
+              ) : (
+                <div className="bg-white p-5 ">Template Not Found</div>
+              )}
+            </React.Fragment>
+          )}
+        </div>
       </div>
     </EditorProvider>
   );

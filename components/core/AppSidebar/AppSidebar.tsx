@@ -56,7 +56,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
 
   return (
 
-      <Sidebar className="border-none  mt-[121px]">
+      <Sidebar className="border-none  mt-[122px]">
         <SidebarContent className="bg-[#F9FBFD] ">
           <SidebarGroup>
             <div className="fixed left-0">

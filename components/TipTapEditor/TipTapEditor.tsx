@@ -79,10 +79,10 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
   }, [content, editor, setCurrentEditor]);
 
   return (
-    <div className="editor-container mt-[109px] max-w-[80%] w-full" onClick={() => setCurrentEditor(editor)}>
+    <div className="editor-container mt-[132px] w-full bg-white border  border-[#c7c7c7]" onClick={() => setCurrentEditor(editor)}>
       <EditorContent
         editor={editor}
-        className="minimal-tiptap-editor overflow-auto h-full p-10 border-destructive focus-within:border-destructive min-h-[200px]"
+        className="minimal-tiptap-editor overflow-auto h-full p-10 border-destructive focus-within:border-destructive"
         placeholder="Type your description here"
       />
     </div>

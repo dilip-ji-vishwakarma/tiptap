@@ -10,6 +10,7 @@
 body {
   font-family: var(--googlesanse);
   font-weight: 400;
+  background-color: #F9FBFD;
 }
 
 .containers {
