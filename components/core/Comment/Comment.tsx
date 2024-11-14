@@ -7,6 +7,7 @@ import { useEditorContext } from '@/components/TipTapEditor';
 import { v4 as uuidv4 } from 'uuid';
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Portal } from '../Portal';
+import Link from 'next/link';
 
 export const Comment = () => {
   const { handleSubmit, control, formState: { errors, isValid }, reset } = useForm({
@@ -31,7 +32,7 @@ export const Comment = () => {
   }, []);
 
   useEffect(() => {
-    fetchComments(); 
+    fetchComments();
   }, []);
 
   const fetchComments = async () => {
@@ -61,6 +62,7 @@ export const Comment = () => {
       if (!response.ok) throw new Error("Failed to save comment");
       console.log("Comment saved successfully");
       fetchComments();
+      setCommentbox(false);
     } catch (error) {
       console.error("Error saving comment:", error);
     }
@@ -102,7 +104,7 @@ export const Comment = () => {
         <div ref={commentBoxRef}>
           {commentbox ? (
 
-            <div className="bg-[whitesmoke] w-full mt-[132px]" >
+            <div className="bg-[whitesmoke] w-full mt-[15px]" >
               <div className='shadow-[0_1px_3px_rgba(0,0,0,0.3),0_4px_8px_3px_rgba(0,0,0,0.15)] p-3 rounded-md bg-white space-y-3'>
                 <div className='flex items-center gap-3'>
                   <Avatar>
@@ -129,22 +131,22 @@ export const Comment = () => {
               </div>
             </div>
           ) : null}
-          {comments.length > 0 && (
-          <div className="comments-list mt-5">
-            {comments.map((comment: any) => (
-              <div key={comment.id} className="comment-item space-y-3 p-3 rounded-md bg-[#EDF2FA]" id={comment.id}>
-                <div className='flex items-center gap-3'>
-                  <Avatar>
-                    <AvatarImage src="https://github.com/shadcn.png" className="w-10 h-10 min-w-[40px] p-[3px] rounded-[100%] border-2 border-solid border-[rgba(112,100,233,0.3019607843)]" />
-                    <AvatarFallback>CN</AvatarFallback>
-                  </Avatar>
-                  <span className='text-md'>Dilip Vishwakarma</span>
+          <div className='space-y-3 mt-3 flex flex-col'>
+            {comments.length > 0 && comments.map((comment: any) => (
+              <Link href={`#${comment.id}`}>
+                <div key={comment.id} className="comment-item space-y-3 p-3 rounded-md bg-[#EDF2FA]">
+                  <div className='flex items-center gap-3'>
+                    <Avatar>
+                      <AvatarImage src="https://github.com/shadcn.png" className="w-10 h-10 min-w-[40px] p-[3px] rounded-[100%] border-2 border-solid border-[rgba(112,100,233,0.3019607843)]" />
+                      <AvatarFallback>CN</AvatarFallback>
+                    </Avatar>
+                    <span className='text-md'>Dilip Vishwakarma</span>
+                  </div>
+                  <p className="text-sm">{comment.text}</p>
                 </div>
-                <p className="text-sm">{comment.text}</p>
-              </div>
+              </Link>
             ))}
           </div>
-          ) }
         </div>
       </Portal>
     </>
