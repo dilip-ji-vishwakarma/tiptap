@@ -19,7 +19,7 @@ export const Comment = () => {
   const { currentEditor } = useEditorContext();  // Access editor from context
   const [comments, setComments] = useState({});
 
-  const saveCommentToApi = async ({ commentId, commentData }:any) => {
+  const saveCommentToApi = async ({ commentId, commentData }: any) => {
     try {
       const response = await fetch("/api/comment", {
         method: "POST",
@@ -33,61 +33,64 @@ export const Comment = () => {
     }
   };
 
-  const handleAddComment = (data:any) => {
-    const commentId = uuidv4();
+  const handleAddComment = (data: any) => {
+    const commentId = uuidv4(); // Generate a unique ID for the comment
     const commentContent = data.comment_area;
     const selection = currentEditor?.state.selection;
-    const position = selection ? selection.from : 0;
 
     if (selection && commentContent) {
+      // Apply the comment mark with the generated commentId
       currentEditor.chain()
         .focus()
         .setMark('comment', {
-          class: 'comment',
-          backgroundColor: 'gray',
-          'data-comment-id': commentId
+          id: commentId, // Pass data-comment-id
+          class: 'comment', // Add class as well
         })
         .run();
 
       // Save comment in component state and to API
       setComments(prev => ({
         ...prev,
-        [commentId]: { text: commentContent, position },
+        [commentId]: { text: commentContent, position: selection.from },
       }));
+
+      // Save comment to API
       saveCommentToApi({
         commentId,
-        commentData: { text: commentContent, position },
+        commentData: { text: commentContent, position: selection.from },
       });
 
-      reset();  // Clear the form
+      reset(); // Clear the form
     }
   };
 
   return (
-    <Sheet>
-      <SheetTrigger><span><MessageSquareText /></span></SheetTrigger>
-      <SheetContent className="bg-[whitesmoke]">
-        <SheetHeader>
-          <SheetTitle className="text-2xl font-bold">Comments</SheetTitle>
-          <SheetDescription>
-            <form onSubmit={handleSubmit(handleAddComment)} className="space-y-3">
-              <InputTextArea
-                column_name="comment_area"
-                required={true}
-                control={control}
-                errors={errors}
-                label="Enter Comment"
-              />
-              <button
-                type="submit"
-                className="border cursor-pointer text-lg font-medium h-10 bg-[#0b57d0] text-white px-6 py-2 rounded"
-              >
-                Save
-              </button>
-            </form>
-          </SheetDescription>
-        </SheetHeader>
-      </SheetContent>
-    </Sheet>
+    
+      <Sheet>
+        <SheetTrigger><MessageSquareText /></SheetTrigger>
+        <SheetContent className="bg-[whitesmoke]">
+          <SheetHeader>
+            <SheetTitle className="text-2xl font-bold">Comments</SheetTitle>
+            <SheetDescription>
+            <form onSubmit={handleSubmit(handleAddComment)} className='space-y-3'>
+                <InputTextArea
+                  column_name="comment_area"
+                  required={true}
+                  control={control}
+                  errors={errors}
+                  label="Enter Comment"
+                />
+                <button
+                  type="submit"
+                  className="border cursor-pointer text-lg font-medium h-10 bg-[#0b57d0] text-white px-6 py-2 rounded"
+                >
+                  Save
+                </button>
+                </form>
+            </SheetDescription>
+          </SheetHeader>
+        </SheetContent>
+      </Sheet>
+   
   );
 };

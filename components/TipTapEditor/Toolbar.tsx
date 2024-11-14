@@ -187,17 +187,17 @@ export const Toolbar = () => {
   //     console.error("Error saving comment:", error);
   //   }
   // };
-  
+
   // const handleComment = () => {
   //   const commentContent = prompt('Enter your comment:');
-    
+
   //   if (commentContent) {
   //     const commentId = new Date().getTime().toString();
-  
+
   //     // Access the current selection position
   //     const selection = currentEditor?.state.selection;
   //     const position = selection ? selection.from : 0;
-  
+
   //     if (selection) {
   //       currentEditor?.chain()
   //         .focus()
@@ -208,13 +208,13 @@ export const Toolbar = () => {
   //         })
   //         .run();
   //     }
-  
+
   //     // Save the comment in the state
   //     setComments(prevComments => ({
   //       ...prevComments,
   //       [commentId]: { text: commentContent, position },
   //     }));
-  
+
   //     // Save the comment to an external API with the 'data-comment-id'
   //     saveCommentToApi({
   //       commentId,
@@ -222,9 +222,9 @@ export const Toolbar = () => {
   //     });
   //   }
   // };
-  
-  
-  
+
+
+
 
   return (
     <div className="containers">
@@ -319,39 +319,22 @@ export const Toolbar = () => {
 
         <div >
           <Toggle type="button" onClick={() => setColor(!color)}><Palette className="h-4 w-4" /></Toggle>
-
           {color ? (
             <div className="absolute bg-[#F9FBFD] p-2.5 rounded-[10px] ">
-              <div >
-                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} pressed={activeFormats.textStyle}>
-                  <div className="bg-[#958DF1] w-[15px] h-[15px]"></div>
-                </Toggle>
+              <div className="gap-3 flex">
+                <Toggle className="p-0 bg-[#958DF1] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} pressed={activeFormats.textStyle}>
-                  <div className="bg-[#F98181] w-[15px] h-[15px]"></div>
-                </Toggle>
+                <Toggle className="p-0 bg-[#F98181] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} pressed={activeFormats.textStyle}>
-                  <div className="bg-[#FBBC88] w-[15px] h-[15px]"></div>
-                </Toggle>
+                <Toggle className="p-0 bg-[#FBBC88] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} pressed={activeFormats.textStyle}>
-                  <div className="bg-[#FAF594] w-[15px] h-[15px]"></div>
-                </Toggle>
+                <Toggle className="p-0 bg-[#FAF594] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} pressed={activeFormats.textStyle}>
-                  <div className="bg-[#70CFF8] w-[15px] h-[15px]"></div>
-                </Toggle>
+                <Toggle className="p-0 bg-[#70CFF8] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} pressed={activeFormats.textStyle}>
-                  <div className="bg-[#94FADB] w-[15px] h-[15px]"></div>
-                </Toggle>
+                <Toggle className="p-0 bg-[#94FADB] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} pressed={activeFormats.textStyle}>
-                  <div className="bg-[#B9F18D] w-[15px] h-[15px]"></div>
-                </Toggle>
-
-
+                <Toggle className="p-0 bg-[#B9F18D] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} pressed={activeFormats.textStyle} />
               </div>
               <input
                 type="color"

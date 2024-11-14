@@ -1,14 +1,21 @@
-import { Mark, markInputRule } from '@tiptap/core';
+import { Mark } from '@tiptap/core';
 
 export const CommentMark = Mark.create({
   name: 'comment',
+  
+  addAttributes() {
+    return {
+      id: {
+        default: null, // Allow id to be passed dynamically
+      },
+      class: {
+        default: 'comment', // Default class for styling
+      },
+    };
+  },
 
-  // Render HTML with the custom class and id
   renderHTML({ HTMLAttributes }) {
-    // Generate a unique ID for each comment (you can change this logic)
-    const commentId = HTMLAttributes['data-comment-id'] || new Date().getTime().toString();
-
-    // Return the span with the class and the id attribute
-    return ['span', { class: 'comment', id: commentId, ...HTMLAttributes }];
+    const { id, class: className } = HTMLAttributes;
+    return ['span', { class: className, id: id, ...HTMLAttributes }];
   },
 });
