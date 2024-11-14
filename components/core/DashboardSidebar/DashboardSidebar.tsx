@@ -55,13 +55,15 @@ export const DashboardSidebar = () => {
   }
 
   return (
-    <EditorProvider>
+    <EditorProvider >
+      <div className="relative">
       <div className="space-y-3 fixed top-0 z-[1] bg-white">
         <Header />
         <Toolbar />
         <div className="border-b  border-[#c7c7c7]"></div>
       </div>
-      <div className="flex gap-5 px-5">
+      </div>
+      <div className="flex gap-5 px-5 fixed top-[122px] h-[100vh] overflow-scroll">
         <div className="max-w-[20%] w-full">
           {courses.length > 0 ? (
             <SidebarProvider>
@@ -88,7 +90,7 @@ export const DashboardSidebar = () => {
           )}
         </div>
         <div className="max-w-[22%] w-full">
-            <div id="comment-portal" className="sticky top-[130px]"></div>
+            <div id="comment-portal" className="sticky top-[0px]"></div>
         </div>
       </div>
     </EditorProvider>
