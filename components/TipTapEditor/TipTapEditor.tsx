@@ -32,7 +32,7 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       Subscript,
       Superscript,
       CommentMark,
-      Highlight,
+      Highlight.configure({ multicolor: true }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
       }),
@@ -47,7 +47,6 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
           console.log("node.attrs", node.attrs);
           const modifiedId = node.attrs.id.replace(/\s+/g, '-');
           const link = node.attrs.link || `course?id=introduction-to-react#${modifiedId}`;
-          console.log("adsfadsfadsf",  node.attrs.link);
           return [
             'a',
             mergeAttributes({ href: link }, options.HTMLAttributes),

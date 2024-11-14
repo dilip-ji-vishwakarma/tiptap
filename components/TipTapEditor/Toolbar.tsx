@@ -4,16 +4,16 @@ import { Toggle } from "@/components/ui/toggle";
 import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, MessageCircle } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { Portal, ToolTip } from "../core";
-import { CommentStore } from "./CommentStore";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover"
+
 
 export const Toolbar = () => {
   const { currentEditor } = useEditorContext();
-  const [color, setColor] = useState(false);
-  const [comments, setComments] = useState<{
-    [key: string]: { text: string; position: number };
-  }>({});
-
-
+  const [activeHighlightColor, setActiveHighlightColor] = useState<string | null>(null);
   const [activeFormats, setActiveFormats] = useState({
     bold: false,
     italic: false,
@@ -41,6 +41,7 @@ export const Toolbar = () => {
     if (!currentEditor) return;
 
     const alignment = currentEditor.getAttributes('paragraph').textAlign;
+    const highlight = currentEditor.getAttributes('highlight')?.color || null;
 
     setActiveFormats({
       bold: currentEditor.isActive("bold"),
@@ -51,7 +52,7 @@ export const Toolbar = () => {
       superscript: currentEditor.isActive("superscript"),
       code: currentEditor.isActive("code"),
       paragraph: currentEditor.isActive("paragraph"),
-      highlight: currentEditor.isActive("highlight"),
+      highlight: !!highlight,
       left: alignment === 'left',
       center: alignment === 'center',
       right: alignment === 'right',
@@ -164,7 +165,12 @@ export const Toolbar = () => {
     currentEditor?.chain().focus().unsetLink().run()
   }, [currentEditor]);
 
-  
+  const handleHighlight = useCallback((color: string) => {
+    currentEditor?.chain().focus().toggleHighlight({ color }).run();
+    setActiveHighlightColor(color); // Set the active color
+  }, [currentEditor]);
+
+
   return (
     <div className="containers">
       <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
@@ -200,9 +206,28 @@ export const Toolbar = () => {
           <Pilcrow className="h-4 w-4" />
         </Toggle></ToolTip>
 
-        <ToolTip title="Highlight"><Toggle onClick={handlehighlighter} pressed={activeFormats.highlight}>
-          <Highlighter className="h-4 w-4" />
-        </Toggle></ToolTip>
+        <Popover >
+          <PopoverTrigger><Toggle type="button">
+            <Highlighter className="h-4 w-4" />
+          </Toggle></PopoverTrigger>
+          <PopoverContent className="w-full bg-white">
+            <div className="space-y-3">
+              <div className="gap-3 flex">
+                {['#958DF1', '#F98181', '#FBBC88', '#FAF594', '#70CFF8', '#94FADB', '#B9F18D'].map(color => (
+                  <Toggle
+                    key={color}
+                    className="p-0 min-w-[15px] h-[15px] rounded-none"
+                    style={{ backgroundColor: color }}
+                    onClick={() => handleHighlight(color)}
+                    pressed={activeHighlightColor === color} // Check if the color is active
+                  />
+                ))}
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+
 
         <div className="textAlign">
           <ToolTip title="Left"><Toggle onClick={handleLeftAlign} pressed={activeFormats.left}>
@@ -255,35 +280,37 @@ export const Toolbar = () => {
             <Link2Off className="h-4 w-4" />
           </Toggle></ToolTip>
         </div>
-
-        <div >
-          <Toggle type="button" onClick={() => setColor(!color)}><Palette className="h-4 w-4" /></Toggle>
-          {color ? (
-            <div className="absolute bg-[#F9FBFD] p-2.5 rounded-[10px] ">
+        <Popover>
+          <PopoverTrigger><Toggle type="button"><Palette className="h-4 w-4" /></Toggle></PopoverTrigger>
+          <PopoverContent className="w-full bg-white">
+            <div className="space-y-3">
               <div className="gap-3 flex">
-                <Toggle className="p-0 bg-[#958DF1] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#958DF1] min-w-[15px] h-[15px] rounded-none hover:bg-[#958DF1]" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0 bg-[#F98181] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#F98181] min-w-[15px] h-[15px] rounded-none hover:bg-[#F98181]" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0 bg-[#FBBC88] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#FBBC88] min-w-[15px] h-[15px] rounded-none hover:bg-[#FBBC88]" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0 bg-[#FAF594] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#FAF594] min-w-[15px] h-[15px] rounded-none hover:bg-[#FAF594]" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0 bg-[#70CFF8] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#70CFF8] min-w-[15px] h-[15px] rounded-none hover:bg-[#70CFF8]" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0 bg-[#94FADB] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#94FADB] min-w-[15px] h-[15px] rounded-none hover:bg-[#94FADB]" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} pressed={activeFormats.textStyle} />
 
-                <Toggle className="p-0 bg-[#B9F18D] min-w-[15px] h-[15px] rounded-none" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#B9F18D] min-w-[15px] h-[15px] rounded-none hover:bg-[#B9F18D]" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} pressed={activeFormats.textStyle} />
               </div>
-              <input
-                type="color"
-                onInput={event => currentEditor?.chain().focus().setColor((event.target as HTMLInputElement).value).run()}
-                value={currentEditor?.getAttributes('textStyle').color}
-                data-testid="setColor"
-              />
+              <div className="flex items-center gap-3">
+                <label>Inset Color</label>
+                <input
+                  type="color"
+                  onInput={event => currentEditor?.chain().focus().setColor((event.target as HTMLInputElement).value).run()}
+                  value={currentEditor?.getAttributes('textStyle').color}
+                  data-testid="setColor"
+                />
+              </div>
             </div>
-          ) : null}
-        </div>
+          </PopoverContent>
+        </Popover>
       </div>
     </div>
   );
