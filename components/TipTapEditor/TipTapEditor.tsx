@@ -14,7 +14,10 @@ import TextStyle from '@tiptap/extension-text-style'
 import Mention from '@tiptap/extension-mention'
 import suggestion from '../core/Mention/Suggestion'
 import { CommentMark } from "@/lib/CommentMark";
-
+import { DocBreadcrumb } from "../core";
+import { useSearchParams } from "next/navigation";
+import Image from '@tiptap/extension-image'
+import ResizeImage from "tiptap-extension-resize-image";
 
 interface TipTapEditorProps {
   content: string; // Assuming content is a string; change if it's different
@@ -22,6 +25,8 @@ interface TipTapEditorProps {
 
 export const TipTapEditor = ({ content }: TipTapEditorProps) => {
   const { setCurrentEditor } = useEditorContext();
+  const searchParams = useSearchParams();
+  const id = searchParams.get("id");
 
   const editor = useEditor({
     extensions: [
@@ -32,6 +37,10 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       Subscript,
       Superscript,
       CommentMark,
+      ResizeImage,
+      Image.configure({
+        inline: false, // Allows image to be a block element
+      }),
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({
         types: ['heading', 'paragraph'],
@@ -77,12 +86,16 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
   }, [content, editor, setCurrentEditor]);
 
   return (
+    <div className="mt-5">
+    <DocBreadcrumb path={`skilline.ai/course?id=${id}`}/>
     <div className="editor-container w-full bg-white border mt-3 border-[#c7c7c7]" onClick={() => setCurrentEditor(editor)}>
+      
       <EditorContent
         editor={editor}
         className="minimal-tiptap-editor overflow-auto h-full p-10 border-destructive focus-within:border-destructive"
         placeholder="Type your description here"
       />
+    </div>
     </div>
   );
 };

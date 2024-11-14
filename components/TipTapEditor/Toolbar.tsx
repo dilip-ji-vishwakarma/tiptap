@@ -1,19 +1,23 @@
 "use client"
 import { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, MessageCircle } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film  } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
-import { Portal, ToolTip } from "../core";
+import { ToolTip } from "../core";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 
 export const Toolbar = () => {
   const { currentEditor } = useEditorContext();
   const [activeHighlightColor, setActiveHighlightColor] = useState<string | null>(null);
+
+  const [imageUrl, setImageUrl] = useState('')
+
   const [activeFormats, setActiveFormats] = useState({
     bold: false,
     italic: false,
@@ -170,6 +174,26 @@ export const Toolbar = () => {
     setActiveHighlightColor(color); // Set the active color
   }, [currentEditor]);
 
+  const addImage = () => {
+    if (imageUrl) {
+      currentEditor?.chain().focus().setImage({ src: imageUrl }).run()
+      setImageUrl('')
+    }
+  }
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (file && currentEditor) {
+      const reader = new FileReader()
+      reader.onload = () => {
+        const result = reader.result
+        if (typeof result === 'string') {
+          currentEditor?.chain().focus().setImage({ src: result }).run()
+        }
+      }
+      reader.readAsDataURL(file) // Read the image as a Base64 URL
+    }
+  }
 
   return (
     <div className="containers">
@@ -309,6 +333,66 @@ export const Toolbar = () => {
                 />
               </div>
             </div>
+          </PopoverContent>
+        </Popover>
+
+        <Popover>
+          <PopoverTrigger><Toggle type="button"><Image className="h-4 w-4" /></Toggle></PopoverTrigger>
+          <PopoverContent className="bg-white relative p-2">
+            <Tabs defaultValue="URL" >
+              <TabsList className="w-full bg-[#EDF2FA] text-black">
+                <TabsTrigger className="w-6/12 data-[state=active]:bg-[#D3E3FD]" value="URL">URL</TabsTrigger>
+                <TabsTrigger className="w-6/12 data-[state=active]:bg-[#D3E3FD]" value="Upload">Upload</TabsTrigger>
+              </TabsList>
+              <TabsContent value="URL" className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Enter image URL"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  className="w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md"
+                />
+                <button onClick={addImage} className="border cursor-pointer text-md font-medium h-10   px-6 py-2 rounded-md leading-[0px] bg-[#0b57d0] text-white">
+                  Add Image
+                </button></TabsContent>
+              <TabsContent value="Upload">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </TabsContent>
+            </Tabs>
+          </PopoverContent>
+        </Popover>
+
+        <Popover>
+          <PopoverTrigger><Toggle type="button"><Film className="h-4 w-4" /></Toggle></PopoverTrigger>
+          <PopoverContent className="bg-white relative p-2">
+            <Tabs defaultValue="URL" >
+              <TabsList className="w-full bg-[#EDF2FA] text-black">
+                <TabsTrigger className="w-6/12 data-[state=active]:bg-[#D3E3FD]" value="URL">URL</TabsTrigger>
+                <TabsTrigger className="w-6/12 data-[state=active]:bg-[#D3E3FD]" value="Upload">Upload</TabsTrigger>
+              </TabsList>
+              <TabsContent value="URL" className="space-y-3">
+                <input
+                  type="text"
+                  placeholder="Enter image URL"
+                  value={imageUrl}
+                  onChange={(e) => setImageUrl(e.target.value)}
+                  className="w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md"
+                />
+                <button onClick={addImage} className="border cursor-pointer text-md font-medium h-10   px-6 py-2 rounded-md leading-[0px] bg-[#0b57d0] text-white">
+                  Add Image
+                </button></TabsContent>
+              <TabsContent value="Upload">
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleImageUpload}
+                />
+              </TabsContent>
+            </Tabs>
           </PopoverContent>
         </Popover>
       </div>
