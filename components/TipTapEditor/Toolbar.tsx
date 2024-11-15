@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {
@@ -186,17 +186,17 @@ export const Toolbar = () => {
 
   const insertYouTubeVideo = () => {
     if (!videoUrl) return;
-  
+
     const embedUrl = videoUrl.replace('watch?v=', 'embed/');
     const videoWidth = Math.max(320, parseInt(width.toString(), 10)) || 640;
     const videoHeight = Math.max(180, parseInt(height.toString(), 10)) || 480;
-  
+
     currentEditor?.commands.setYoutubeVideo({
       src: embedUrl,
       width: videoWidth as number,
-      height: videoHeight as number, 
+      height: videoHeight as number,
     });
-    setVideoUrl(''); 
+    setVideoUrl('');
   };
 
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,9 +251,7 @@ export const Toolbar = () => {
         </Toggle></ToolTip>
 
         <Popover >
-          <PopoverTrigger><Toggle type="button">
-            <Highlighter className="h-4 w-4" />
-          </Toggle></PopoverTrigger>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><Highlighter className="h-4 w-4" /></PopoverTrigger>
           <PopoverContent className="w-full bg-white">
             <div className="space-y-3">
               <div className="gap-3 flex">
@@ -263,9 +261,13 @@ export const Toolbar = () => {
                     className="p-0 min-w-[15px] h-[15px] rounded-none"
                     style={{ backgroundColor: color }}
                     onClick={() => handleHighlight(color)}
-                    pressed={activeHighlightColor === color} // Check if the color is active
+                    pressed={activeHighlightColor === color}
                   />
                 ))}
+              </div>
+              <div className="flex items-center gap-3">
+                <label>Unset Highlight</label>
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().unsetHighlight().run()}><PaintBucket className="h-4 w-4" /> </Toggle>
               </div>
             </div>
           </PopoverContent>
@@ -325,23 +327,23 @@ export const Toolbar = () => {
           </Toggle></ToolTip>
         </div>
         <Popover>
-          <PopoverTrigger><Toggle type="button"><Palette className="h-4 w-4" /></Toggle></PopoverTrigger>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><Palette className="h-4 w-4" /></PopoverTrigger>
           <PopoverContent className="w-full bg-white">
             <div className="space-y-3">
               <div className="gap-3 flex">
-                <Toggle className="p-0 bg-[#958DF1] min-w-[15px] h-[15px] rounded-none hover:bg-[#958DF1]" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#958DF1] min-w-[15px] h-[15px] rounded-none hover:bg-[#958DF1]" onClick={() => currentEditor?.chain().focus().setColor('#958DF1').run()} />
 
-                <Toggle className="p-0 bg-[#F98181] min-w-[15px] h-[15px] rounded-none hover:bg-[#F98181]" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#F98181] min-w-[15px] h-[15px] rounded-none hover:bg-[#F98181]" onClick={() => currentEditor?.chain().focus().setColor('#F98181').run()} />
 
-                <Toggle className="p-0 bg-[#FBBC88] min-w-[15px] h-[15px] rounded-none hover:bg-[#FBBC88]" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#FBBC88] min-w-[15px] h-[15px] rounded-none hover:bg-[#FBBC88]" onClick={() => currentEditor?.chain().focus().setColor('#FBBC88').run()} />
 
-                <Toggle className="p-0 bg-[#FAF594] min-w-[15px] h-[15px] rounded-none hover:bg-[#FAF594]" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#FAF594] min-w-[15px] h-[15px] rounded-none hover:bg-[#FAF594]" onClick={() => currentEditor?.chain().focus().setColor('#FAF594').run()} />
 
-                <Toggle className="p-0 bg-[#70CFF8] min-w-[15px] h-[15px] rounded-none hover:bg-[#70CFF8]" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#70CFF8] min-w-[15px] h-[15px] rounded-none hover:bg-[#70CFF8]" onClick={() => currentEditor?.chain().focus().setColor('#70CFF8').run()} />
 
-                <Toggle className="p-0 bg-[#94FADB] min-w-[15px] h-[15px] rounded-none hover:bg-[#94FADB]" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#94FADB] min-w-[15px] h-[15px] rounded-none hover:bg-[#94FADB]" onClick={() => currentEditor?.chain().focus().setColor('#94FADB').run()} />
 
-                <Toggle className="p-0 bg-[#B9F18D] min-w-[15px] h-[15px] rounded-none hover:bg-[#B9F18D]" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} pressed={activeFormats.textStyle} />
+                <Toggle className="p-0 bg-[#B9F18D] min-w-[15px] h-[15px] rounded-none hover:bg-[#B9F18D]" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} />
               </div>
               <div className="flex items-center gap-3">
                 <label>Inset Color</label>
@@ -351,6 +353,10 @@ export const Toolbar = () => {
                   value={currentEditor?.getAttributes('textStyle').color}
                   data-testid="setColor"
                 />
+              </div>
+              <div className="flex items-center gap-3">
+                <label>Unset Color</label>
+                <Toggle className="p-0" onClick={() => currentEditor?.chain().focus().unsetColor().run()}><PaintBucket className="h-4 w-4" /> </Toggle>
               </div>
             </div>
           </PopoverContent>
