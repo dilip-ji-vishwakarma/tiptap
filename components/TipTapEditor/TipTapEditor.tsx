@@ -18,6 +18,7 @@ import { DocBreadcrumb } from "../core";
 import { useSearchParams } from "next/navigation";
 import Image from '@tiptap/extension-image'
 import ResizeImage from "tiptap-extension-resize-image";
+import Youtube from '@tiptap/extension-youtube'
 
 interface TipTapEditorProps {
   content: string; // Assuming content is a string; change if it's different
@@ -38,6 +39,10 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       Superscript,
       CommentMark,
       ResizeImage,
+      Youtube.configure({
+        controls: false,
+        nocookie: true,
+      }),
       Image.configure({
         inline: false, // Allows image to be a block element
       }),

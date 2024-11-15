@@ -1,7 +1,7 @@
 "use client"
-import { useEffect, useCallback, useState } from "react";
+import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film  } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {
@@ -15,6 +15,9 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 export const Toolbar = () => {
   const { currentEditor } = useEditorContext();
   const [activeHighlightColor, setActiveHighlightColor] = useState<string | null>(null);
+  const [height, setHeight] = useState(480)
+  const [width, setWidth] = useState(640)
+  const [videoUrl, setVideoUrl] = useState('');
 
   const [imageUrl, setImageUrl] = useState('')
 
@@ -181,6 +184,21 @@ export const Toolbar = () => {
     }
   }
 
+  const insertYouTubeVideo = () => {
+    if (!videoUrl) return;
+  
+    const embedUrl = videoUrl.replace('watch?v=', 'embed/');
+    const videoWidth = Math.max(320, parseInt(width.toString(), 10)) || 640;
+    const videoHeight = Math.max(180, parseInt(height.toString(), 10)) || 480;
+  
+    currentEditor?.commands.setYoutubeVideo({
+      src: embedUrl,
+      width: videoWidth as number,
+      height: videoHeight as number, 
+    });
+    setVideoUrl(''); 
+  };
+
   const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0]
     if (file && currentEditor) {
@@ -194,6 +212,8 @@ export const Toolbar = () => {
       reader.readAsDataURL(file) // Read the image as a Base64 URL
     }
   }
+
+  const inputClass = "w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md";
 
   return (
     <div className="containers">
@@ -337,7 +357,7 @@ export const Toolbar = () => {
         </Popover>
 
         <Popover>
-          <PopoverTrigger><Toggle type="button"><Image className="h-4 w-4" /></Toggle></PopoverTrigger>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><Image className="h-4 w-4" /></PopoverTrigger>
           <PopoverContent className="bg-white relative p-2">
             <Tabs defaultValue="URL" >
               <TabsList className="w-full bg-[#EDF2FA] text-black">
@@ -350,7 +370,7 @@ export const Toolbar = () => {
                   placeholder="Enter image URL"
                   value={imageUrl}
                   onChange={(e) => setImageUrl(e.target.value)}
-                  className="w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md"
+                  className={inputClass}
                 />
                 <button onClick={addImage} className="border cursor-pointer text-md font-medium h-10   px-6 py-2 rounded-md leading-[0px] bg-[#0b57d0] text-white">
                   Add Image
@@ -367,32 +387,34 @@ export const Toolbar = () => {
         </Popover>
 
         <Popover>
-          <PopoverTrigger><Toggle type="button"><Film className="h-4 w-4" /></Toggle></PopoverTrigger>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><Film className="h-4 w-4" /></PopoverTrigger>
           <PopoverContent className="bg-white relative p-2">
-            <Tabs defaultValue="URL" >
-              <TabsList className="w-full bg-[#EDF2FA] text-black">
-                <TabsTrigger className="w-6/12 data-[state=active]:bg-[#D3E3FD]" value="URL">URL</TabsTrigger>
-                <TabsTrigger className="w-6/12 data-[state=active]:bg-[#D3E3FD]" value="Upload">Upload</TabsTrigger>
-              </TabsList>
-              <TabsContent value="URL" className="space-y-3">
+            <div className="space-y-2">
+              <input
+                type="text"
+                placeholder="YouTube URL"
+                value={videoUrl}
+                onChange={(e) => setVideoUrl(e.target.value)}
+                className={inputClass}
+              />
+              <div className="flex gap-2 items-center">
                 <input
-                  type="text"
-                  placeholder="Enter image URL"
-                  value={imageUrl}
-                  onChange={(e) => setImageUrl(e.target.value)}
-                  className="w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md"
+                  type="number"
+                  placeholder="Width"
+                  value={width}
+                  onChange={(e) => setWidth(Number(e.target.value))}
+                  className={inputClass}
                 />
-                <button onClick={addImage} className="border cursor-pointer text-md font-medium h-10   px-6 py-2 rounded-md leading-[0px] bg-[#0b57d0] text-white">
-                  Add Image
-                </button></TabsContent>
-              <TabsContent value="Upload">
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
+                  type="number"
+                  placeholder="Height"
+                  value={height}
+                  onChange={(e) => setHeight(Number(e.target.value))}
+                  className={inputClass}
                 />
-              </TabsContent>
-            </Tabs>
+              </div>
+              <button onClick={insertYouTubeVideo} className="border cursor-pointer text-md font-medium h-10   px-6 py-2 rounded-md leading-[0px] bg-[#0b57d0] text-white">Add Video</button>
+            </div>
           </PopoverContent>
         </Popover>
       </div>
