@@ -108,3 +108,17 @@ body {
 .comment {
   background-color: #FEF2CD;
 }
+
+.tiptap code {
+  background-color: #F6F2FF;
+  border-radius: .4rem;
+  color: black;
+  font-size: .85rem;
+  padding: .25em .3em;
+}
+
+.tiptap blockquote {
+  border-left: 3px solid gray;
+  margin: 1.5rem 0;
+  padding-left: 1rem;
+}

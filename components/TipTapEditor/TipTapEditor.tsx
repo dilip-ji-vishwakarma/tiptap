@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useEditor, EditorContent, mergeAttributes } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -19,9 +19,11 @@ import { useSearchParams } from "next/navigation";
 import Image from '@tiptap/extension-image'
 import ResizeImage from "tiptap-extension-resize-image";
 import Youtube from '@tiptap/extension-youtube'
+import Code from '@tiptap/extension-code'
+import Blockquote from '@tiptap/extension-blockquote'
 
 interface TipTapEditorProps {
-  content: string; // Assuming content is a string; change if it's different
+  content: string;
 }
 
 export const TipTapEditor = ({ content }: TipTapEditorProps) => {
@@ -39,6 +41,8 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       Superscript,
       CommentMark,
       ResizeImage,
+      Code,
+      Blockquote,
       Youtube.configure({
         controls: false,
         nocookie: true,

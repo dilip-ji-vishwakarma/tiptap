@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {
@@ -42,6 +42,7 @@ export const Toolbar = () => {
     ordered: false,
     link: false,
     textStyle: false,
+    blockquote: false,
   });
 
   const checkActiveFormats = useCallback(() => {
@@ -71,6 +72,7 @@ export const Toolbar = () => {
       ordered: currentEditor.isActive("ordered"),
       link: currentEditor.isActive("link"),
       textStyle: currentEditor.isActive("textStyle"),
+      blockquote: currentEditor.isActive("blockquote"),
     });
   }, [currentEditor]);
 
@@ -172,6 +174,14 @@ export const Toolbar = () => {
     currentEditor?.chain().focus().unsetLink().run()
   }, [currentEditor]);
 
+  const handleUnsetCode = useCallback(() => {
+    currentEditor?.chain().focus().unsetCode().run()
+  }, [currentEditor]);
+
+  const handleBlockquote = useCallback(() => {
+    currentEditor?.chain().focus().toggleBlockquote().run()
+  }, [currentEditor]);
+
   const handleHighlight = useCallback((color: string) => {
     currentEditor?.chain().focus().toggleHighlight({ color }).run();
     setActiveHighlightColor(color); // Set the active color
@@ -209,7 +219,7 @@ export const Toolbar = () => {
           currentEditor?.chain().focus().setImage({ src: result }).run()
         }
       }
-      reader.readAsDataURL(file) // Read the image as a Base64 URL
+      reader.readAsDataURL(file) 
     }
   }
 
@@ -218,6 +228,16 @@ export const Toolbar = () => {
   return (
     <div className="containers">
       <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
+      <div>
+          <ToolTip title="Undo"><Toggle onClick={handleundo} pressed={activeFormats.horizontal}>
+            <Undo2 className="h-4 w-4" />
+          </Toggle></ToolTip>
+
+          <ToolTip title="Redo"><Toggle onClick={handleredo} pressed={activeFormats.horizontal}>
+            <Redo2 className="h-4 w-4" />
+          </Toggle></ToolTip>
+        </div>
+
         <ToolTip title="Bold"><Toggle onClick={handleBold} pressed={activeFormats.bold}>
           <BoldIcon className="h-4 w-4" />
         </Toggle></ToolTip>
@@ -246,12 +266,16 @@ export const Toolbar = () => {
           <CodeIcon className="h-4 w-4" />
         </Toggle></ToolTip>
 
+        <ToolTip title="Unset Code"><Toggle onClick={handleUnsetCode} pressed={activeFormats.code}>
+          <CodeXml className="h-4 w-4" />
+        </Toggle></ToolTip>
+
         <ToolTip title="Paragraph"><Toggle onClick={handleParagraph} pressed={activeFormats.paragraph}>
           <Pilcrow className="h-4 w-4" />
         </Toggle></ToolTip>
 
         <Popover >
-          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><Highlighter className="h-4 w-4" /></PopoverTrigger>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Highlight"><Highlighter className="h-4 w-4" /></ToolTip></PopoverTrigger>
           <PopoverContent className="w-full bg-white">
             <div className="space-y-3">
               <div className="gap-3 flex">
@@ -297,15 +321,9 @@ export const Toolbar = () => {
           <SquareMinus className="h-4 w-4" />
         </Toggle></ToolTip>
 
-        <div>
-          <ToolTip title="Undo"><Toggle onClick={handleundo} pressed={activeFormats.horizontal}>
-            <Undo2 className="h-4 w-4" />
-          </Toggle></ToolTip>
-
-          <ToolTip title="Redo"><Toggle onClick={handleredo} pressed={activeFormats.horizontal}>
-            <Redo2 className="h-4 w-4" />
-          </Toggle></ToolTip>
-        </div>
+        <ToolTip title="Blockquote"><Toggle onClick={handleBlockquote} pressed={activeFormats.blockquote}>
+          <MessageSquareQuote className="h-4 w-4" />
+        </Toggle></ToolTip>
 
         <div>
           <ToolTip title="Bullet list"><Toggle onClick={handleBullet} pressed={activeFormats.bullet}>
@@ -322,12 +340,13 @@ export const Toolbar = () => {
             <Link2 className="h-4 w-4" />
           </Toggle></ToolTip>
 
-          <ToolTip title="Ordered list"><Toggle onClick={handleRemoveLink} pressed={activeFormats.link}>
+          <ToolTip title="Unlink"><Toggle onClick={handleRemoveLink} pressed={activeFormats.link}>
             <Link2Off className="h-4 w-4" />
           </Toggle></ToolTip>
         </div>
+
         <Popover>
-          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><Palette className="h-4 w-4" /></PopoverTrigger>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Color"><Palette className="h-4 w-4" /></ToolTip></PopoverTrigger>
           <PopoverContent className="w-full bg-white">
             <div className="space-y-3">
               <div className="gap-3 flex">
@@ -363,7 +382,7 @@ export const Toolbar = () => {
         </Popover>
 
         <Popover>
-          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><Image className="h-4 w-4" /></PopoverTrigger>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Image"><Image className="h-4 w-4" /></ToolTip></PopoverTrigger>
           <PopoverContent className="bg-white relative p-2">
             <Tabs defaultValue="URL" >
               <TabsList className="w-full bg-[#EDF2FA] text-black">
@@ -393,7 +412,7 @@ export const Toolbar = () => {
         </Popover>
 
         <Popover>
-          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><Film className="h-4 w-4" /></PopoverTrigger>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Video"><Film className="h-4 w-4" /></ToolTip></PopoverTrigger>
           <PopoverContent className="bg-white relative p-2">
             <div className="space-y-2">
               <input
