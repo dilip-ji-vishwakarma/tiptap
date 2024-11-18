@@ -9,7 +9,6 @@ import {
     DialogTrigger,
 } from "@/components/ui/dialog"
 import { LockKeyhole } from 'lucide-react'
-import { Button } from "@/components/ui/button"
 import { Clipboard, Files } from 'lucide-react';
 
 export const Share = () => {

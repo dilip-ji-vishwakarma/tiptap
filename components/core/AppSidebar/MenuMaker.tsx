@@ -10,7 +10,7 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus, X } from 'lucide-react';
+import { Plus} from 'lucide-react';
 
 
 export const MenuMaker = () => {

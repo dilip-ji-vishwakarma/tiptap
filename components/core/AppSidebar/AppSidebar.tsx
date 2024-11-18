@@ -11,7 +11,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { MenuMaker } from "./MenuMaker";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ListMinus } from "lucide-react";
 import Link from "next/link";
 

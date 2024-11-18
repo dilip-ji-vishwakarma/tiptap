@@ -36,6 +36,7 @@
     "@tiptap/suggestion": "^2.9.1",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
+    "docx": "^9.0.3",
     "lucide-react": "^0.454.0",
     "mysql2": "^3.11.4",
     "next": "15.0.3",
@@ -49,6 +50,8 @@
     "uuid": "^11.0.3"
   },
   "devDependencies": {
+    "@types/file-saver": "^2.0.7",
+    "@types/html-docx-js": "^0.3.4",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

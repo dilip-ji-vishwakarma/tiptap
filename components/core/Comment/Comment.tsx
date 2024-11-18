@@ -132,8 +132,8 @@ export const Comment = () => {
             </div>
           ) : null}
           <div className='space-y-3 mt-3 flex flex-col'>
-            {comments.length > 0 && comments.map((comment: any) => (
-              <Link href={`#${comment.id}`}>
+            {comments.length > 0 && comments.map((comment: any, index) => (
+              <Link key={index} href={`#${comment.id}`}>
                 <div key={comment.id} className="comment-item space-y-3 p-3 rounded-md bg-[#EDF2FA]">
                   <div className='flex items-center gap-3'>
                     <Avatar>

@@ -36,8 +36,6 @@ export const Toolbar = () => {
     right: false,
     justify: false,
     horizontal: false,
-    undo: false,
-    redo: false,
     bullet: false,
     ordered: false,
     link: false,
@@ -66,8 +64,6 @@ export const Toolbar = () => {
       right: alignment === 'right',
       justify: alignment === 'justify',
       horizontal: currentEditor.isActive("horizontal"),
-      undo: currentEditor.isActive("undo"),
-      redo: currentEditor.isActive("redo"),
       bullet: currentEditor.isActive("bullet"),
       ordered: currentEditor.isActive("ordered"),
       link: currentEditor.isActive("link"),
@@ -121,10 +117,6 @@ export const Toolbar = () => {
 
   const handleParagraph = useCallback(() => {
     currentEditor?.chain().focus().setParagraph().run();
-  }, [currentEditor]);
-
-  const handlehighlighter = useCallback(() => {
-    currentEditor?.chain().focus().toggleHighlight().run();
   }, [currentEditor]);
 
   const handleLeftAlign = useCallback(() => {
@@ -194,6 +186,8 @@ export const Toolbar = () => {
     }
   }
 
+
+
   const insertYouTubeVideo = () => {
     if (!videoUrl) return;
 
@@ -228,15 +222,13 @@ export const Toolbar = () => {
   return (
     <div className="containers">
       <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
-      <div>
-          <ToolTip title="Undo"><Toggle onClick={handleundo} pressed={activeFormats.horizontal}>
+          <ToolTip title="Undo"><Toggle onClick={handleundo} disabled={!currentEditor?.can().undo()}>
             <Undo2 className="h-4 w-4" />
           </Toggle></ToolTip>
 
-          <ToolTip title="Redo"><Toggle onClick={handleredo} pressed={activeFormats.horizontal}>
+          <ToolTip title="Redo"><Toggle onClick={handleredo} disabled={!currentEditor?.can().redo()}>
             <Redo2 className="h-4 w-4" />
           </Toggle></ToolTip>
-        </div>
 
         <ToolTip title="Bold"><Toggle onClick={handleBold} pressed={activeFormats.bold}>
           <BoldIcon className="h-4 w-4" />
@@ -442,6 +434,12 @@ export const Toolbar = () => {
             </div>
           </PopoverContent>
         </Popover>
+
+        {/* <ToolTip title="Export to DOC">
+          <button onClick={handleExportToDoc} className="flex items-center justify-center text-sm p-2 border rounded-md bg-blue-500 text-white">
+            Export to DOC
+          </button>
+          </ToolTip> */}
       </div>
     </div>
   );

@@ -21,6 +21,9 @@ import ResizeImage from "tiptap-extension-resize-image";
 import Youtube from '@tiptap/extension-youtube'
 import Code from '@tiptap/extension-code'
 import Blockquote from '@tiptap/extension-blockquote'
+import Document from '@tiptap/extension-document'
+import Paragraph from '@tiptap/extension-paragraph'
+import Text from '@tiptap/extension-text'
 
 interface TipTapEditorProps {
   content: string;
@@ -42,7 +45,10 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       CommentMark,
       ResizeImage,
       Code,
+      Document,
       Blockquote,
+      Paragraph,
+      Text,
       Youtube.configure({
         controls: false,
         nocookie: true,
