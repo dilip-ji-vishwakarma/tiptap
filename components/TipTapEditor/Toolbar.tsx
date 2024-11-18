@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6  } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {
@@ -41,6 +41,7 @@ export const Toolbar = () => {
     link: false,
     textStyle: false,
     blockquote: false,
+    heading: false,
   });
 
   const checkActiveFormats = useCallback(() => {
@@ -69,6 +70,7 @@ export const Toolbar = () => {
       link: currentEditor.isActive("link"),
       textStyle: currentEditor.isActive("textStyle"),
       blockquote: currentEditor.isActive("blockquote"),
+      heading: currentEditor.isActive("heading"),
     });
   }, [currentEditor]);
 
@@ -242,6 +244,22 @@ export const Toolbar = () => {
           <BoldIcon className="h-4 w-4" />
         </Toggle></ToolTip>
 
+        <Popover>
+        <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Heading"><Heading className="h-4 w-4" /></ToolTip></PopoverTrigger>
+        <PopoverContent className="w-full bg-white">
+            <div className="gap-3 flex">
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 1 }).run()}  ><Heading1 className="h-4 w-4"/></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 2 }).run()}  ><Heading2 className="h-4 w-4"/></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 3 }).run()}  ><Heading3 className="h-4 w-4"/></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 4 }).run()}  ><Heading4 className="h-4 w-4"/></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 5 }).run()}  ><Heading5 className="h-4 w-4"/></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 6 }).run()}  ><Heading6 className="h-4 w-4"/></Toggle>
+            </div>
+          </PopoverContent>
+        </Popover>
+
+        
+
         <ToolTip title="Italic"><Toggle onClick={handleItalic} pressed={activeFormats.italic}>
           <ItalicIcon className="h-4 w-4" />
         </Toggle></ToolTip>
@@ -296,8 +314,6 @@ export const Toolbar = () => {
             </div>
           </PopoverContent>
         </Popover>
-
-
 
         <div className="textAlign">
           <ToolTip title="Left"><Toggle onClick={handleLeftAlign} pressed={activeFormats.left}>

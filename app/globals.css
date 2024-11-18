@@ -143,3 +143,16 @@ body {
 ::-webkit-scrollbar-thumb {
   @apply rounded-full bg-border border-none bg-[#EDF2FA];
 }
+
+.tiptap h1 {
+  font-size: 1.4rem;
+}
+.tiptap h2 {
+  font-size: 1.2rem;
+}
+.tiptap h3 {
+  font-size: 1.1rem;
+}
+.tiptap h4, h5, h6 {
+  font-size: 1rem;
+}

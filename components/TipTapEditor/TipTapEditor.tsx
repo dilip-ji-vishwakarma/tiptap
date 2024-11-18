@@ -25,6 +25,7 @@ import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text';
 import ReactComponent from '@/lib/NodeExtension'
+import Heading from '@tiptap/extension-heading'
 interface TipTapEditorProps {
   content: string;
 }
@@ -49,6 +50,9 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       Blockquote,
       Paragraph,
       Text,
+      Heading.configure({
+        levels: [1, 2, 3, 4, 5, 6],
+      }),
       ReactComponent,
       Youtube.configure({
         controls: false,
