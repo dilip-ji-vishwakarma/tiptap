@@ -12,3 +12,4 @@ export * from "./Legend";
 export * from "./FontChanger";
 export * from "./input";
 export * from "./DocBreadcrumb";
+export * from "./GridBox";

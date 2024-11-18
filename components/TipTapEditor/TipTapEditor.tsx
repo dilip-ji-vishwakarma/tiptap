@@ -23,8 +23,8 @@ import Code from '@tiptap/extension-code'
 import Blockquote from '@tiptap/extension-blockquote'
 import Document from '@tiptap/extension-document'
 import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
-
+import Text from '@tiptap/extension-text';
+import ReactComponent from '@/lib/NodeExtension'
 interface TipTapEditorProps {
   content: string;
 }
@@ -49,6 +49,7 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       Blockquote,
       Paragraph,
       Text,
+      ReactComponent,
       Youtube.configure({
         controls: false,
         nocookie: true,
@@ -107,7 +108,7 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
       
       <EditorContent
         editor={editor}
-        className="minimal-tiptap-editor overflow-auto h-full p-10 border-destructive focus-within:border-destructive"
+        className="minimal-tiptap-editor overflow-auto  p-10 border-destructive focus-within:border-destructive h-[100vh]"
         placeholder="Type your description here"
       />
     </div>

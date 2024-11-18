@@ -1,11 +1,8 @@
-import React from 'react'
+import React from 'react';
 import { TipTapEditor } from './TipTapEditor';
 
-const TapEditor = ({ courses }: any) => {
-    const string = courses.map((item: any) => item.editor_string).join(' ');
-  return (
-    <><TipTapEditor content={string} /></>
-  )
+const TapEditor = ({ editorString }: any) => {
+  return <TipTapEditor content={editorString} />;
 }
 
-export default TapEditor
+export default TapEditor;

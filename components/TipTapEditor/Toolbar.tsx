@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {
@@ -213,22 +213,30 @@ export const Toolbar = () => {
           currentEditor?.chain().focus().setImage({ src: result }).run()
         }
       }
-      reader.readAsDataURL(file) 
+      reader.readAsDataURL(file)
     }
   }
+
+  const insertComponent = (type: string) => {
+    currentEditor
+      ?.chain()
+      .focus()
+      .insertContent(`<react-component></react-component>`)
+      .run();
+  };
 
   const inputClass = "w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md";
 
   return (
     <div className="containers">
       <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
-          <ToolTip title="Undo"><Toggle onClick={handleundo} disabled={!currentEditor?.can().undo()}>
-            <Undo2 className="h-4 w-4" />
-          </Toggle></ToolTip>
+        <ToolTip title="Undo"><Toggle onClick={handleundo} disabled={!currentEditor?.can().undo()}>
+          <Undo2 className="h-4 w-4" />
+        </Toggle></ToolTip>
 
-          <ToolTip title="Redo"><Toggle onClick={handleredo} disabled={!currentEditor?.can().redo()}>
-            <Redo2 className="h-4 w-4" />
-          </Toggle></ToolTip>
+        <ToolTip title="Redo"><Toggle onClick={handleredo} disabled={!currentEditor?.can().redo()}>
+          <Redo2 className="h-4 w-4" />
+        </Toggle></ToolTip>
 
         <ToolTip title="Bold"><Toggle onClick={handleBold} pressed={activeFormats.bold}>
           <BoldIcon className="h-4 w-4" />
@@ -434,12 +442,10 @@ export const Toolbar = () => {
             </div>
           </PopoverContent>
         </Popover>
-
-        {/* <ToolTip title="Export to DOC">
-          <button onClick={handleExportToDoc} className="flex items-center justify-center text-sm p-2 border rounded-md bg-blue-500 text-white">
-            Export to DOC
-          </button>
-          </ToolTip> */}
+        <ToolTip title="Component"><Toggle onClick={() => insertComponent('card')}>
+          <Plus className="h-4 w-4" />
+        </Toggle>
+        </ToolTip>
       </div>
     </div>
   );

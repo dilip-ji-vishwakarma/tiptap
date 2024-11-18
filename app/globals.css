@@ -122,3 +122,24 @@ body {
   margin: 1.5rem 0;
   padding-left: 1rem;
 }
+
+.tiptap li {
+  list-style: disc;
+}
+
+.tiptap ol li {
+  list-style: decimal;
+}
+
+::-webkit-scrollbar {
+  @apply w-2.5 h-2.5;
+ 
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent
+}
+
+::-webkit-scrollbar-thumb {
+  @apply rounded-full bg-border border-none bg-[#EDF2FA];
+}
