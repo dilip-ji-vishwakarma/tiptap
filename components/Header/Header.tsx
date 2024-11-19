@@ -6,6 +6,7 @@ import { NavigationMenu, NavigationMenuList, NavigationMenuLink } from "@/compon
 import Image from "next/image"
 import { LayoutGrid } from 'lucide-react';
 import { ButtonAction } from "./ButtonAction"
+import { Comment, Share } from "../core"
 
 export const Header = () => {
 
@@ -39,7 +40,6 @@ export const Header = () => {
                     <SheetTrigger asChild >
                         <Button variant="outline" size="icon" className="lg:hidden ">
                             <LayoutGrid />
-                            <span className="sr-only">Toggle navigation menu</span>
                         </Button>
                     </SheetTrigger>
                     <SheetContent side="left" className="bg-[whitesmoke]">

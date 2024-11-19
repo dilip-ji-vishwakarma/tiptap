@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Braces  } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Braces } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {
@@ -238,8 +238,8 @@ export const Toolbar = () => {
   const inputClass = "w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md";
 
   return (
-    <div className="containers">
-      <div className="rounded-full toolbar flex justify-start gap-3 shrink-0 overflow-x-auto  px-2 bg-[#EDF2FA]">
+    <div className="w-full">
+      <div className="md:rounded-full toolbar flex flex-wrap justify-start md:gap-3 gap-4 md:shrink-0 overflow-x-auto  px-2 py-1.5 bg-[#EDF2FA]">
         <ToolTip title="Undo"><Toggle onClick={handleundo} disabled={!currentEditor?.can().undo()}>
           <Undo2 className="h-4 w-4" />
         </Toggle></ToolTip>
@@ -251,22 +251,6 @@ export const Toolbar = () => {
         <ToolTip title="Bold"><Toggle onClick={handleBold} pressed={activeFormats.bold}>
           <BoldIcon className="h-4 w-4" />
         </Toggle></ToolTip>
-
-        <Popover>
-        <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Heading"><Heading className="h-4 w-4" /></ToolTip></PopoverTrigger>
-        <PopoverContent className="w-full bg-white">
-            <div className="gap-3 flex">
-              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 1 }).run()}  ><Heading1 className="h-4 w-4"/></Toggle>
-              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 2 }).run()}  ><Heading2 className="h-4 w-4"/></Toggle>
-              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 3 }).run()}  ><Heading3 className="h-4 w-4"/></Toggle>
-              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 4 }).run()}  ><Heading4 className="h-4 w-4"/></Toggle>
-              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 5 }).run()}  ><Heading5 className="h-4 w-4"/></Toggle>
-              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 6 }).run()}  ><Heading6 className="h-4 w-4"/></Toggle>
-            </div>
-          </PopoverContent>
-        </Popover>
-
-        
 
         <ToolTip title="Italic"><Toggle onClick={handleItalic} pressed={activeFormats.italic}>
           <ItalicIcon className="h-4 w-4" />
@@ -300,6 +284,69 @@ export const Toolbar = () => {
           <Pilcrow className="h-4 w-4" />
         </Toggle></ToolTip>
 
+        <ToolTip title="Left"><Toggle onClick={handleLeftAlign} pressed={activeFormats.left}>
+          <AlignLeft className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Center"><Toggle onClick={handleCenterAlign} pressed={activeFormats.center} >
+          <AlignCenter className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Right"><Toggle onClick={handleRightAlign} pressed={activeFormats.right} >
+          <AlignRight className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Justify"><Toggle onClick={handleJustifyAlign} pressed={activeFormats.justify} >
+          <AlignJustify className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Horizontal rule"><Toggle onClick={handleHorizontalRue} pressed={activeFormats.horizontal}>
+          <SquareMinus className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Blockquote"><Toggle onClick={handleBlockquote} pressed={activeFormats.blockquote}>
+          <MessageSquareQuote className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Bullet list"><Toggle onClick={handleBullet} pressed={activeFormats.bullet}>
+          <List className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Ordered list"><Toggle onClick={handleOrdered} pressed={activeFormats.ordered}>
+          <ListOrdered className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Link"><Toggle onClick={handleLink} pressed={activeFormats.link}>
+          <Link2 className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Unlink"><Toggle onClick={handleRemoveLink} pressed={activeFormats.link}>
+          <Link2Off className="h-4 w-4" />
+        </Toggle></ToolTip>
+
+        <ToolTip title="Component"><Toggle onClick={() => insertComponent('card')}>
+          <Plus className="h-4 w-4" />
+        </Toggle>
+        </ToolTip>
+        <ToolTip title="Monaco"><Toggle onClick={() => MonacoComponent('monaco')}>
+          <Braces className="h-4 w-4" />
+        </Toggle>
+        </ToolTip>
+
+        <Popover>
+          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Heading"><Heading className="h-4 w-4" /></ToolTip></PopoverTrigger>
+          <PopoverContent className="w-full bg-white">
+            <div className="gap-3 flex">
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 1 }).run()}  ><Heading1 className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 2 }).run()}  ><Heading2 className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 3 }).run()}  ><Heading3 className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 4 }).run()}  ><Heading4 className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 5 }).run()}  ><Heading5 className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => currentEditor?.chain().focus().toggleHeading({ level: 6 }).run()}  ><Heading6 className="h-4 w-4" /></Toggle>
+            </div>
+          </PopoverContent>
+        </Popover>
+
         <Popover >
           <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Highlight"><Highlighter className="h-4 w-4" /></ToolTip></PopoverTrigger>
           <PopoverContent className="w-full bg-white">
@@ -322,52 +369,6 @@ export const Toolbar = () => {
             </div>
           </PopoverContent>
         </Popover>
-
-        <div className="textAlign">
-          <ToolTip title="Left"><Toggle onClick={handleLeftAlign} pressed={activeFormats.left}>
-            <AlignLeft className="h-4 w-4" />
-          </Toggle></ToolTip>
-
-          <ToolTip title="Center"><Toggle onClick={handleCenterAlign} pressed={activeFormats.center} >
-            <AlignCenter className="h-4 w-4" />
-          </Toggle></ToolTip>
-
-          <ToolTip title="Right"><Toggle onClick={handleRightAlign} pressed={activeFormats.right} >
-            <AlignRight className="h-4 w-4" />
-          </Toggle></ToolTip>
-
-          <ToolTip title="Justify"><Toggle onClick={handleJustifyAlign} pressed={activeFormats.justify} >
-            <AlignJustify className="h-4 w-4" />
-          </Toggle></ToolTip>
-        </div>
-
-        <ToolTip title="Horizontal rule"><Toggle onClick={handleHorizontalRue} pressed={activeFormats.horizontal}>
-          <SquareMinus className="h-4 w-4" />
-        </Toggle></ToolTip>
-
-        <ToolTip title="Blockquote"><Toggle onClick={handleBlockquote} pressed={activeFormats.blockquote}>
-          <MessageSquareQuote className="h-4 w-4" />
-        </Toggle></ToolTip>
-
-        <div>
-          <ToolTip title="Bullet list"><Toggle onClick={handleBullet} pressed={activeFormats.bullet}>
-            <List className="h-4 w-4" />
-          </Toggle></ToolTip>
-
-          <ToolTip title="Ordered list"><Toggle onClick={handleOrdered} pressed={activeFormats.ordered}>
-            <ListOrdered className="h-4 w-4" />
-          </Toggle></ToolTip>
-        </div>
-
-        <div>
-          <ToolTip title="Link"><Toggle onClick={handleLink} pressed={activeFormats.link}>
-            <Link2 className="h-4 w-4" />
-          </Toggle></ToolTip>
-
-          <ToolTip title="Unlink"><Toggle onClick={handleRemoveLink} pressed={activeFormats.link}>
-            <Link2Off className="h-4 w-4" />
-          </Toggle></ToolTip>
-        </div>
 
         <Popover>
           <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Color"><Palette className="h-4 w-4" /></ToolTip></PopoverTrigger>
@@ -466,14 +467,6 @@ export const Toolbar = () => {
             </div>
           </PopoverContent>
         </Popover>
-        <ToolTip title="Component"><Toggle onClick={() => insertComponent('card')}>
-          <Plus className="h-4 w-4" />
-        </Toggle>
-        </ToolTip>
-        <ToolTip title="Monaco"><Toggle onClick={() => MonacoComponent('monaco')}>
-          <Braces className="h-4 w-4" />
-        </Toggle>
-        </ToolTip>
       </div>
     </div>
   );

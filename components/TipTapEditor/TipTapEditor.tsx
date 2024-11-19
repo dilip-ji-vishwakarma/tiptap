@@ -108,13 +108,13 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
   }, [content, editor, setCurrentEditor]);
 
   return (
-    <div className="mt-5">
+    <div className="mt-5 mb-20">
     <DocBreadcrumb path={`skilline.ai/course?id=${id}`}/>
-    <div className="editor-container w-full bg-white border mt-3 border-[#c7c7c7]" onClick={() => setCurrentEditor(editor)}>
+    <div className="editor-container w-full bg-white border mt-3  pb-[150px]  border-[#c7c7c7]" onClick={() => setCurrentEditor(editor)}>
       
       <EditorContent
         editor={editor}
-        className="minimal-tiptap-editor overflow-auto  p-10 border-destructive focus-within:border-destructive h-[100vh]"
+        className="minimal-tiptap-editor lg:overflow-auto p-10 border-destructive focus-within:border-destructive lg:h-[100vh]"
         placeholder="Type your description here"
       />
     </div>
