@@ -13,3 +13,4 @@ export * from "./FontChanger";
 export * from "./input";
 export * from "./DocBreadcrumb";
 export * from "./GridBox";
+export * from "./MonacoEditor";

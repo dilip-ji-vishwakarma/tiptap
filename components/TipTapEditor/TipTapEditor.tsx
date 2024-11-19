@@ -26,6 +26,7 @@ import Paragraph from '@tiptap/extension-paragraph'
 import Text from '@tiptap/extension-text';
 import ReactComponent from '@/lib/NodeExtension'
 import Heading from '@tiptap/extension-heading'
+import MonacoComponent from "@/lib/MonacoExtension"
 interface TipTapEditorProps {
   content: string;
 }
@@ -54,6 +55,7 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
         levels: [1, 2, 3, 4, 5, 6],
       }),
       ReactComponent,
+      MonacoComponent,
       Youtube.configure({
         controls: false,
         nocookie: true,
