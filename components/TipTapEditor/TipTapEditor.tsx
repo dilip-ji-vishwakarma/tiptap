@@ -28,10 +28,12 @@ import ReactComponent from '@/lib/NodeExtension'
 import Heading from '@tiptap/extension-heading'
 import MonacoComponent from "@/lib/MonacoExtension"
 interface TipTapEditorProps {
-  content: string;
+  editorString: string;
+  onFocus: () => void;
+  onBlur: () => void
 }
 
-export const TipTapEditor = ({ content }: TipTapEditorProps) => {
+export const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProps) => {
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -94,23 +96,35 @@ export const TipTapEditor = ({ content }: TipTapEditorProps) => {
     onUpdate: ({ editor }) => {
       console.log("Editor content updated:", editor.getJSON());
     },
+    onFocus: () => {
+      console.log("Editor is focused!");
+      if (onFocus) {
+        onFocus();  // Trigger the callback passed from the parent
+      }
+    },
+    onBlur: () => {
+      console.log("Editor is onBlur!");
+      if (onBlur) {
+        onBlur();  // Trigger the callback passed from the parent
+      }
+    },
   });
 
   useEffect(() => {
     if (editor) {
-      editor.commands.setContent(content); // Set content with HTML including IDs
+      editor.commands.setContent(editorString); // Set content with HTML including IDs
       setCurrentEditor(editor);
     }
 
     return () => {
       setCurrentEditor(null);
     };
-  }, [content, editor, setCurrentEditor]);
+  }, [editorString, editor, setCurrentEditor]);
 
   return (
     <div className="mt-5 mb-20">
     <DocBreadcrumb path={`skilline.ai/course?id=${id}`}/>
-    <div className="editor-container w-full bg-white border mt-3  pb-[150px]  border-[#c7c7c7]" onClick={() => setCurrentEditor(editor)}>
+    <div className="editor-container w-full bg-white border mt-3  pb-[150px]  border-[#c7c7c7]" onClick={() => {setCurrentEditor(editor); editor?.commands.focus();}}>
       
       <EditorContent
         editor={editor}

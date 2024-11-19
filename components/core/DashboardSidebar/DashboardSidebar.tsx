@@ -2,18 +2,19 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { fetchDataFromApi } from "@/lib/api";
-import { EditorProvider, Toolbar } from "@/components/TipTapEditor";
+import { EditorProvider, TipTapEditor, Toolbar, useEditorContext } from "@/components/TipTapEditor";
 import { AppSidebar } from "../AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "@/components/Header";
-import TapEditor from "@/components/TipTapEditor/TapEditor";
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Pen } from 'lucide-react';
+import { MenuTab } from "../MenuTab";
 
 const templates: any = {
-  "tiptap-editor": TapEditor,
+  "tiptap-editor": TipTapEditor,
 };
 
 export const DashboardSidebar = () => {
+  const { currentEditor } = useEditorContext();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
@@ -22,7 +23,8 @@ export const DashboardSidebar = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [toolbar, setToolbar] = useState(false);
-
+  const [menutool, setMenuTool] = useState(false);
+  const [pen, setPen] = useState(true);
   useEffect(() => {
     const fetchStepsData = async () => {
       setLoading(true);
@@ -52,6 +54,21 @@ export const DashboardSidebar = () => {
     setToolbar(!toolbar); // Toggle the sidebar state
   };
 
+  const handleEdit = () => {
+    setMenuTool(true);
+    setPen(false);
+  }
+
+  const handleEditorFocus = () => {
+    setMenuTool(true); // Show toolbar when editor is focused
+    setPen(false); // Hide pen icon when editor is focused
+  };
+
+  const handleEditorBlur = () => {
+    setMenuTool(false); // Hide toolbar when editor loses focus
+    setPen(true); // Show pen icon again when editor loses focus
+  };
+
   if (loading) {
     return <div>Loading.....</div>;
   }
@@ -61,18 +78,18 @@ export const DashboardSidebar = () => {
   }
 
   return (
-    <EditorProvider >
+    < >
       <div className="relative">
         <div className="space-y-3 fixed top-0 z-[1] bg-white w-full">
           <Header />
-          <div className="lg:block hidden"> 
+          <div className="lg:block hidden">
             <Toolbar />
           </div>
           <div className="border-b  border-[#c7c7c7]"></div>
         </div>
       </div>
       <div className="flex gap-5 px-5 fixed md:top-[122px] top-[70px] h-[100vh] overflow-scroll w-full">
-        <div className="max-w-[20%] w-full lg:block hidden">
+        <div className="md:max-w-[20%] w-full lg:block hidden">
           {courses.length > 0 ? (
             <SidebarProvider>
               <AppSidebar data={courses} />;
@@ -89,6 +106,8 @@ export const DashboardSidebar = () => {
                   step: currentStep,
                   courses: courses,
                   editorString: currentStep.editor_string,
+                  onFocus: handleEditorFocus,
+                  onBlur: handleEditorBlur,
                 })
               ) : (
                 <div className="bg-white p-5 ">Template Not Found</div>
@@ -101,10 +120,28 @@ export const DashboardSidebar = () => {
           <div id="comment-portal" className="sticky top-[0px]"></div>
         </div>
       </div>
-      <div className={`lg:hidden fixed ${toolbar ? 'bottom-0' : 'bottom-[-156px]'} transition-all`}>
-        <span onClick={toggleSidebar} className="flex justify-end px-2">{toolbar ? <ChevronDown className="bg-black text-white" /> : <ChevronUp className="bg-black text-white" />}</span>
-        <Toolbar />
+      
+      {pen ? (
+        <div className="fixed z-[1] right-[15px] bottom-[90px] lg:hidden w-[50px] h-[50px] bg-[#C2E7FF] flex justify-center items-center rounded-[10px]">
+        <span onClick={handleEdit}><Pen className=" text-black" /></span>
       </div>
-    </EditorProvider>
+      ): null}
+      
+      {menutool ? (
+        <div className={`lg:hidden fixed ${toolbar ? 'bottom-0' : 'bottom-[-156px]'} transition-all`}>
+          <span onClick={toggleSidebar} className="flex justify-end px-2">{toolbar ? <ChevronDown className="bg-black text-white" /> : <ChevronUp className="bg-black text-white" />}</span>
+          <Toolbar />
+        </div>
+      ) : (
+        <div className="fixed w-full bg-[white] px-2.5 py-[5px] bottom-0">
+          {courses.length > 0 ? (
+          <MenuTab data={courses}/>
+        ) : (
+          <div>No data available for the sidebar</div>
+        )}
+        </div>
+      )}
+
+    </>
   );
 };
