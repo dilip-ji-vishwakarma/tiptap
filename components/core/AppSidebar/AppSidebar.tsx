@@ -52,26 +52,23 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
     const course = courses.find((course) => course.id === dataId);
     if (!course) return;
   
-    // Toggle bookmark value directly
     const updatedBookmarkValue = course.bookmark === 0 ? 1 : 0;
   
     console.log(course.bookmark)
     try {
-      // Pass the updated bookmark value directly in the PATCH request
       const response = await fetchDataFromApi(`/api/tutorials/${dataId}`, {
         method: 'PATCH',
-        body: JSON.stringify({ bookmark: updatedBookmarkValue }), // Directly use the toggled value
+        body: JSON.stringify({ bookmark: updatedBookmarkValue }),
       });
   
       if (response.ok) {
-        // Update state with the new bookmark value after successful API call
         const updatedCourses = courses.map((course) => {
           if (course.id === dataId) {
-            course.bookmark = updatedBookmarkValue; // Set the toggled value directly
+            course.bookmark = updatedBookmarkValue; 
           }
           return course;
         });
-        setCourses(updatedCourses); // Update the state with the new course list
+        setCourses(updatedCourses); 
       } else {
         console.error("Failed to update bookmark");
       }

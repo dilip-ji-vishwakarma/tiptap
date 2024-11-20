@@ -8,7 +8,6 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "@/components/Header";
 import { ChevronDown, ChevronUp, TableOfContents } from 'lucide-react';
 import { MenuTab } from "../MenuTab";
-import { WishlistProvider } from "@/components/context/WishlistContext";
 
 const templates: any = {
   "tiptap-editor": React.lazy(() => import("@/components/TipTapEditor/TipTapEditor")),
@@ -78,7 +77,7 @@ export const DashboardSidebar = () => {
         </div>
         <div className="flex md:gap-5 md:px-5 px-3 fixed md:top-[122px] top-[70px] h-[100vh] overflow-scroll w-full">
           <div className="md:max-w-[20%] w-full lg:block hidden">
-          {courses.length > 0 ? <SidebarProvider><WishlistProvider><AppSidebar data={courses} /></WishlistProvider></SidebarProvider> : <div>No data available for the sidebar</div>}
+          {courses.length > 0 ? <SidebarProvider><AppSidebar data={courses} /></SidebarProvider> : <div>No data available for the sidebar</div>}
           </div>
           <div className="lg:max-w-[58%] max-w-full w-full">
             {currentStep && (

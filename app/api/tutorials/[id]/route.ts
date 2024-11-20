@@ -9,7 +9,7 @@ async function updateTutorial(id: string, data: any) {
         SET bookmark = ? 
         WHERE id = ?
       `;
-      const values = [data.bookmark, id]; // Ensure this is passing correctly
+      const values = [data.bookmark, id]; 
   
       connection.query(query, values, (err, results) => {
         if (err) {
