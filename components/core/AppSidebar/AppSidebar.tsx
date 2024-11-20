@@ -51,24 +51,27 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   const handleBookmarkToggle = async (dataId: number) => {
     const course = courses.find((course) => course.id === dataId);
     if (!course) return;
-  
     const updatedBookmarkValue = course.bookmark === 0 ? 1 : 0;
-  
-    console.log(course.bookmark)
+    console.log('Toggled Bookmark Value:', updatedBookmarkValue);
+
     try {
-      const response = await fetchDataFromApi(`/api/tutorials/${dataId}`, {
+      const response = await fetch(`/api/tutorials/${dataId}`, {
         method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify({ bookmark: updatedBookmarkValue }),
       });
-  
+
       if (response.ok) {
         const updatedCourses = courses.map((course) => {
           if (course.id === dataId) {
-            course.bookmark = updatedBookmarkValue; 
+            course.bookmark = updatedBookmarkValue;
           }
           return course;
         });
-        setCourses(updatedCourses); 
+        window.location.reload()
+        setCourses(updatedCourses);
       } else {
         console.error("Failed to update bookmark");
       }
@@ -76,8 +79,8 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
       console.error("Error updating bookmark:", err);
     }
   };
-  
-  
+
+
 
   return (
     <Sidebar className="border-none mt-[122px]">
@@ -105,15 +108,15 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                             </Link>
                           </span>
                           <button
-                      onClick={() => handleBookmarkToggle(item.id)}
-                      className="ml-2"
-                    >
-                      {item.bookmark === 1 ? (
-                        <Heart className="text-yellow-500" />
-                      ) : (
-                        <Heart className="text-gray-500" />
-                      )}
-                    </button>
+                            onClick={() => handleBookmarkToggle(item.id)}
+                            className="ml-2"
+                          >
+                            {item.bookmark === 1 ? (
+                              <Heart className="fill-red-500 text-red-500 w-4 h-4" />
+                            ) : (
+                              <Heart className="text-gray-500 w-4 h-4" />
+                            )}
+                          </button>
                         </span>
                       </div>
                     </SidebarMenuButton>

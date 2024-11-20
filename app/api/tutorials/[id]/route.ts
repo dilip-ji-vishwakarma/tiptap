@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connection from '@/lib/mysql'; // Adjust this based on your actual MySQL connection import
-
 // Define the updateTutorial function
 async function updateTutorial(id: string, data: any) {
     return new Promise((resolve, reject) => {
@@ -9,7 +8,7 @@ async function updateTutorial(id: string, data: any) {
         SET bookmark = ? 
         WHERE id = ?
       `;
-      const values = [data.bookmark, id]; 
+      const values = [data.bookmark, id]; // Ensure this is passing correctly
   
       connection.query(query, values, (err, results) => {
         if (err) {
@@ -20,7 +19,6 @@ async function updateTutorial(id: string, data: any) {
       });
     });
   }
-
   export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
     try {
       const id = params.id;
@@ -34,4 +32,3 @@ async function updateTutorial(id: string, data: any) {
       return NextResponse.json({ message: 'Error updating tutorial' }, { status: 500 });
     }
   }
-  
