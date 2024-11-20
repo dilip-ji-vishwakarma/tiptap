@@ -6,7 +6,7 @@ import { Toolbar } from "@/components/TipTapEditor";
 import { AppSidebar } from "../AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "@/components/Header";
-import { ChevronDown, ChevronUp, Pen } from 'lucide-react';
+import { ChevronDown, ChevronUp, TableOfContents } from 'lucide-react';
 import { MenuTab } from "../MenuTab";
 
 const templates: any = {
@@ -23,7 +23,8 @@ export const DashboardSidebar = () => {
   const [error, setError] = useState<string | null>(null);
   const [toolbar, setToolbar] = useState(false);
   const [menutool, setMenuTool] = useState(false);
-  const [pen, setPen] = useState(true);
+  const [toc, setToc] = useState(false);
+
   useEffect(() => {
     const fetchStepsData = async () => {
       setLoading(true);
@@ -50,23 +51,15 @@ export const DashboardSidebar = () => {
   }, [id, courses]);
 
   const toggleSidebar = () => {
-    setToolbar(!toolbar); // Toggle the sidebar state
+    setToolbar(!toolbar); 
   };
 
-  const handleEdit = () => {
-    setMenuTool(true);
-    setPen(false);
-  }
 
   const handleEditorFocus = () => {
     setMenuTool(true); 
-    setPen(false); 
+    setToc(true);
   };
 
-  const handleEditorBlur = () => {
-    setMenuTool(false); 
-    setPen(true); 
-  };
 
   if (loading) {
     return <div>Loading.....</div>;
@@ -87,7 +80,7 @@ export const DashboardSidebar = () => {
           <div className="border-b  border-[#c7c7c7]"></div>
         </div>
       </div>
-      <div className="flex gap-5 px-5 fixed md:top-[122px] top-[70px] h-[100vh] overflow-scroll w-full">
+      <div className="flex md:gap-5 md:px-5 px-3 fixed md:top-[122px] top-[70px] h-[100vh] overflow-scroll w-full">
         <div className="md:max-w-[20%] w-full lg:block hidden">
           {courses.length > 0 ? (
             <SidebarProvider>
@@ -106,7 +99,6 @@ export const DashboardSidebar = () => {
                   courses: courses,
                   editorString: currentStep.editor_string,
                   onFocus: handleEditorFocus,
-                  onBlur: handleEditorBlur,
                 })
               ) : (
                 <div className="bg-white p-5 ">Template Not Found</div>
@@ -120,19 +112,18 @@ export const DashboardSidebar = () => {
         </div>
       </div>
       
-      {pen ? (
-        <div className="fixed z-[1] right-[15px] bottom-[90px] lg:hidden w-[50px] h-[50px] bg-[#C2E7FF] flex justify-center items-center rounded-[10px]">
-        <span onClick={handleEdit}><Pen className=" text-black" /></span>
-      </div>
-      ): null}
-      
       {menutool ? (
         <div className={`lg:hidden fixed ${toolbar ? 'bottom-0' : 'bottom-[-156px]'} transition-all`}>
+          {toc ? (
+        <button type="button" onClick={()=> setMenuTool(false)} className="justify-center flex w-[45px] h-[45px] bg-[#C2E7FF] items-center absolute top-[-60px] rounded-[10px] right-2">
+          <TableOfContents />
+        </button>
+      ): null}
           <span onClick={toggleSidebar} className="flex justify-end px-2">{toolbar ? <ChevronDown className="bg-black text-white" /> : <ChevronUp className="bg-black text-white" />}</span>
           <Toolbar />
         </div>
       ) : (
-        <div className="fixed w-full bg-[white] px-2.5 py-[5px] bottom-0 lg:hidden">
+        <div className="fixed w-full bg-[white] bottom-0 lg:hidden">
           {courses.length > 0 ? (
           <MenuTab data={courses}/>
         ) : (

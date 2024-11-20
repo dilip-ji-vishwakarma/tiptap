@@ -30,10 +30,9 @@ import MonacoComponent from "@/lib/MonacoExtension"
 interface TipTapEditorProps {
   editorString: string;
   onFocus: () => void;
-  onBlur: () => void
 }
 
-const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProps) => {
+const TipTapEditor = ({ editorString, onFocus }: TipTapEditorProps) => {
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -101,11 +100,6 @@ const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProps) => {
         onFocus();  // Trigger the callback passed from the parent
       }
     },
-    onBlur: () => {
-      if (onBlur) {
-        onBlur();  // Trigger the callback passed from the parent
-      }
-    },
   });
 
   useEffect(() => {
@@ -126,7 +120,7 @@ const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProps) => {
       
       <EditorContent
         editor={editor}
-        className="minimal-tiptap-editor lg:overflow-auto p-10 border-destructive focus-within:border-destructive lg:h-[100vh]"
+        className="minimal-tiptap-editor lg:overflow-auto md:p-10 p-6 border-destructive focus-within:border-destructive lg:h-[100vh]"
         placeholder="Type your description here"
       />
     </div>
