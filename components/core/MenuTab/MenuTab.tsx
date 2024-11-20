@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, Heart } from "lucide-react";
 import { useRouter } from "next/navigation";
 import {
   Drawer,
@@ -23,6 +23,7 @@ type TutorialItem = {
   id: number;
   label: string;
   url: string;
+  bookmark: any;
   submenu?: SubmenuItem[];
 };
 
@@ -33,9 +34,42 @@ type MenuTabProps = {
 export const MenuTab = ({ data }: MenuTabProps) => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isDrawerOpen, setDrawerOpen] = useState(false);
+  const [courses, setCourses] = useState(data);
   const router = useRouter();
 
-  // Navigate to the current item's URL whenever the index changes
+  const handleBookmarkToggle = async (dataId: number) => {
+    const course = courses.find((course) => course.id === dataId);
+    if (!course) return;
+    const updatedBookmarkValue = course.bookmark === 0 ? 1 : 0;
+    console.log('Toggled Bookmark Value:', updatedBookmarkValue);
+
+    try {
+      const response = await fetch(`/api/tutorials/${dataId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ bookmark: updatedBookmarkValue }),
+      });
+
+      if (response.ok) {
+        const updatedCourses = courses.map((course) => {
+          if (course.id === dataId) {
+            course.bookmark = updatedBookmarkValue;
+          }
+          return course;
+        });
+
+        window.location.reload()
+        setCourses(updatedCourses);
+      } else {
+        console.error("Failed to update bookmark");
+      }
+    } catch (err) {
+      console.error("Error updating bookmark:", err);
+    }
+  };
+
   useEffect(() => {
     if (data[currentIndex]?.url) {
       router.push(data[currentIndex].url);
@@ -105,13 +139,24 @@ export const MenuTab = ({ data }: MenuTabProps) => {
               <div key={item.id} className="space-y-2">
                 {/* Main Menu Item */}
                 <div
-                  className="cursor-pointer p-2 hover:bg-gray-200 rounded-md font-semibold"
+                  className="cursor-pointer p-2 hover:bg-gray-200 rounded-md font-semibold flex justify-between items-center"
                   onClick={() => {
                     setCurrentIndex(index);
                     setDrawerOpen(false); // Close the drawer after selection
                   }}
                 >
                   {item.label}
+
+                  <button
+                            onClick={() => handleBookmarkToggle(item.id)}
+                            className="ml-2"
+                          >
+                            {item.bookmark === 1 ? (
+                              <Heart className="fill-red-500 text-red-500 w-4 h-4" />
+                            ) : (
+                              <Heart className="text-gray-500 w-4 h-4" />
+                            )}
+                          </button>
                 </div>
 
                 {/* Submenu Items */}
