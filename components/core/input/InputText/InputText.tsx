@@ -9,15 +9,16 @@ type InputProps = {
     placeholder?: string;
     control: Control<FieldValues>;
     errors: DeepMap<FieldValues, FieldError>;
+    defaultValue?: string;
 }
 
-export const InputText = ({ column_name, label, required, placeholder, control, errors }: InputProps) => {
+export const InputText = ({ column_name, label, required, placeholder, control, errors, defaultValue }: InputProps) => {
     return (
         <div className='w-full'>
             <Controller
                 name={column_name}
                 control={control}
-                defaultValue=""
+                defaultValue={defaultValue}
                 rules={{ required: required }}
                 render={({ field: { onChange, value } }) => (
                     <>

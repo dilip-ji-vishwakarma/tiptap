@@ -2,10 +2,11 @@
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { MenuMaker } from "./MenuMaker";
 import { useState } from "react";
-import { Heart, ListMinus } from "lucide-react";
+import { EllipsisVertical, Heart } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { fetchDataFromApi } from "@/lib/api";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
+import { RenameTab } from "./RenameTab";
 
 type SubmenuItem = {
   id: number;
@@ -33,10 +34,22 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
 
   const [openSubmenuId, setOpenSubmenuId] = useState<number | null>(null);
   const [courses, setCourses] = useState(data);
+  const [isRenameOpen, setIsRenameOpen] = useState(false);
+  const [renameItem, setRenameItem] = useState<{ id: number; label: string; url: string; } | null>(null);
 
   if (data.length === 0) {
     return <div className="text-center text-red-500 font-semibold">Warning: No data available</div>;
   }
+
+  const openRenameDialog = (id: number, label: string, url: string,) => {
+    setRenameItem({ id, label, url });
+    setIsRenameOpen(true);
+  };
+
+  const closeRenameDialog = () => {
+    setIsRenameOpen(false);
+    setRenameItem(null);
+  };
 
   const handleSubmenuToggle = (id: number) => {
     setOpenSubmenuId((prevId) => (prevId === id ? null : id));
@@ -100,27 +113,31 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                       className={`bg-[#D3E3FD] rounded-full mb-2 text-base font-medium h-[41px] p-[15px] ${isActive(item.url) ? "bg-[#D3E3FD]" : "bg-[#F4F4F5]"}`}
                     >
                       <div>
-                        <span className="flex justify-between w-full items-center">
-                          <span onClick={() => handleSubmenuToggle(item.id)}>
-                            <Link href={item.url} className="flex gap-3 w-full items-center">
-                              <ListMinus />
+                        <div className="flex justify-between w-full items-center">
+                          <span className="flex gap-3 w-full items-center">
+                            <button
+                              onClick={() => handleBookmarkToggle(item.id)}
+                              className="ml-2"
+                            >
+                              {item.bookmark === 1 ? (
+                                <Heart className="fill-red-500 text-red-500 w-4 h-4" />
+                              ) : (
+                                <Heart className="text-gray-500 w-4 h-4" />
+                              )}
+                            </button>
+                            <Link href={item.url} className="" onClick={() => handleSubmenuToggle(item.id)}>
                               <span>{item.label}</span>
                             </Link>
                           </span>
-                          <button
-                            onClick={() => handleBookmarkToggle(item.id)}
-                            className="ml-2"
-                          >
-                            {item.bookmark === 1 ? (
-                              <Heart className="fill-red-500 text-red-500 w-4 h-4" />
-                            ) : (
-                              <Heart className="text-gray-500 w-4 h-4" />
-                            )}
-                          </button>
-                        </span>
+                          <DropdownMenu>
+                            <DropdownMenuTrigger className="focus:outline-none"><EllipsisVertical className="w-4 h-4" /></DropdownMenuTrigger>
+                            <DropdownMenuContent className="bg-white">
+                              <DropdownMenuItem><button onClick={() => openRenameDialog(item.id, item.label, item.url)} className="w-full text-left">Rename</button></DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </div>
                       </div>
                     </SidebarMenuButton>
-
                     {item.submenu && item.submenu.length > 0 && (
                       <SidebarMenu
                         className={`ml-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${openSubmenuId === item.id ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}
@@ -143,6 +160,15 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
           </div>
         </SidebarGroup>
       </SidebarContent>
+      {renameItem && (
+        <RenameTab
+          isOpen={isRenameOpen}
+          onClose={closeRenameDialog}
+          id={renameItem.id}
+          label={renameItem.label}
+          url={renameItem.url}
+        />
+      )}
     </Sidebar>
   );
 };

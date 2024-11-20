@@ -110,7 +110,7 @@ export const MenuTab = ({ data }: MenuTabProps) => {
         {/* Center Content */}
         <div
           className="flex flex-col items-center cursor-pointer"
-          onClick={handleLabelClick} // Open drawer on label click
+          onClick={handleLabelClick} 
         >
           <div className="text-lg font-semibold text-gray-800">{currentItem.label}</div>
           <div className="text-sm text-gray-600">{submenuCount} Submenus</div>
