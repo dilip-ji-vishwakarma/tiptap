@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { fetchDataFromApi } from "@/lib/api";
-import { EditorProvider, TipTapEditor, Toolbar, useEditorContext } from "@/components/TipTapEditor";
+import { Toolbar } from "@/components/TipTapEditor";
 import { AppSidebar } from "../AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "@/components/Header";
@@ -10,11 +10,10 @@ import { ChevronDown, ChevronUp, Pen } from 'lucide-react';
 import { MenuTab } from "../MenuTab";
 
 const templates: any = {
-  "tiptap-editor": TipTapEditor,
+  "tiptap-editor": React.lazy(() => import("@/components/TipTapEditor/TipTapEditor")),
 };
 
 export const DashboardSidebar = () => {
-  const { currentEditor } = useEditorContext();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
@@ -60,13 +59,13 @@ export const DashboardSidebar = () => {
   }
 
   const handleEditorFocus = () => {
-    setMenuTool(true); // Show toolbar when editor is focused
-    setPen(false); // Hide pen icon when editor is focused
+    setMenuTool(true); 
+    setPen(false); 
   };
 
   const handleEditorBlur = () => {
-    setMenuTool(false); // Hide toolbar when editor loses focus
-    setPen(true); // Show pen icon again when editor loses focus
+    setMenuTool(false); 
+    setPen(true); 
   };
 
   if (loading) {
@@ -133,7 +132,7 @@ export const DashboardSidebar = () => {
           <Toolbar />
         </div>
       ) : (
-        <div className="fixed w-full bg-[white] px-2.5 py-[5px] bottom-0">
+        <div className="fixed w-full bg-[white] px-2.5 py-[5px] bottom-0 lg:hidden">
           {courses.length > 0 ? (
           <MenuTab data={courses}/>
         ) : (

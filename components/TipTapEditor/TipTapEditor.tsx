@@ -33,7 +33,7 @@ interface TipTapEditorProps {
   onBlur: () => void
 }
 
-export const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProps) => {
+const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProps) => {
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
@@ -97,13 +97,11 @@ export const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProp
       console.log("Editor content updated:", editor.getJSON());
     },
     onFocus: () => {
-      console.log("Editor is focused!");
       if (onFocus) {
         onFocus();  // Trigger the callback passed from the parent
       }
     },
     onBlur: () => {
-      console.log("Editor is onBlur!");
       if (onBlur) {
         onBlur();  // Trigger the callback passed from the parent
       }
@@ -124,7 +122,7 @@ export const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProp
   return (
     <div className="mt-5 mb-20">
     <DocBreadcrumb path={`skilline.ai/course?id=${id}`}/>
-    <div className="editor-container w-full bg-white border mt-3  pb-[150px]  border-[#c7c7c7]" onClick={() => {setCurrentEditor(editor); editor?.commands.focus();}}>
+    <div className="editor-container w-full bg-white border mt-3  pb-[150px]  border-[#c7c7c7]" onClick={() => {setCurrentEditor(editor);}}>
       
       <EditorContent
         editor={editor}
@@ -135,3 +133,5 @@ export const TipTapEditor = ({ editorString, onFocus, onBlur }: TipTapEditorProp
     </div>
   );
 };
+
+export default TipTapEditor;
