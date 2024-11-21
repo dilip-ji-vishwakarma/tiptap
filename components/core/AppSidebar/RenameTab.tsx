@@ -55,7 +55,7 @@ export const RenameTab = ({ id, label, isOpen, onClose, url }: RenameTabProps) =
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogHeader>
-      <DialogTitle>Are you absolutely sure?</DialogTitle>
+      <DialogTitle></DialogTitle>
       <DialogContent className="bg-white">
         <form onSubmit={handleSubmit(handleForm)} className="space-y-3">
           <InputText column_name="label" placeholder="Rename Tab" defaultValue={label} required={true} control={control} errors={errors} label="Enter Tab Name" />

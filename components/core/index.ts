@@ -15,3 +15,4 @@ export * from "./DocBreadcrumb";
 export * from "./GridBox";
 export * from "./EditorMonaco";
 export * from "./MenuTab";
+export * from "./Snackbar";

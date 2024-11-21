@@ -87,6 +87,7 @@ export const DashboardSidebar = () => {
                   step: currentStep,
                   courses: courses,
                   editorString: currentStep.editor_string,
+                  ids: currentStep.id,
                   onFocus: handleEditorFocus,
                 })
               ) : (

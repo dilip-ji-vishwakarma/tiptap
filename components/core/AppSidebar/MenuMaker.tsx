@@ -1,5 +1,5 @@
 "use client"
-import React from 'react'
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { InputText } from '../input/InputText';
 import {
@@ -10,10 +10,11 @@ import {
     DialogTitle,
     DialogTrigger,
 } from "@/components/ui/dialog";
-import { Plus} from 'lucide-react';
-
+import { Plus } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 export const MenuMaker = () => {
+    const [open, setOpen] = useState(false); 
     const {
         handleSubmit,
         control,
@@ -21,13 +22,18 @@ export const MenuMaker = () => {
         reset,
     } = useForm();
 
-    const onSubmit = (data:any) => {
+    const onSubmit = (data: any) => {
         console.log(data);
         reset();
+        setOpen(false); 
+    }
+
+    const onClose = () => {
+        setOpen(false); 
     }
 
     return (
-        <Dialog>
+        <Dialog open={open} onOpenChange={setOpen}>
             <DialogTrigger asChild>
                 <span className="cursor-pointer">
                     <Plus width={18} height={18} />
@@ -39,13 +45,17 @@ export const MenuMaker = () => {
                         <DialogTitle>Create Menu</DialogTitle>
                     </DialogHeader>
                     <div className='space-y-5 mt-3'>
-                        <InputText column_name='parent-menu' label='Tab Name' control={control} errors={errors} required={true} />
+                        <InputText column_name="label" placeholder="Enter Tab Name" required={true} control={control} errors={errors} label="Tab Name" />
+                        <InputText column_name="url" placeholder="Enter Url" required={true} control={control} errors={errors} label="Url" />
                     </div>
-                    <DialogFooter className='mt-3'>
-                        <button type='submit' className='inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2'>Save</button>
+                    <DialogFooter className="mt-5">
+                        <Button type="button" variant="outline" onClick={onClose}>
+                            Cancel
+                        </Button>
+                        <Button type="submit">Save</Button>
                     </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>
-    )
+    );
 }
