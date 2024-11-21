@@ -56,6 +56,21 @@ async function updateTutorial(id: string, data: any) {
   });
 }
 
+async function deleteTutorial(id: string) {
+  return new Promise((resolve, reject) => {
+    const query = 'DELETE FROM courses WHERE id = ?';
+
+    // Execute the query
+    connection.query(query, [id], (err, results) => {
+      if (err) {
+        console.error('Error executing query:', err);  // Log the error details from MySQL
+        return reject(new Error('Error executing delete query'));
+      }
+      console.log('Query Results:', results);  // Log the results if query is successful
+      resolve(results);
+    });
+  });
+}
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
   try {
@@ -75,8 +90,28 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
     } else {
       console.error('Unexpected error:', error); // Handle case where error is not an instance of Error
     }
-  
+
     return NextResponse.json({ message: 'Error updating tutorial', error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
   }
-  
+}
+
+export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  try {
+    const id = params.id;
+    console.log('Received Data for Delete:', id);
+
+    // Call the delete function
+    const deletedTutorial = await deleteTutorial(id);
+
+    // Return the result of the delete
+    return NextResponse.json(deletedTutorial, { status: 200 });
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      console.error('Error deleting content:', error.message); // Now `error` is treated as an instance of `Error`
+    } else {
+      console.error('Unexpected error:', error); // Handle case where error is not an instance of Error
+    }
+
+    return NextResponse.json({ message: 'Error deleting tutorial', error: error instanceof Error ? error.message : 'Unknown error' }, { status: 500 });
+  }
 }

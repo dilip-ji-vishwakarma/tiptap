@@ -7,6 +7,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
 import { RenameTab } from "./RenameTab";
+import { DeleteTab } from "./DeleteTab";
 
 type SubmenuItem = {
   id: number;
@@ -36,10 +37,22 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   const [courses, setCourses] = useState(data);
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const [renameItem, setRenameItem] = useState<{ id: number; label: string; url: string; } | null>(null);
+  const [deleteItem, setDeleteItem] = useState<{ id: number} | null>(null);
+  const [isdeleteopen, setIsdeleteopen] = useState(false);
 
   if (data.length === 0) {
     return <div className="text-center text-red-500 font-semibold">Warning: No data available</div>;
   }
+
+  const openDeleteDialog = (id: number) => {
+    setDeleteItem({id});
+    setIsdeleteopen(true)
+  }
+
+  const closeDeleteDialog = () => {
+    setIsdeleteopen(false);
+    setDeleteItem(null);
+  };
 
   const openRenameDialog = (id: number, label: string, url: string,) => {
     setRenameItem({ id, label, url });
@@ -133,6 +146,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                             <DropdownMenuTrigger className="focus:outline-none"><EllipsisVertical className="w-4 h-4" /></DropdownMenuTrigger>
                             <DropdownMenuContent className="bg-white">
                               <DropdownMenuItem><button onClick={() => openRenameDialog(item.id, item.label, item.url)} className="w-full text-left">Rename</button></DropdownMenuItem>
+                              <DropdownMenuItem><button onClick={() => openDeleteDialog(item.id)} className="w-full text-left">Delete</button></DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
@@ -167,6 +181,13 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
           id={renameItem.id}
           label={renameItem.label}
           url={renameItem.url}
+        />
+      )}
+      {deleteItem && (
+        <DeleteTab
+        isOpen={isdeleteopen}
+          onClose={closeDeleteDialog}
+          id={deleteItem.id}
         />
       )}
     </Sidebar>
