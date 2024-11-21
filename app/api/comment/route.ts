@@ -31,4 +31,29 @@ export async function POST(req: NextRequest) {
   }
 }
 
+export async function DELETE(req: NextRequest) {
+  try {
+    const { id } = await req.json();
 
+    if (!id) {
+      return NextResponse.json({ error: 'Missing required id' }, { status: 400 });
+    }
+
+    const [result] = await connection.execute(
+      'DELETE FROM comments WHERE id = ?',
+      [id]
+    );
+
+    const resultSetHeader = result as mysql.ResultSetHeader;
+
+    if (resultSetHeader.affectedRows === 0) {
+      return NextResponse.json({ error: 'No comment found with that id' }, { status: 404 });
+    }
+
+    return NextResponse.json({ message: 'Comment deleted successfully' }, { status: 200 });
+
+  } catch (error) {
+    console.error('Error deleting comment:', error);
+    return NextResponse.json({ error: 'Failed to delete comment' }, { status: 500 });
+  }
+}

@@ -47,6 +47,28 @@ export const Comment = () => {
     fetchComments();
   }, []);
 
+  const handleDeleteComment = async (id: string) => {
+    try {
+      const response = await fetch("/api/comment", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ id }), // Ensure you're sending the comment id
+      });
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to delete comment");
+      }
+  
+      console.log("Comment deleted successfully");
+    } catch (error) {
+      console.error("Error deleting comment:", error);
+    }
+  };
+  
+
   const fetchComments = async () => {
     try {
       const response = await fetch("/api/getcomment", {
@@ -146,18 +168,27 @@ export const Comment = () => {
             ) : null}
             <div className='space-y-3 mt-12 flex flex-col'>
               {comments.length > 0 && comments.map((comment: any, index) => (
-                <Link key={index} href={`#${comment.id}`}>
+           
                   <div key={comment.id} className="comment-item space-y-3 p-3 rounded-md bg-[#EDF2FA]">
-                    <div className='flex items-center gap-3'>
+                    <div className='flex justify-between items-center'>
+                    <span className='flex items-center gap-3 w-full'>
                       <Avatar>
                         <AvatarImage src="https://github.com/shadcn.png" className="w-10 h-10 min-w-[40px] p-[3px] rounded-[100%] border-2 border-solid border-[rgba(112,100,233,0.3019607843)]" />
                         <AvatarFallback>CN</AvatarFallback>
                       </Avatar>
                       <span className='text-md'>Dilip Vishwakarma</span>
+                    </span>
+                    <Button
+  variant="ghost"
+  onClick={() => handleDeleteComment(comment.id)}
+  className="cursor-pointer"
+>
+  <X />
+</Button>
                     </div>
-                    <p className="text-sm">{comment.text}</p>
+                    <Link key={index} href={`#${comment.id}`}>{comment.text}</Link>
                   </div>
-                </Link>
+          
               ))}
             </div>
           </div>
@@ -213,6 +244,7 @@ export const Comment = () => {
                         </Avatar>
                         <span className='text-md'>Dilip Vishwakarma</span>
                       </div>
+                      
                       <p className="text-sm">{comment.text}</p>
                     </div>
                   </Link>
