@@ -27,7 +27,7 @@ export const Comment = () => {
   const { currentEditor } = useEditorContext();
   const [comments, setComments] = useState<any[]>([]);
   const [commentbox, setCommentbox] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false); // State for drawer open/close
+  const [drawerOpen, setDrawerOpen] = useState(false); 
   const commentBoxRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {

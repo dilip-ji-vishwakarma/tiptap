@@ -1,11 +1,12 @@
 import mysql from 'mysql2';
 
-// Create a connection to the database
 const connection = mysql.createConnection({
-  host: 'localhost',       // Change to your MySQL host
-  user: 'root',            // Change to your MySQL username
-  password: '',            // Change to your MySQL password
-  database: 'doc'  // Change to your database name
+  host: 'localhost',    
+  user: 'root', 
+  password: '', 
+  database: 'doc', 
+  waitForConnections: true,
+  connectionLimit: 10,
 });
 
 connection.connect((err) => {
