@@ -1,77 +1,32 @@
-import mysql from 'mysql2/promise'; // Use promise-based MySQL API
+import { NextResponse } from 'next/server';
+import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import md5 from 'md5';
+import connection from '@/lib/mysql';
 
-const connection = mysql.createPool({
-  host: 'localhost',
-  user: 'root',
-  password: '',
-  database: 'doc',
-});
 
-const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key'; // Store securely in .env
+const JWT_SECRET = '4e8f517f-d76b-4d75-bae4-9977f67c3075bbdb3f62b8b7c1e8d91b97a497b3e4b9bce8b072b6f9a8f90c58c0'; // Use an environment variable in production
 
-// POST handler
-export async function POST(req: Request) {
-  const { email, password } = await req.json();
-
-  if (!email || !password) {
-    return new Response(
-      JSON.stringify({
-        success: false,
-        message: 'Email and password are required',
-      }),
-      { status: 400 }
-    );
-  }
+export async function POST(request: Request) {
+  const { email, password } = await request.json();
 
   try {
-    // Encrypt the password using md5
-    const hashedPassword = md5(password);
+    const [rows]: any = await connection.query('SELECT * FROM np_users WHERE email = ?', [email]);
 
-    // Query the database using promises
-    const [rows] = await connection.execute(
-      'SELECT * FROM np_users WHERE email = ? AND password = ?',
-      [email, hashedPassword]
-    );
-
-    const users = rows as any[];
-
-    if (users.length === 0) {
-      return new Response(
-        JSON.stringify({
-          success: false,
-          message: 'Invalid email or password',
-        }),
-        { status: 401 }
-      );
+    if (rows.length === 0) {
+      return NextResponse.json({ message: 'User not found' }, { status: 404 });
     }
 
-    const user = users[0];
+    const user = rows[0];
+    const isMatch = await bcrypt.compare(password, user.password);
 
-    // Generate a JWT token
-    const token = jwt.sign(
-      { id: user.id, email: user.email },
-      JWT_SECRET,
-      { expiresIn: '1h' } 
-    );
+    if (!isMatch) {
+      return NextResponse.json({ message: 'Invalid credentials' }, { status: 401 });
+    }
 
-    return new Response(
-      JSON.stringify({
-        success: true,
-        message: 'Login successful',
-        token,
-      }),
-      { status: 200 }
-    );
+    const token = jwt.sign({ userId: user.id }, JWT_SECRET, { expiresIn: '1h' });
+
+    return NextResponse.json({ token, user: { id: user.id, email: user.email } });
   } catch (error) {
-    console.error('Login error:', error);
-    return new Response(
-      JSON.stringify({
-        success: false,
-        message: 'An error occurred. Please try again later.',
-      }),
-      { status: 500 }
-    );
+    return NextResponse.json({ message: 'Something went wrong', error }, { status: 500 });
   }
 }

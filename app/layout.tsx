@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { ClientProvider } from "@/components/core";
+import { UserProvider } from "@/lib/UserContext";
 
 const googlesanse = localFont({
   src: [
@@ -54,8 +55,9 @@ export default function RootLayout({
       <body className={cn(googlesanse.className)}>
         <ClientProvider>
           <main>
-            
+            <UserProvider>
             {children}
+            </UserProvider>
           </main>
         </ClientProvider>
       </body>

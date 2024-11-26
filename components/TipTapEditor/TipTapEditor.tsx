@@ -65,6 +65,7 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
       Youtube.configure({
         controls: false,
         nocookie: true,
+        allowFullscreen: false,
       }),
       Image.configure({
         inline: false,

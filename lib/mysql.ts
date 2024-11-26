@@ -1,20 +1,11 @@
-import mysql from 'mysql2';
+import mysql from 'mysql2/promise';  // Use the promise wrapper
 
-const connection = mysql.createConnection({
-  host: 'localhost',    
-  user: 'root', 
-  password: '', 
-  database: 'doc', 
-  waitForConnections: true,
-  connectionLimit: 10,
-});
-
-connection.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MySQL database: ', err);
-    return;
-  }
-  console.log('Connected to MySQL database');
+// Create a connection to the database
+const connection = await mysql.createConnection({
+  host: 'localhost',
+  user: 'root',
+  password: '',
+  database: 'doc',
 });
 
 export default connection;

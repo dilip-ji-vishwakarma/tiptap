@@ -1,11 +1,27 @@
 "use client";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from "@/components/ui/sidebar";
+
+import {
+  Sidebar,
+  SidebarContent,
+  SidebarGroup,
+  SidebarGroupContent,
+  SidebarGroupLabel,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarTrigger,
+} from "@/components/ui/sidebar";
 import { MenuMaker } from "./MenuMaker";
 import { useState } from "react";
 import { EllipsisVertical, Heart } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, } from "@/components/ui/dropdown-menu"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { RenameTab } from "./RenameTab";
 import { DeleteTab } from "./DeleteTab";
 
@@ -16,16 +32,17 @@ type SubmenuItem = {
   url: string;
 };
 
-type TutorialItem = {
+type CourseItem = {
   id: number;
   label: string;
   url: string;
-  bookmark: any;
+  bookmark: number;
   submenu?: SubmenuItem[];
 };
 
+
 type AppSidebarProps = {
-  data: TutorialItem[];
+  data: CourseItem[];
 };
 
 export const AppSidebar = ({ data }: AppSidebarProps) => {
@@ -36,34 +53,22 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   const [openSubmenuId, setOpenSubmenuId] = useState<number | null>(null);
   const [courses, setCourses] = useState(data);
   const [isRenameOpen, setIsRenameOpen] = useState(false);
-  const [renameItem, setRenameItem] = useState<{ id: number; label: string; url: string; } | null>(null);
+  const [renameItem, setRenameItem] = useState<CourseItem | null>(null);
   const [deleteItem, setDeleteItem] = useState<{ id: number } | null>(null);
-  const [isdeleteopen, setIsdeleteopen] = useState(false);
-
-  if (data.length === 0) {
-    data = [
-      {
-        id: 0,
-        label: "Tab1",
-        url: "/course?id=tab1",
-        bookmark: 0,
-        submenu: [],
-      },
-    ];
-  }
+  const [isDeleteOpen, setIsDeleteOpen] = useState(false);
 
   const openDeleteDialog = (id: number) => {
     setDeleteItem({ id });
-    setIsdeleteopen(true)
-  }
+    setIsDeleteOpen(true);
+  };
 
   const closeDeleteDialog = () => {
-    setIsdeleteopen(false);
+    setIsDeleteOpen(false);
     setDeleteItem(null);
   };
 
-  const openRenameDialog = (id: number, label: string, url: string,) => {
-    setRenameItem({ id, label, url });
+  const openRenameDialog = (id: number, label: string, url: string, bookmark: number) => {
+    setRenameItem({ id, label, url, bookmark });
     setIsRenameOpen(true);
   };
 
@@ -83,28 +88,22 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   };
 
   const handleBookmarkToggle = async (dataId: number) => {
-    const course = courses.find((course) => course.id === dataId);
-    if (!course) return;
-    const updatedBookmarkValue = course.bookmark === 0 ? 1 : 0;
-    console.log('Toggled Bookmark Value:', updatedBookmarkValue);
+    const updatedCourses = courses.map((course) =>
+      course.id === dataId
+        ? { ...course, bookmark: course.bookmark === 0 ? 1 : 0 }
+        : course
+    );
 
     try {
       const response = await fetch(`/api/tutorials/${dataId}`, {
-        method: 'PATCH',
+        method: "PATCH",
         headers: {
-          'Content-Type': 'application/json',
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify({ bookmark: updatedBookmarkValue }),
+        body: JSON.stringify({ bookmark: updatedCourses.find((c) => c.id === dataId)?.bookmark }),
       });
 
       if (response.ok) {
-        const updatedCourses = courses.map((course) => {
-          if (course.id === dataId) {
-            course.bookmark = updatedBookmarkValue;
-          }
-          return course;
-        });
-        window.location.reload()
         setCourses(updatedCourses);
       } else {
         console.error("Failed to update bookmark");
@@ -114,12 +113,10 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
     }
   };
 
-
-
   return (
     <Sidebar className="border-none mt-[122px]">
-      <SidebarContent className="bg-[#F9FBFD] ">
-      <SidebarTrigger className="fixed z-[1] left-[25px] top-[145px]" />
+      <SidebarContent className="bg-[#F9FBFD]">
+        <SidebarTrigger className="fixed z-[1] left-[25px] top-[145px]" />
         <SidebarGroup className="relative">
           <div className="mt-[100px]">
             <SidebarGroupLabel className="flex items-center justify-between text-[#444746] text-md font-light leading-5">
@@ -128,11 +125,13 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
             </SidebarGroupLabel>
             <SidebarGroupContent className="mt-3">
               <SidebarMenu className="px-1">
-                {data.map((item) => (
+                {courses?.map((item) => (
                   <SidebarMenuItem key={item.id}>
                     <SidebarMenuButton
                       asChild
-                      className={`bg-[#D3E3FD] rounded-full mb-2 text-base font-medium h-[41px] p-[15px] ${isActive(item.url) ? "bg-[#D3E3FD]" : "bg-[#F4F4F5]"}`}
+                      className={`rounded-full mb-2 text-base font-medium h-[41px] p-[15px] ${
+                        isActive(item.url) ? "bg-[#D3E3FD]" : "bg-[#F4F4F5]"
+                      }`}
                     >
                       <div>
                         <div className="flex justify-between w-full items-center">
@@ -147,15 +146,37 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                                 <Heart className="text-gray-500 w-4 h-4" />
                               )}
                             </button>
-                            <Link href={item.url} className="" onClick={() => handleSubmenuToggle(item.id)}>
+                            <Link
+                              href={item.url}
+                              className=""
+                              onClick={() => handleSubmenuToggle(item.id)}
+                            >
                               <span>{item.label}</span>
                             </Link>
                           </span>
                           <DropdownMenu>
-                            <DropdownMenuTrigger className="focus:outline-none"><EllipsisVertical className="w-4 h-4" /></DropdownMenuTrigger>
+                            <DropdownMenuTrigger className="focus:outline-none">
+                              <EllipsisVertical className="w-4 h-4" />
+                            </DropdownMenuTrigger>
                             <DropdownMenuContent className="bg-white">
-                              <DropdownMenuItem><button onClick={() => openRenameDialog(item.id, item.label, item.url)} className="w-full text-left">Rename</button></DropdownMenuItem>
-                              <DropdownMenuItem><button onClick={() => openDeleteDialog(item.id)} className="w-full text-left">Delete</button></DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <button
+                                  onClick={() =>
+                                    openRenameDialog(item.id, item.label, item.url, item.bookmark)
+                                  }
+                                  className="w-full text-left"
+                                >
+                                  Rename
+                                </button>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem>
+                                <button
+                                  onClick={() => openDeleteDialog(item.id)}
+                                  className="w-full text-left"
+                                >
+                                  Delete
+                                </button>
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </div>
@@ -163,7 +184,11 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                     </SidebarMenuButton>
                     {item.submenu && item.submenu.length > 0 && (
                       <SidebarMenu
-                        className={`ml-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${openSubmenuId === item.id ? "max-h-[1000px] opacity-100" : "max-h-0 opacity-0"}`}
+                        className={`ml-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${
+                          openSubmenuId === item.id
+                            ? "max-h-[1000px] opacity-100"
+                            : "max-h-0 opacity-0"
+                        }`}
                       >
                         {item.submenu.map((submenuItem) => (
                           <SidebarMenuItem key={submenuItem.id}>
@@ -194,7 +219,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
       )}
       {deleteItem && (
         <DeleteTab
-          isOpen={isdeleteopen}
+          isOpen={isDeleteOpen}
           onClose={closeDeleteDialog}
           id={deleteItem.id}
         />

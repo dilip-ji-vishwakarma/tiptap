@@ -9,11 +9,23 @@ import { Header } from "@/components/Header";
 import { ChevronDown, ChevronUp, TableOfContents } from 'lucide-react';
 import { MenuTab } from "../MenuTab";
 
+interface Course {
+  id: string;
+  title: string;
+  url: string;
+  template: string;
+  editor_string: string;
+  // Add other fields as necessary
+}
+
 const templates: any = {
   "tiptap-editor": React.lazy(() => import("@/components/TipTapEditor/TipTapEditor")),
 };
 
 export const DashboardSidebar = () => {
+
+  
+
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
 
@@ -27,11 +39,29 @@ export const DashboardSidebar = () => {
 
   useEffect(() => {
     const fetchStepsData = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setError("No token provided");
+        return;
+      }
+
       setLoading(true);
       try {
-        const data = await fetchDataFromApi(`/api/tutorials`);
-        setCourses(data);
-        console.log("data", data)
+        const response = await fetch('/api/tutorials', {
+          method: 'GET', // Or POST depending on the API
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`, // Add the token in the Authorization header
+          },
+        });
+        
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch courses data');
+        }
+
+        const data = await response.json();
+        setCourses(data.courses);
         setError(null);
       } catch (err: any) {
         console.error("Error fetching courses data:", err);
@@ -47,6 +77,7 @@ export const DashboardSidebar = () => {
   useEffect(() => {
     if (courses.length > 0) {
       const tempStartStep = courses.find(course => course.url === `/course?id=${id}`);
+      console.log("tempStartStep", tempStartStep)
       setCurrentStep(tempStartStep);
     }
   }, [id, courses]);
@@ -78,7 +109,7 @@ export const DashboardSidebar = () => {
       </div>
       <div className="flex md:gap-5 md:px-5 px-3 fixed md:top-[122px] top-[70px] h-[100vh] overflow-scroll w-full">
         <div className="md:max-w-[20%] w-full lg:block hidden">
-          {courses.length > 0 ? <SidebarProvider><AppSidebar data={courses} /></SidebarProvider> : <div>No data available for the sidebar</div>}
+          <SidebarProvider><AppSidebar data={courses} /></SidebarProvider>
         </div>
         <div className="lg:max-w-[58%] max-w-full w-full">
           {currentStep && (
