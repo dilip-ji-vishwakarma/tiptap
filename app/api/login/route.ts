@@ -31,7 +31,7 @@ export async function POST(req: Request) {
 
     // Query the database using promises
     const [rows] = await connection.execute(
-      'SELECT * FROM users WHERE email = ? AND password = ?',
+      'SELECT * FROM np_users WHERE email = ? AND password = ?',
       [email, hashedPassword]
     );
 
@@ -53,7 +53,7 @@ export async function POST(req: Request) {
     const token = jwt.sign(
       { id: user.id, email: user.email },
       JWT_SECRET,
-      { expiresIn: '1h' } // Token valid for 1 hour
+      { expiresIn: '1h' } 
     );
 
     return new Response(

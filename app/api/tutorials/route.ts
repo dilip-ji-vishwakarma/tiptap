@@ -3,7 +3,7 @@ import connection from '@/lib/mysql';
 
 export async function GET() {
   return new Promise((resolve, reject) => {
-    const queryCourses = 'SELECT * FROM courses';
+    const queryCourses = 'SELECT * FROM np_courses';
 
     connection.query(queryCourses, (err, courses: any[]) => {  
       if (err) {
@@ -11,7 +11,7 @@ export async function GET() {
         return reject(new NextResponse('Error fetching courses', { status: 500 }));
       }
 
-      const queryCourseSteps = 'SELECT * FROM course_steps';
+      const queryCourseSteps = 'SELECT * FROM np_submenus';
 
       connection.query(queryCourseSteps, (err, courseSteps: any[]) => {  
         if (err) {

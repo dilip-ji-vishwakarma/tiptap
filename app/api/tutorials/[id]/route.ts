@@ -35,7 +35,7 @@ async function updateTutorial(id: string, data: any) {
 
     // Construct the SQL query dynamically based on the fields provided
     const query = `
-      UPDATE courses 
+      UPDATE np_courses 
       SET ${fields.join(', ')} 
       WHERE id = ?
     `;

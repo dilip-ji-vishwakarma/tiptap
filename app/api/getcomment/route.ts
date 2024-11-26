@@ -12,7 +12,7 @@ const connection = await mysql.createPool({
 export async function GET(req: NextRequest) {
   try {
     // Fetch all comments from the database
-    const [comments] = await connection.execute('SELECT id, text, position FROM comments');
+    const [comments] = await connection.execute('SELECT id, text, username, useremail, user_id FROM np_comments');
     return NextResponse.json({ comments }, { status: 200 });
   } catch (error) {
     console.error('Error fetching comments:', error);

@@ -31,6 +31,7 @@ export const DashboardSidebar = () => {
       try {
         const data = await fetchDataFromApi(`/api/tutorials`);
         setCourses(data);
+        console.log("data", data)
         setError(null);
       } catch (err: any) {
         console.error("Error fetching courses data:", err);
@@ -44,8 +45,8 @@ export const DashboardSidebar = () => {
   }, []);
 
   useEffect(() => {
-    if (courses.length > 0 && id) {
-      const tempStartStep = courses.find(course => course.url === `/course/?id=${id}`);
+    if (courses.length > 0) {
+      const tempStartStep = courses.find(course => course.url === `/course?id=${id}`);
       setCurrentStep(tempStartStep);
     }
   }, [id, courses]);

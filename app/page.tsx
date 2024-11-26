@@ -10,37 +10,45 @@ const Page = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
+  // Inside your Login function
 
-    try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      });
+const handleLogin = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setError('');
+  setLoading(true);
 
-      const data = await response.json();
+  try {
+    const response = await fetch('/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password }),
+    });
 
-      if (!response.ok) {
-        setError(data.message || 'Something went wrong');
-        setLoading(false);
-        return;
-      }
-      const expirationTime = new Date().getTime() + 3600 * 1000; 
-      sessionStorage.setItem('token', data.token);
-      sessionStorage.setItem('tokenExpiration', expirationTime.toString());
+    const data = await response.json();
 
-      alert('Login successful!');
-      router.push('/dashboard'); 
-    } catch (err) {
-      setError('An unexpected error occurred');
-    } finally {
+    if (!response.ok) {
+      setError(data.message || 'Something went wrong');
       setLoading(false);
+      return;
     }
-  };
+
+    // Store the entire user data (including token and tokenExpiration) in sessionStorage
+    sessionStorage.setItem('userDetails', JSON.stringify({
+      token: data.token,
+      tokenExpiration: data.tokenExpiration,
+      email: data.email, // Add any other user info you need here
+      name: data.name,   // Example: user name
+    }));
+
+    alert('Login successful!');
+    // Redirect to dashboard or other page
+  } catch (err) {
+    setError('An unexpected error occurred');
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-gray-100">

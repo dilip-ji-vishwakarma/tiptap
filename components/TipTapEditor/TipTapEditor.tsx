@@ -30,7 +30,7 @@ import MonacoComponent from "@/lib/MonacoExtension";
 import { useSnackbar } from "../core/context/SnackbarContext";
 
 interface TipTapEditorProps {
-  editorString: string;
+  editorString: any;
   onFocus: () => void;
   ids: number;
 }

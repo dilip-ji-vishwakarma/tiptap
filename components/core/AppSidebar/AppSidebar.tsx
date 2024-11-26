@@ -1,5 +1,5 @@
 "use client";
-import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent, SidebarGroupLabel, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarTrigger } from "@/components/ui/sidebar";
 import { MenuMaker } from "./MenuMaker";
 import { useState } from "react";
 import { EllipsisVertical, Heart } from "lucide-react";
@@ -37,15 +37,23 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   const [courses, setCourses] = useState(data);
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const [renameItem, setRenameItem] = useState<{ id: number; label: string; url: string; } | null>(null);
-  const [deleteItem, setDeleteItem] = useState<{ id: number} | null>(null);
+  const [deleteItem, setDeleteItem] = useState<{ id: number } | null>(null);
   const [isdeleteopen, setIsdeleteopen] = useState(false);
 
   if (data.length === 0) {
-    return <div className="text-center text-red-500 font-semibold">Warning: No data available</div>;
+    data = [
+      {
+        id: 0,
+        label: "Tab1",
+        url: "/course?id=tab1",
+        bookmark: 0,
+        submenu: [],
+      },
+    ];
   }
 
   const openDeleteDialog = (id: number) => {
-    setDeleteItem({id});
+    setDeleteItem({ id });
     setIsdeleteopen(true)
   }
 
@@ -110,9 +118,10 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
 
   return (
     <Sidebar className="border-none mt-[122px]">
-      <SidebarContent className="bg-[#F9FBFD]">
-        <SidebarGroup>
-          <div className="mt-[60px]">
+      <SidebarContent className="bg-[#F9FBFD] ">
+      <SidebarTrigger className="fixed z-[1] left-[25px] top-[145px]" />
+        <SidebarGroup className="relative">
+          <div className="mt-[100px]">
             <SidebarGroupLabel className="flex items-center justify-between text-[#444746] text-md font-light leading-5">
               <span>Document Tabs</span>
               <MenuMaker />
@@ -185,7 +194,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
       )}
       {deleteItem && (
         <DeleteTab
-        isOpen={isdeleteopen}
+          isOpen={isdeleteopen}
           onClose={closeDeleteDialog}
           id={deleteItem.id}
         />

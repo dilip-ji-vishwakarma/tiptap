@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
     }
 
     const [result] = await connection.execute(
-      'INSERT INTO comments (id, text, position) VALUES (?, ?, ?)',
+      'INSERT INTO np_comments (id, text, position) VALUES (?, ?, ?)',
       [id, text, position]
     );
 
@@ -40,7 +40,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     const [result] = await connection.execute(
-      'DELETE FROM comments WHERE id = ?',
+      'DELETE FROM np_comments WHERE id = ?',
       [id]
     );
 
