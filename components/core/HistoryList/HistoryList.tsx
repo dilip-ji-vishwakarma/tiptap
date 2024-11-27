@@ -3,7 +3,6 @@ import { History } from 'lucide-react';
 import {
   Sheet,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -17,7 +16,7 @@ export const HistoryList = () => {
       <SheetContent className='bg-[whitesmoke]'>
         <SheetHeader>
           <SheetTitle className='text-2xl font-bold'>Version history</SheetTitle>
-          <SheetDescription>
+       
             <div className="p-4 sm:p-6">
               <div className="space-y-6">
                 <div>
@@ -87,7 +86,7 @@ export const HistoryList = () => {
 
               </div>
             </div>
-          </SheetDescription>
+ 
         </SheetHeader>
       </SheetContent>
     </Sheet>

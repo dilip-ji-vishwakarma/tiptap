@@ -3,7 +3,6 @@ import { LayoutList } from 'lucide-react';
 import {
     Sheet,
     SheetContent,
-    SheetDescription,
     SheetHeader,
     SheetTitle,
     SheetTrigger,
@@ -16,7 +15,7 @@ export const Legend = () => {
             <SheetContent className='bg-[whitesmoke]'>
                 <SheetHeader>
                     <SheetTitle className='text-2xl font-bold'>Legend</SheetTitle>
-                    <SheetDescription>
+                 
                         <div className='inline-grid space-y-2'>
                      
                         <div className="inline-flex items-center">
@@ -32,7 +31,7 @@ export const Legend = () => {
                             <span className="text-gray-600 dark:text-neutral-400">Default</span>
                         </div>
                         </div>
-                    </SheetDescription>
+                   
                 </SheetHeader>
             </SheetContent>
         </Sheet>

@@ -12,7 +12,6 @@ import {
   Drawer,
   DrawerClose,
   DrawerContent,
-  DrawerDescription,
   DrawerFooter,
   DrawerHeader,
   DrawerTitle,
@@ -27,7 +26,7 @@ export const Comment = () => {
   const { currentEditor } = useEditorContext();
   const [comments, setComments] = useState<any[]>([]);
   const [commentbox, setCommentbox] = useState(false);
-  const [drawerOpen, setDrawerOpen] = useState(false); 
+  const [drawerOpen, setDrawerOpen] = useState(false);
   const commentBoxRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -56,7 +55,7 @@ export const Comment = () => {
         },
         body: JSON.stringify({ id }), // Ensure you're sending the comment id
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to delete comment");
@@ -66,7 +65,7 @@ export const Comment = () => {
       console.error("Error deleting comment:", error);
     }
   };
-  
+
 
   const fetchComments = async () => {
     try {
@@ -131,7 +130,7 @@ export const Comment = () => {
 
   return (
     <>
-    <div className='lg:block hidden'>
+      <div className='lg:block hidden'>
         <span className='cursor-pointer' onClick={() => setCommentbox(true)}><MessageSquareText /></span>
         <Portal id='comment-portal' >
           <div ref={commentBoxRef}>
@@ -166,9 +165,9 @@ export const Comment = () => {
             ) : null}
             <div className='space-y-3 mt-12 flex flex-col'>
               {comments.length > 0 && comments.map((comment: any, index) => (
-           
-                  <div key={comment.id} className="comment-item space-y-3 p-3 rounded-md bg-[#EDF2FA]">
-                    <div className='flex justify-between items-center'>
+
+                <div key={comment.id} className="comment-item space-y-3 p-3 rounded-md bg-[#EDF2FA]">
+                  <div className='flex justify-between items-center'>
                     <span className='flex items-center gap-3 w-full'>
                       <Avatar>
                         <AvatarImage src="https://github.com/shadcn.png" className="w-10 h-10 min-w-[40px] p-[3px] rounded-[100%] border-2 border-solid border-[rgba(112,100,233,0.3019607843)]" />
@@ -177,16 +176,16 @@ export const Comment = () => {
                       <span className='text-md'>Dilip Vishwakarma</span>
                     </span>
                     <Button
-  variant="ghost"
-  onClick={() => handleDeleteComment(comment.id)}
-  className="cursor-pointer"
->
-  <X />
-</Button>
-                    </div>
-                    <Link key={index} href={`#${comment.id}`}>{comment.text}</Link>
+                      variant="ghost"
+                      onClick={() => handleDeleteComment(comment.id)}
+                      className="cursor-pointer"
+                    >
+                      <X />
+                    </Button>
                   </div>
-          
+                  <Link key={index} href={`#${comment.id}`}>{comment.text}</Link>
+                </div>
+
               ))}
             </div>
           </div>
@@ -198,11 +197,11 @@ export const Comment = () => {
           <DrawerContent className='bg-white text-left'>
             <DrawerHeader>
               <div className='flex justify-between items-center'>
-              <DrawerTitle>Comment</DrawerTitle>
-              <DrawerClose>
-        <Button variant="outline"><X /></Button>
-      </DrawerClose>
-      </div>
+                <DrawerTitle>Comment</DrawerTitle>
+                <DrawerClose>
+                  <X />
+                </DrawerClose>
+              </div>
               <div className="bg-[whitesmoke] w-full mt-[15px]" >
                 <div className='shadow-[0_1px_3px_rgba(0,0,0,0.3),0_4px_8px_3px_rgba(0,0,0,0.15)] p-3 rounded-md bg-white space-y-3'>
                   <div className='flex items-center gap-3'>
@@ -242,7 +241,7 @@ export const Comment = () => {
                         </Avatar>
                         <span className='text-md'>Dilip Vishwakarma</span>
                       </div>
-                      
+
                       <p className="text-sm">{comment.text}</p>
                     </div>
                   </Link>

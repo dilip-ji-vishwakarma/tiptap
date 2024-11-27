@@ -35,7 +35,7 @@ export const Share = () => {
                 <DialogHeader className='space-y-5'>
                     <DialogTitle>Share Notes</DialogTitle>
                     <DialogDescription className='flex items-center border-[#c7c7c7] border justify-between p-2.5 '>
-                        <p>{window.location.href}</p>
+                        <span>{window.location.href}</span>
                         <span onClick={handleCopyLink} className='shadow-none cursor-pointer'>
                             {copy ? <Files /> : <Clipboard />}
                         </span>
