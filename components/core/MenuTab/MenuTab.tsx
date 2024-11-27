@@ -41,8 +41,6 @@ export const MenuTab = ({ data }: MenuTabProps) => {
     const course = courses.find((course) => course.id === dataId);
     if (!course) return;
     const updatedBookmarkValue = course.bookmark === 0 ? 1 : 0;
-    console.log('Toggled Bookmark Value:', updatedBookmarkValue);
-
     try {
       const response = await fetch(`/api/tutorials/${dataId}`, {
         method: 'PATCH',

@@ -40,14 +40,10 @@ async function updateTutorial(id: string, data: any) {
     WHERE id = ?
   `;
 
-  // Log the query and parameters for debugging
-  console.log('SQL Query:', query);
-  console.log('Values:', values);
 
   try {
     // Execute the query using async/await
     const [results] = await connection.execute(query, values);
-    console.log('Query Results:', results);  // Log the results if query is successful
     return results;
   } catch (err) {
     console.error('Error executing query:', err);  // Log the error details from MySQL
@@ -57,12 +53,11 @@ async function updateTutorial(id: string, data: any) {
 
 
 async function deleteTutorial(id: string) {
-  const query = 'DELETE FROM courses WHERE id = ?';
+  const query = 'DELETE FROM np_courses WHERE id = ?';
 
   try {
     // Execute the query using async/await
     const [results] = await connection.execute(query, [id]);
-    console.log('Query Results:', results);  // Log the results if query is successful
     return results;
   } catch (err) {
     console.error('Error executing query:', err);  // Log the error details from MySQL
@@ -74,10 +69,6 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   try {
     const id = params.id;
     const body = await req.json();
-
-    console.log('Received Data for Update:', body);
-
-    // Call the update function with the provided data
     const updatedTutorial = await updateTutorial(id, body);
 
     // Return the result of the update
@@ -96,9 +87,6 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
   try {
     const id = params.id;
-    console.log('Received Data for Delete:', id);
-
-    // Call the delete function
     const deletedTutorial = await deleteTutorial(id);
 
     // Return the result of the delete

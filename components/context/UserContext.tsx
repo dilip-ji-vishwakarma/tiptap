@@ -26,7 +26,6 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
           const response = await fetch('/api/getUserDetails', {
             headers: { Authorization: `Bearer ${token}` },
           });
-          console.log(response);
           if (response.ok) {
             const data = await response.json();
             setUser(data.user); 

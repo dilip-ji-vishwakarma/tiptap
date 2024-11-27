@@ -28,8 +28,7 @@ export const DeleteTab = ({ id, isOpen, onClose }: DeleteTabProps) => {
       if (!response.ok) {
         throw new Error('Failed to delete');
       }
-
-      // If successful, close the dialog and reset state
+      window.location.reload();
       reset();
       onClose();
     } catch (err) {

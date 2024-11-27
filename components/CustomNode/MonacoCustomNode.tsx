@@ -21,7 +21,7 @@ export const MonacoCustomNode = () => {
             console.error('Execution error:', error);
             logs.push(`Error: ${String(error)}`);
         } finally {
-            console.log = originalConsoleLog; // Restore original console.log
+            console.log = originalConsoleLog; 
         }
         setOutput(logs.join('\n'));
         setHasRunCode(true); // Mark code as executed

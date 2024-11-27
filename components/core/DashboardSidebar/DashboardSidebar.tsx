@@ -77,7 +77,6 @@ export const DashboardSidebar = () => {
   useEffect(() => {
     if (courses.length > 0) {
       const tempStartStep = courses.find(course => course.url === `/course?id=${id}`);
-      console.log("tempStartStep", tempStartStep)
       setCurrentStep(tempStartStep);
     }
   }, [id, courses]);

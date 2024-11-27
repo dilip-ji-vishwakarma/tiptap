@@ -61,8 +61,7 @@ export const Comment = () => {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to delete comment");
       }
-  
-      console.log("Comment deleted successfully");
+
     } catch (error) {
       console.error("Error deleting comment:", error);
     }
@@ -94,7 +93,6 @@ export const Comment = () => {
         body: JSON.stringify({ id: commentId, ...commentData }),
       });
       if (!response.ok) throw new Error("Failed to save comment");
-      console.log("Comment saved successfully");
       fetchComments();
       setCommentbox(false);
     } catch (error) {

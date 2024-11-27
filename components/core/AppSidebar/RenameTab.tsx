@@ -42,8 +42,7 @@ export const RenameTab = ({ id, label, isOpen, onClose, url }: RenameTabProps) =
       if (!response.ok) {
         throw new Error("Failed to rename tab");
       }
-  
-      console.log("Tab renamed successfully:", await response.json());
+
       window.location.reload();
       onClose(); 
     } catch (error) {

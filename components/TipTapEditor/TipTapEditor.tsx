@@ -95,11 +95,9 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
     ],
     content: editorString,
     onCreate: () => {
-      console.log("Editor created");
     },
     onUpdate: ({ editor }) => {
       const newContent = editor.getJSON();
-      console.log("Editor content updated:", newContent);
       setContent(JSON.stringify(newContent));
     },
     onFocus: () => {

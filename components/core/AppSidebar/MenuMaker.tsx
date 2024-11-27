@@ -23,7 +23,6 @@ export const MenuMaker = () => {
     } = useForm();
 
     const onSubmit = (data: any) => {
-        console.log(data);
         reset();
         setOpen(false); 
     }

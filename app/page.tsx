@@ -5,10 +5,17 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const Page = () => {
+
+  const router = useRouter();
+  const storedUserDetails = localStorage.getItem('token');
+
+  if(storedUserDetails) {
+    router.push("/course")
+  } 
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
-  const router = useRouter();
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
