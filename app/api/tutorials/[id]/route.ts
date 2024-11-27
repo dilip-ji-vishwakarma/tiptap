@@ -1,75 +1,73 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connection from '@/lib/mysql';
 
+
 async function updateTutorial(id: string, data: any) {
-  return new Promise((resolve, reject) => {
-    const fields: string[] = [];
-    const values: any[] = [];
+  const fields: string[] = [];
+  const values: any[] = [];
 
-    // Check for optional fields and add them to the update query
-    if (data.bookmark !== undefined) {
-      fields.push('bookmark = ?');
-      values.push(data.bookmark);
-    }
-    if (data.label !== undefined) {
-      fields.push('label = ?');
-      values.push(data.label);
-    }
-    if (data.url !== undefined) {
-      fields.push('url = ?');
-      values.push(data.url);
-    }
-    if (data.editor_string !== undefined) {
-      // Serialize the editor_string object to a JSON string
-      fields.push('editor_string = ?');
-      values.push(JSON.stringify(data.editor_string));  // Convert the object to a string
-    }
+  // Check for optional fields and add them to the update query
+  if (data.bookmark !== undefined) {
+    fields.push('bookmark = ?');
+    values.push(data.bookmark);
+  }
+  if (data.label !== undefined) {
+    fields.push('label = ?');
+    values.push(data.label);
+  }
+  if (data.url !== undefined) {
+    fields.push('url = ?');
+    values.push(data.url);
+  }
+  if (data.editor_string !== undefined) {
+    // Serialize the editor_string object to a JSON string
+    fields.push('editor_string = ?');
+    values.push(JSON.stringify(data.editor_string));  // Convert the object to a string
+  }
 
-    // If no fields are provided, reject the update
-    if (fields.length === 0) {
-      return reject(new Error('No fields provided for update'));
-    }
+  // If no fields are provided, reject the update
+  if (fields.length === 0) {
+    throw new Error('No fields provided for update');
+  }
 
-    // Push the ID at the end of values to update the correct row
-    values.push(id);
+  // Push the ID at the end of values to update the correct row
+  values.push(id);
 
-    // Construct the SQL query dynamically based on the fields provided
-    const query = `
-      UPDATE np_courses 
-      SET ${fields.join(', ')} 
-      WHERE id = ?
-    `;
+  // Construct the SQL query dynamically based on the fields provided
+  const query = `
+    UPDATE np_courses 
+    SET ${fields.join(', ')} 
+    WHERE id = ?
+  `;
 
-    // Log the query and parameters for debugging
-    console.log('SQL Query:', query);
-    console.log('Values:', values);
+  // Log the query and parameters for debugging
+  console.log('SQL Query:', query);
+  console.log('Values:', values);
 
-    // Execute the query
-    connection.query(query, values, (err, results) => {
-      if (err) {
-        console.error('Error executing query:', err);  // Log the error details from MySQL
-        return reject(new Error('Error executing query'));
-      }
-      console.log('Query Results:', results);  // Log the results if query is successful
-      resolve(results);
-    });
-  });
+  try {
+    // Execute the query using async/await
+    const [results] = await connection.execute(query, values);
+    console.log('Query Results:', results);  // Log the results if query is successful
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err);  // Log the error details from MySQL
+    throw new Error('Error executing query');
+  }
 }
 
-async function deleteTutorial(id: string) {
-  return new Promise((resolve, reject) => {
-    const query = 'DELETE FROM courses WHERE id = ?';
 
-    // Execute the query
-    connection.query(query, [id], (err, results) => {
-      if (err) {
-        console.error('Error executing query:', err);  // Log the error details from MySQL
-        return reject(new Error('Error executing delete query'));
-      }
-      console.log('Query Results:', results);  // Log the results if query is successful
-      resolve(results);
-    });
-  });
+async function deleteTutorial(id: string) {
+  const query = 'DELETE FROM courses WHERE id = ?';
+
+  try {
+    // Execute the query using async/await
+    const [results] = await connection.execute(query, [id]);
+    console.log('Query Results:', results);  // Log the results if query is successful
+    return results;
+  } catch (err) {
+    console.error('Error executing query:', err);  // Log the error details from MySQL
+    throw new Error('Error executing delete query');
+  }
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {

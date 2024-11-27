@@ -105,6 +105,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
 
       if (response.ok) {
         setCourses(updatedCourses);
+        window.location.reload();
       } else {
         console.error("Failed to update bookmark");
       }

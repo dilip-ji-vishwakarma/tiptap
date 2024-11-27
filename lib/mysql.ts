@@ -6,6 +6,9 @@ const connection = await mysql.createConnection({
   user: 'root',
   password: '',
   database: 'doc',
+  waitForConnections: true,
+  connectionLimit: 10,
+  queueLimit: 0,
 });
 
 export default connection;
