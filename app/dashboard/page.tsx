@@ -1,31 +1,32 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import { useUser } from '@/components/context/UserContext';
+import { useRouter } from 'next/navigation';
+import React, { useState } from 'react';
 
 const page = () => {
-  const [userDetails, setUserDetails] = useState<any>(null);
+  const router = useRouter();
+  const { user, loading } = useUser();
 
-  useEffect(() => {
-    const storedUserDetails = sessionStorage.getItem('userDetails');
-    if (storedUserDetails) {
-      setUserDetails(JSON.parse(storedUserDetails));
-    } else {
-      window.location.href = '/';
-    }
-  }, []);
+  if (loading) return <p>Loading...</p>;
+
+  if (!user) return <p>User not logged in. Please log in.</p>;
+
+  const storedUserDetails = localStorage.getItem('token');
+
+  if(!storedUserDetails) {
+    router.push("/")
+  }
+
 
   return (
     <div className="flex flex-col items-center justify-center">
-      {userDetails ? (
+
         <div>
-          <h1>Welcome, {userDetails.name}</h1>
-          <p>Your email: {userDetails.email}</p>
-          <p>Token: {userDetails.token}</p>
-          <p>Token Expiration: {userDetails.tokenExpiration}</p>
-          <p>Other details: {JSON.stringify(userDetails, null, 2)}</p>
+          <h1>Welcome, {user.id}</h1>
+          <p>Your email: {user.email}</p>
+          <p>Token: {user.fullname}</p>
         </div>
-      ) : (
-        <p>Loading user details...</p>
-      )}
+
     </div>
   );
 };
