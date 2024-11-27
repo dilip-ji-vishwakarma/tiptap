@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { InputText } from '../input/InputText';
@@ -12,9 +12,13 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { useUser } from '@/components/context/UserContext';
 
 export const MenuMaker = () => {
-    const [open, setOpen] = useState(false); 
+    const { user } = useUser();
+
+    const [open, setOpen] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false); 
     const {
         handleSubmit,
         control,
@@ -22,14 +26,44 @@ export const MenuMaker = () => {
         reset,
     } = useForm();
 
-    const onSubmit = (data: any) => {
-        reset();
-        setOpen(false); 
-    }
+    const onSubmit = async (data: any) => {
+        setIsSubmitting(true); 
+        const labelFormatted = data.label.replace(/\s+/g, '-'); 
+        const finalUrl = `/course?id=${labelFormatted}`;
+
+        try {
+            const response = await fetch('/api/tutorialmaking', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    user_id: user?.id,
+                    label: data.label,
+                    url: finalUrl, 
+                    template: "tiptap-editor",
+                    editor_string: '{}',
+                    bookmark: false, 
+                }),
+            });
+
+            if (response.ok) {
+                reset();
+                setOpen(false); 
+                window.location.reload(); 
+            } else {
+                console.error('Error submitting form:', response.statusText);
+            }
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setIsSubmitting(false); 
+        }
+    };
 
     const onClose = () => {
-        setOpen(false); 
-    }
+        setOpen(false);
+    };
 
     return (
         <Dialog open={open} onOpenChange={setOpen}>
@@ -45,16 +79,17 @@ export const MenuMaker = () => {
                     </DialogHeader>
                     <div className='space-y-5 mt-3'>
                         <InputText column_name="label" placeholder="Enter Tab Name" required={true} control={control} errors={errors} label="Tab Name" />
-                        <InputText column_name="url" placeholder="Enter Url" required={true} control={control} errors={errors} label="Url" />
                     </div>
                     <DialogFooter className="mt-5">
                         <Button type="button" variant="outline" onClick={onClose}>
                             Cancel
                         </Button>
-                        <Button type="submit">Save</Button>
+                        <button type="submit" disabled={isSubmitting}>
+                            {isSubmitting ? 'Saving...' : 'Save'}
+                        </button>
                     </DialogFooter>
                 </form>
             </DialogContent>
         </Dialog>
     );
-}
+};

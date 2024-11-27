@@ -1,7 +1,6 @@
 import React from 'react'
 import { Controller, Control, FieldValues, DeepMap, FieldError } from 'react-hook-form';
 
-
 type InputProps = {
     column_name: string,
     label?: string,
@@ -10,17 +9,18 @@ type InputProps = {
     control: Control<FieldValues>;
     errors: DeepMap<FieldValues, FieldError>;
     defaultValue?: string;
+    hidden?: boolean;
 }
 
-export const InputText = ({ column_name, label, required, placeholder, control, errors, defaultValue }: InputProps) => {
+export const InputText = ({ column_name, label, required, placeholder, control, errors, defaultValue, hidden }: InputProps) => {
     return (
-        <div className='w-full'>
+        <div className={`w-full ${hidden ? "hidden" : ""}`}>
             <Controller
                 name={column_name}
                 control={control}
                 defaultValue={defaultValue}
                 rules={{ required: required }}
-                render={({ field: { onChange, value } }) => (
+                render={({ field: { onChange, value = "" } }) => ( // Default value is an empty string if undefined
                     <>
                         <div className='flex items-center space-x-1'>
                             {required && (
@@ -35,12 +35,11 @@ export const InputText = ({ column_name, label, required, placeholder, control, 
                                 className="form-control w-full border-none rounded-md focus:outline-none focus:shadow-none shadow-none h-[50px] placeholder:text-[#9D9D9D] text-[14px] px-3"
                                 placeholder={placeholder}
                                 autoComplete="off"
-                                value={value}
+                                value={value}  // Always set value
                                 onChange={onChange}
                             />
                         </span>
                     </>
-
                 )}
             />
             {errors[column_name] && <span className="text-red-500 text-sm">Please Enter {label}</span>}

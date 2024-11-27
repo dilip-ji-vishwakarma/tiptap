@@ -10,8 +10,8 @@ const page = () => {
   const router = useRouter();
   useEffect(() => {
     const storedUserDetails = localStorage.getItem('token');
-    if (storedUserDetails) {
-      router.push("/course");
+    if (!storedUserDetails) {
+      router.push("/");
     }
   }, [router]);
 

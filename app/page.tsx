@@ -26,7 +26,7 @@ const Page = () => {
       const { token } = response.data;
       localStorage.setItem('token', token);
 
-      router.push('/dashboard');
+      window.location.href = '/course';
     } catch (err: any) {
       setError(err.response?.data?.message || 'An error occurred. Please try again.');
     }

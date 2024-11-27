@@ -3,7 +3,7 @@ import bcrypt from 'bcrypt';
 import connection from '@/lib/mysql';
 
 export async function POST(request: Request) {
-  const { email, password } = await request.json();
+  const { email, password, fullname } = await request.json();
 
   try {
     // Check if user already exists
@@ -17,7 +17,7 @@ export async function POST(request: Request) {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     // Insert the new user into the database
-    await connection.query('INSERT INTO np_users (email, password) VALUES (?, ?)', [email, hashedPassword]);
+    await connection.query('INSERT INTO np_users (email, password, fullname) VALUES (?, ?, ?)', [email, hashedPassword, fullname]);
 
     return NextResponse.json({ message: 'Signup successful! Redirecting to login...' }, { status: 201 });
   } catch (error) {
