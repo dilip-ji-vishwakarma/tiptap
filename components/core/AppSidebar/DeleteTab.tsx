@@ -11,7 +11,7 @@ type DeleteTabProps = {
 };
 
 export const DeleteTab = ({ id, isOpen, onClose }: DeleteTabProps) => {
-  const { handleSubmit, control, formState: { errors, isValid }, reset } = useForm({
+  const { handleSubmit, reset } = useForm({
     mode: "onChange",
   });
 

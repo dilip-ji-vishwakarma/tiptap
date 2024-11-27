@@ -1,7 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { fetchDataFromApi } from "@/lib/api";
 import { Toolbar } from "@/components/TipTapEditor";
 import { AppSidebar } from "../AppSidebar";
 import { SidebarProvider } from "@/components/ui/sidebar";
@@ -9,14 +8,6 @@ import { Header } from "@/components/Header";
 import { ChevronDown, ChevronUp, TableOfContents } from 'lucide-react';
 import { MenuTab } from "../MenuTab";
 
-interface Course {
-  id: string;
-  title: string;
-  url: string;
-  template: string;
-  editor_string: string;
-  // Add other fields as necessary
-}
 
 const templates: any = {
   "tiptap-editor": React.lazy(() => import("@/components/TipTapEditor/TipTapEditor")),

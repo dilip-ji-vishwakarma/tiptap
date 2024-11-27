@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import connection from '@/lib/mysql';
 
+interface TutorialData {
+  bookmark?: string;
+  label?: string;
+  url?: string;
+  editor_string?: any;
+}
 
-async function updateTutorial(id: string, data: any) {
+async function updateTutorial(id: string, data: TutorialData) {
   const fields: string[] = [];
   const values: any[] = [];
 
@@ -40,7 +46,6 @@ async function updateTutorial(id: string, data: any) {
     WHERE id = ?
   `;
 
-
   try {
     // Execute the query using async/await
     const [results] = await connection.execute(query, values);
@@ -50,7 +55,6 @@ async function updateTutorial(id: string, data: any) {
     throw new Error('Error executing query');
   }
 }
-
 
 async function deleteTutorial(id: string) {
   const query = 'DELETE FROM np_courses WHERE id = ?';
@@ -66,8 +70,9 @@ async function deleteTutorial(id: string) {
 }
 
 export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params; // Explicit destructuring of params
+
   try {
-    const id = params.id;
     const body = await req.json();
     const updatedTutorial = await updateTutorial(id, body);
 
@@ -85,8 +90,9 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: { id: string } }) {
+  const { id } = params; // Explicit destructuring of params
+
   try {
-    const id = params.id;
     const deletedTutorial = await deleteTutorial(id);
 
     // Return the result of the delete

@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from 'next/server';
+import {NextResponse } from 'next/server';
 import mysql from 'mysql2/promise';
 
 // Create a pool connection to the database
@@ -9,7 +9,7 @@ const connection = await mysql.createPool({
   database: 'doc',         // Update with your database name
 });
 
-export async function GET(req: NextRequest) {
+export async function GET() {
   try {
     // Fetch all comments from the database
     const [comments] = await connection.execute('SELECT id, text, username, useremail, user_id FROM np_comments');

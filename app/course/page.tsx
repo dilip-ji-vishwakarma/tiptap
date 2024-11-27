@@ -4,15 +4,16 @@ import { SnackbarProvider } from '@/components/core/context/SnackbarContext'
 import Snackbar from '@/components/core/Snackbar/Snackbar'
 import { EditorProvider } from '@/components/TipTapEditor'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 
 const page = () => {
   const router = useRouter();
-  const storedUserDetails = localStorage.getItem('token');
-
-  if(!storedUserDetails) {
-    router.push("/")
-  }
+  useEffect(() => {
+    const storedUserDetails = localStorage.getItem('token');
+    if (storedUserDetails) {
+      router.push("/course");
+    }
+  }, [router]);
 
   return (
     <EditorProvider>

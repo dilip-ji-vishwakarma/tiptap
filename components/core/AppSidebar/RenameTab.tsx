@@ -20,7 +20,7 @@ type RenameTabProps = {
 };
 
 export const RenameTab = ({ id, label, isOpen, onClose, url }: RenameTabProps) => {
-  const { handleSubmit, control, formState: { errors, isValid }, reset } = useForm({
+  const { handleSubmit, control, formState: { errors } } = useForm({
     mode: "onChange",
   });
 
