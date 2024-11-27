@@ -95,7 +95,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
     );
 
     try {
-      const response = await fetch(`/api/tutorials/${dataId}`, {
+      const response = await fetch(`/api/tutorials?id=${dataId}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
