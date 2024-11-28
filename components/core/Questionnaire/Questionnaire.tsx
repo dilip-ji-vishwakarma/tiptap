@@ -169,7 +169,7 @@ const surveyJson = {
     showProgressBar: "top",
     progressBarType: "questions",
     widthMode: "static",
-    width: "864px",
+    width: "100%",
 };
 
 export const Questionnaire = () => {
