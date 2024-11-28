@@ -17,3 +17,4 @@ export * from "./EditorMonaco";
 export * from "./MenuTab";
 export * from "./Snackbar";
 export * from "./Questionnaire";
+export * from "./ResizableIframe";

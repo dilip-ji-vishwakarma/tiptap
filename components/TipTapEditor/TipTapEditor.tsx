@@ -28,7 +28,6 @@ import ReactComponent from '@/lib/NodeExtension';
 import questionnaireComponent from "@/lib/Questionnaire"
 import Heading from '@tiptap/extension-heading';
 import MonacoComponent from "@/lib/MonacoExtension";
-import DraggableYouTube from "@/lib/DraggableYouTube";
 import debounce from "lodash/debounce";
 
 interface TipTapEditorProps {
@@ -58,7 +57,6 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
       Blockquote,
       Paragraph,
       Text,
-      DraggableYouTube,
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
       }),
