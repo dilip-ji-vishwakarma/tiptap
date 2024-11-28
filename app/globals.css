@@ -160,3 +160,11 @@ body {
 .tiptap iframe {
   width: 100%;
 }
+
+.draggable-video {
+  cursor: move;  /* Change the cursor to indicate it's draggable */
+}
+
+.draggable-video-container {
+  position: relative; /* Ensure container holds position for drag functionality */
+}

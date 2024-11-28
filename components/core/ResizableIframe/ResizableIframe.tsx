@@ -2,12 +2,9 @@
 import React, { useState, useRef } from 'react';
 import Draggable from 'react-draggable';
 import 'react-resizable/css/styles.css';
+import { NodeViewWrapper, NodeViewContent } from '@tiptap/react';
 
-type ResizableIframeProps = {
-    videoUrl: string;
-}
-
-export const ResizableIframe = ({ videoUrl }: ResizableIframeProps) => {
+export const ResizableIframe = () => {
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const draggableRef = useRef(null);
     const handleDrag = (e: any, data: any) => {
@@ -15,10 +12,13 @@ export const ResizableIframe = ({ videoUrl }: ResizableIframeProps) => {
     };
 
     return (
+        <NodeViewWrapper className="youtubedraggable-component">
         <Draggable axis="both" handle=".handle" position={position} onStop={handleDrag} nodeRef={draggableRef}>
             <div ref={draggableRef} className='handle cursor-move p-5 bg-[#F3F3F3] w-max'>
-                <iframe width="100%" height="100%" src={videoUrl} allowFullScreen className='w-[800px] h-[500px]'></iframe>
+                <iframe width="100%" height="100%" src="https://www.youtube.com/embed/3WnK03df6aE?si=8KXPP8c4sBhqSGlF" allowFullScreen ></iframe>
             </div>
         </Draggable>
+        <NodeViewContent className="content" />
+        </NodeViewWrapper>
     );
 };

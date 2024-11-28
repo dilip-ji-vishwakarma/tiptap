@@ -28,6 +28,7 @@ import questionnaireComponent from "@/lib/Questionnaire"
 import Heading from '@tiptap/extension-heading';
 import MonacoComponent from "@/lib/MonacoExtension";
 import debounce from "lodash/debounce";
+import YoutubeDraggable from "@/lib/YoutubeDraggable";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -60,17 +61,19 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
         levels: [1, 2, 3, 4, 5, 6],
       }),
       questionnaireComponent,
+      YoutubeDraggable,
       MonacoComponent,
       Youtube.configure({
         controls: false,
         nocookie: true,
         allowFullscreen: false,
+        inline: true,
         HTMLAttributes: {
-          class: 'youtube-video',
+          class: 'youtube-video draggable-video',
         },
       }),
       Image.configure({
-        inline: false,
+        inline: true,
       }),
       Highlight.configure({ multicolor: true }),
       TextAlign.configure({
@@ -131,6 +134,8 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
     }, 1000),
     []
   );
+
+  
 
 
   return (
