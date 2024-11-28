@@ -223,7 +223,7 @@ export const Toolbar = () => {
     currentEditor
       ?.chain()
       .focus()
-      .insertContent(`<react-component></react-component>`)
+      .insertContent(`<questionnaire-component></questionnaire-component>`)
       .run();
   };
 

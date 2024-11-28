@@ -16,3 +16,4 @@ export * from "./GridBox";
 export * from "./EditorMonaco";
 export * from "./MenuTab";
 export * from "./Snackbar";
+export * from "./Questionnaire";
