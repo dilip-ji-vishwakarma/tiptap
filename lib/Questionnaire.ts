@@ -1,20 +1,21 @@
-import { Questionnaire } from '@/components/core'
-import { mergeAttributes, Node } from '@tiptap/core'
-import { ReactNodeViewRenderer } from '@tiptap/react'
+import { Questionnaire } from '@/components/core';
+import { mergeAttributes, Node } from '@tiptap/core';
+import { ReactNodeViewRenderer } from '@tiptap/react';
 
 export default Node.create({
   name: 'questionnaireComponent',
 
-  group: 'inline',
+  // Set it to be an inline node
+  group: 'inline', // Inline group
 
-  atom: true,
+  inline: true, // Specify that this is an inline node
 
   addAttributes() {
     return {
       count: {
         default: 0,
       },
-    }
+    };
   },
 
   parseHTML() {
@@ -22,14 +23,14 @@ export default Node.create({
       {
         tag: 'questionnaire-component',
       },
-    ]
+    ];
   },
 
   renderHTML({ HTMLAttributes }) {
-    return ['questionnaire-component', mergeAttributes(HTMLAttributes)]
+    return ['questionnaire-component', mergeAttributes(HTMLAttributes)];
   },
 
   addNodeView() {
-    return ReactNodeViewRenderer(Questionnaire)
+    return ReactNodeViewRenderer(Questionnaire);
   },
-})
+});
