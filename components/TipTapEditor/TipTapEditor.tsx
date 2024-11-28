@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useEditor, EditorContent, mergeAttributes } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -28,8 +28,8 @@ import ReactComponent from '@/lib/NodeExtension';
 import questionnaireComponent from "@/lib/Questionnaire"
 import Heading from '@tiptap/extension-heading';
 import MonacoComponent from "@/lib/MonacoExtension";
-import { useSnackbar } from "../core/context/SnackbarContext";
 import DraggableYouTube from "@/lib/DraggableYouTube";
+import debounce from "lodash/debounce";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -38,7 +38,6 @@ interface TipTapEditorProps {
 }
 
 const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
-  const { dispatch } = useSnackbar();
   const [content, setContent] = useState<string>(editorString);
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
@@ -106,6 +105,7 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
     onUpdate: ({ editor }) => {
       const newContent = editor.getJSON();
       setContent(JSON.stringify(newContent));
+      saveEditorContent(newContent);
     },
     onFocus: () => {
       if (onFocus) {
@@ -114,44 +114,28 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
     },
   });
 
-  const saveEditorContent = async () => {
-
-    if (editor) {
-      dispatch({
-        type: 'SHOW_SNACKBAR',
-        payload: { message: 'Saving...', type: 'info' },
-      });
-      const updatedContent = editor.getJSON();
+  const saveEditorContent = useCallback(
+    debounce(async (updatedContent: any) => {
       try {
         const response = await fetch(`/api/tutorials/${ids}`, {
-          method: 'PATCH',
+          method: "PATCH",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({ editor_string: updatedContent }),
         });
 
         if (!response.ok) {
-          throw new Error('Failed to update content');
+          throw new Error("Failed to save content");
         }
-
-        const result = await response.json();
-        dispatch({
-          type: 'SHOW_SNACKBAR',
-          payload: { message: 'Saved', type: 'success' },
-        });
+        console.log("Content saved successfully");
       } catch (error) {
-        dispatch({
-          type: 'SHOW_SNACKBAR',
-          payload: { message: 'Error saving content', type: 'error' },
-        });
+        console.error("Error saving content:", error);
       }
-    }
-  };
+    }, 1000),
+    []
+  );
 
-  const handleBlur = () => {
-    saveEditorContent();
-  };
 
   return (
     <div className="mt-5 mb-20">
@@ -161,7 +145,6 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
           editor={editor}
           className="minimal-tiptap-editor lg:overflow-auto md:p-10 p-6 border-destructive focus-within:border-destructive lg:h-[100vh]"
           placeholder="Type your description here"
-          onBlur={handleBlur}
         />
       </div>
     </div>
