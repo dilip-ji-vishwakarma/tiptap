@@ -324,13 +324,12 @@ export const Toolbar = () => {
           <Link2Off className="h-4 w-4" />
         </Toggle></ToolTip>
 
-
         <Popover>
           <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Components"><Plus className="h-4 w-4" /></ToolTip></PopoverTrigger>
           <PopoverContent className="w-full bg-white">
             <div className="gap-3 flex">
-            <Toggle onClick={() => insertComponent('questionnaire')}><MessageCircleQuestion className="h-4 w-4" /></Toggle>
-            <Toggle onClick={() => MonacoComponent('monaco')}><Braces className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => insertComponent('questionnaire')}><MessageCircleQuestion className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => MonacoComponent('monaco')}><Braces className="h-4 w-4" /></Toggle>
             </div>
           </PopoverContent>
         </Popover>
