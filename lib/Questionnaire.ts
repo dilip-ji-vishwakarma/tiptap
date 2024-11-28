@@ -5,7 +5,7 @@ import { ReactNodeViewRenderer } from '@tiptap/react'
 export default Node.create({
   name: 'questionnaireComponent',
 
-  group: 'block',
+  group: 'inline',
 
   atom: true,
 
