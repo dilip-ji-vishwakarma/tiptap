@@ -28,6 +28,7 @@ import ReactComponent from '@/lib/NodeExtension';
 import Heading from '@tiptap/extension-heading';
 import MonacoComponent from "@/lib/MonacoExtension";
 import { useSnackbar } from "../core/context/SnackbarContext";
+import DraggableYouTube from "@/lib/DraggableYouTube";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -57,6 +58,7 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
       Blockquote,
       Paragraph,
       Text,
+      DraggableYouTube,
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
       }),
@@ -66,6 +68,9 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
         controls: false,
         nocookie: true,
         allowFullscreen: false,
+        HTMLAttributes: {
+          class: 'youtube-video',
+        },
       }),
       Image.configure({
         inline: false,
