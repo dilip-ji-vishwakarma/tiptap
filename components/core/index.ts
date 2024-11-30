@@ -18,3 +18,8 @@ export * from "./MenuTab";
 export * from "./Snackbar";
 export * from "./Questionnaire";
 export * from "./ResizableIframe";
+export * from "./IconRender";
+export * from "./Tutorials";
+export * from "./Heading";
+export * from "./Video";
+export * from "./Tab";
