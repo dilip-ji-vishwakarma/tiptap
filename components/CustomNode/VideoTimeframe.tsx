@@ -2,11 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 import { fetchDataFromApi } from "@/lib/api"; 
-import { Tutorials } from "../core";
+import { NodeViewContent, NodeViewWrapper } from "@tiptap/react";
 
 
 const templates: any = {
-  "tutorial-template": Tutorials, 
+  "tutorial-template" : React.lazy(() => import("@/components/core/Tutorials/Tutorials")), 
 };
 
 export const VideoTimeframe = () => {
@@ -41,8 +41,9 @@ export const VideoTimeframe = () => {
   }
 
   return (
+    <NodeViewWrapper className="tabs-youtube">
     <div className="flex h-screen">
-      <div className="w-1/5 bg-[#F9FAFB] border-r border-gray-200 p-4">
+      <div className="w-[35%] bg-[#F9FAFB] border-r border-gray-200 p-4">
         <ul className="space-y-6 relative">
           {data.map((tab, index) => (
             <li key={tab.label} className="flex items-center relative">
@@ -59,13 +60,13 @@ export const VideoTimeframe = () => {
               </div>
               {index !== data.length - 1 && (
                 <div
-                  className={`absolute left-[11px] top-[44px] h-[65px] w-0.5 ${
+                  className={`absolute left-[11px] top-[40px] h-[57px] w-0.5 ${
                     activeTab === tab.label ? "bg-blue-500" : "bg-gray-400"
                   }`}
                 ></div>
               )}
               <button
-                className={`ml-4 py-2 text-left transition-colors flex flex-col ${
+                className={`ml-4 py-2 text-left transition-colors flex flex-col text-sm ${
                   activeTab === tab.label
                     ? "text-blue-500 font-semibold"
                     : "text-gray-800 hover:text-blue-500"
@@ -80,7 +81,7 @@ export const VideoTimeframe = () => {
         </ul>
       </div>
 
-      <div className="w-4/5 p-6 bg-gray-50">
+      <div className="w-[65%] p-6 bg-gray-50">
         {data.map((tab) => {
           const TabTemplate = templates[tab.template];
           if (tab.label !== activeTab) return null;
@@ -97,5 +98,7 @@ export const VideoTimeframe = () => {
         })}
       </div>
     </div>
+    <NodeViewContent className="content" />
+    </NodeViewWrapper>
   );
 };

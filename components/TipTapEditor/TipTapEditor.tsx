@@ -29,6 +29,7 @@ import Heading from '@tiptap/extension-heading';
 import MonacoComponent from "@/lib/MonacoExtension";
 import debounce from "lodash/debounce";
 import YoutubeDraggable from "@/lib/YoutubeDraggable";
+import TabYoutube from "@/lib/TabYoutube";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -57,6 +58,7 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
       Blockquote,
       Paragraph,
       Text,
+      TabYoutube,
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
       }),

@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Braces, MessageCircleQuestion, Youtube } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Braces, MessageCircleQuestion, Youtube, BetweenHorizontalStart  } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {
@@ -243,6 +243,13 @@ export const Toolbar = () => {
       .run();
   };
 
+  const TabComponent = (type: string) => {
+    currentEditor
+      ?.chain()
+      .focus()
+      .insertContent(`<tabs-youtube></tabs-youtube>`)
+      .run();
+  };
 
   const inputClass = "w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md";
 
@@ -340,6 +347,7 @@ export const Toolbar = () => {
               <Toggle onClick={() => insertComponent('questionnaire')}><MessageCircleQuestion className="h-4 w-4" /></Toggle>
               <Toggle onClick={() => MonacoComponent('monaco')}><Braces className="h-4 w-4" /></Toggle>
               <Toggle onClick={() => YoutubeComponent('youtube')}><Youtube className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => TabComponent('TabYoutube')}><BetweenHorizontalStart className="h-4 w-4" /></Toggle>
             </div>
           </PopoverContent>
         </Popover>

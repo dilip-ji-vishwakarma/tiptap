@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { TutorialsTemplate } from './TutorialsTemplate';
 import { fetchDataFromApi } from '@/lib/api';
 
-export const Tutorials = ({ entity }: any) => {
+const Tutorials = ({ entity }: any) => {
     const [data, setData] = useState<any>([]);
     const [loading, setLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
@@ -37,3 +37,4 @@ export const Tutorials = ({ entity }: any) => {
     );
 };
 
+export default Tutorials;
