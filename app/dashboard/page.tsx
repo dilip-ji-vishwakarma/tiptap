@@ -1,4 +1,5 @@
 "use client";
+import { DashboardHeader } from '@/components/core';
 import { useState, useEffect } from 'react';
 
 const Page = () => {
@@ -48,6 +49,7 @@ const Page = () => {
 
   return (
     <div>
+      <DashboardHeader />
       <h1>Welcome to the Dashboard</h1>
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {categories.length === 0 ? (

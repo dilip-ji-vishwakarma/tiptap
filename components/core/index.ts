@@ -23,3 +23,5 @@ export * from "./Tutorials";
 export * from "./Heading";
 export * from "./Video";
 export * from "./Tab";
+export * from "./GlobalSearchbar";
+export * from "./DashboardHeader";
