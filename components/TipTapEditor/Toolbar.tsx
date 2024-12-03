@@ -220,6 +220,7 @@ export const Toolbar = () => {
   }
 
   const insertComponent = (type: string) => {
+    console.log(type)
     currentEditor
       ?.chain()
       .focus()
@@ -228,6 +229,7 @@ export const Toolbar = () => {
   };
 
   const MonacoComponent = (type: string) => {
+    console.log(type)
     currentEditor
       ?.chain()
       .focus()
@@ -236,6 +238,7 @@ export const Toolbar = () => {
   };
 
   const YoutubeComponent = (type: string) => {
+    console.log(type)
     currentEditor
       ?.chain()
       .focus()
@@ -244,6 +247,7 @@ export const Toolbar = () => {
   };
 
   const TabComponent = (type: string) => {
+    console.log(type)
     currentEditor
       ?.chain()
       .focus()

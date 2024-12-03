@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { useSearchParams } from "next/navigation";
 
 type DeleteTabProps = {
   id: number;
@@ -15,14 +16,22 @@ export const DeleteTab = ({ id, isOpen, onClose }: DeleteTabProps) => {
     mode: "onChange",
   });
 
+  const searchParams = useSearchParams();
+  const categoryId = searchParams.get("category_id");
+
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const onDelete = async () => {
+    const token = localStorage.getItem('token');
     try {
       setIsLoading(true);
-      const response = await fetch(`/api/tutorials/${id}`, {
+      const response = await fetch(`/api/petchcourses?category_id=${categoryId}&id=${id}`, {
         method: 'DELETE',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`,
+        },
       });
 
       if (!response.ok) {

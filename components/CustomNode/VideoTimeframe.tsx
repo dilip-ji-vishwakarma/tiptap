@@ -87,7 +87,8 @@ export const VideoTimeframe = () => {
           if (tab.label !== activeTab) return null;
 
           return (
-            <div key={tab.label}>
+            // contentEditable={true}
+            <div key={tab.label} >
               {TabTemplate ? (
                 <TabTemplate {...tab} />
               ) : (

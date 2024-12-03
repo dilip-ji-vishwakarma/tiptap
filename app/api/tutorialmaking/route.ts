@@ -4,7 +4,7 @@ import connection from '@/lib/mysql';
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { user_id, label, url, template, editor_string, bookmark } = body;
+    const { category_id, label, url, template, editor_string, bookmark } = body;
 
     // Ensure that editor_string is parsed to JSON if needed
     let editorJson;
@@ -16,12 +16,12 @@ export async function POST(req: Request) {
 
     // Insert data into MySQL database
     const query = `
-      INSERT INTO np_courses (user_id, label, url, template, editor_string, bookmark)
+      INSERT INTO np_courses (category_id, label, url, template, editor_string, bookmark)
       VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     const [result] = await connection.execute(query, [
-      user_id,
+      category_id,
       label,
       url,
       template,

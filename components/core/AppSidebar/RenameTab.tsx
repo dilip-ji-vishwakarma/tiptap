@@ -10,6 +10,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { InputText } from "../input";
 import { useForm } from "react-hook-form";
+import { useSearchParams } from "next/navigation";
 
 type RenameTabProps = {
   id: number;
@@ -23,6 +24,8 @@ export const RenameTab = ({ id, label, isOpen, onClose, url }: RenameTabProps) =
   const { handleSubmit, control, formState: { errors } } = useForm({
     mode: "onChange",
   });
+  const searchParams = useSearchParams();
+  const categoryId = searchParams.get("category_id");
 
   const handleForm = async (data: any) => {
     try {
@@ -30,11 +33,12 @@ export const RenameTab = ({ id, label, isOpen, onClose, url }: RenameTabProps) =
       if (data.url) {
         payload.url = data.url;
       }
-  
-      const response = await fetch(`/api/tutorials/${id}`, {
+      const token = localStorage.getItem('token');
+      const response = await fetch(`/api/petchcourses?category_id=${categoryId}&id=${id}`, {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify(payload),
       });

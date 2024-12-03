@@ -12,10 +12,12 @@ import {
 } from "@/components/ui/dialog";
 import { Plus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { useUser } from '@/components/context/UserContext';
+import { useSearchParams } from 'next/navigation';
 
 export const MenuMaker = () => {
-    const { user } = useUser();
+
+    const searchParams = useSearchParams();
+    const categoryId = searchParams.get("category_id");
 
     const [open, setOpen] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false); 
@@ -29,7 +31,7 @@ export const MenuMaker = () => {
     const onSubmit = async (data: any) => {
         setIsSubmitting(true); 
         const labelFormatted = data.label.replace(/\s+/g, '-'); 
-        const finalUrl = `/course?id=${labelFormatted}`;
+        const finalUrl = `/course?category_id=${categoryId}&id=${labelFormatted}`;
 
         try {
             const response = await fetch('/api/tutorialmaking', {
@@ -38,7 +40,7 @@ export const MenuMaker = () => {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    user_id: user?.id,
+                    category_id: categoryId,
                     label: data.label,
                     url: finalUrl, 
                     template: "tiptap-editor",

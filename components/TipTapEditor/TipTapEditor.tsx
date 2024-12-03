@@ -34,15 +34,14 @@ import TabYoutube from "@/lib/TabYoutube";
 interface TipTapEditorProps {
   editorString: any;
   onFocus: () => void;
-  ids: number;
 }
 
-const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
+const TipTapEditor = ({ editorString, onFocus }: TipTapEditorProps) => {
   const [content, setContent] = useState<string>(editorString);
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
-
+  const categoryId = searchParams.get("category_id");
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -117,11 +116,13 @@ const TipTapEditor = ({ editorString, onFocus, ids }: TipTapEditorProps) => {
 
   const saveEditorContent = useCallback(
     debounce(async (updatedContent: any) => {
+      const token = localStorage.getItem('token');
       try {
-        const response = await fetch(`/api/tutorials/${ids}`, {
+        const response = await fetch(`/api/petchcourses?category_id=${categoryId}&id=${id}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
+            'Authorization': `Bearer ${token}`,
           },
           body: JSON.stringify({ editor_string: updatedContent }),
         });

@@ -14,12 +14,9 @@ const templates: any = {
 };
 
 export const DashboardSidebar = () => {
-
-  
-
   const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-
+  const courseId = searchParams.get("id");
+  const categoryId = searchParams.get("category_id");
   const [courses, setCourses] = useState<any[]>([]);
   const [currentStep, setCurrentStep] = useState<any>(undefined);
   const [loading, setLoading] = useState(false);
@@ -38,7 +35,7 @@ export const DashboardSidebar = () => {
 
       setLoading(true);
       try {
-        const response = await fetch('/api/tutorials', {
+        const response = await fetch(`/api/courses?category_id=${categoryId}`, {
           method: 'GET', // Or POST depending on the API
           headers: {
             'Content-Type': 'application/json',
@@ -67,10 +64,13 @@ export const DashboardSidebar = () => {
 
   useEffect(() => {
     if (courses.length > 0) {
-      const tempStartStep = courses.find(course => course.url === `/course?id=${id}`);
+      const tempStartStep = courses.find(course => 
+        course.url === `/course?category_id=${categoryId}&id=${courseId}`
+      );
+      console.log(tempStartStep, "tempStartStep");      
       setCurrentStep(tempStartStep);
     }
-  }, [id, courses]);
+  }, [courseId, courses]);
 
   const toggleSidebar = () => {
     setToolbar(!toolbar);
@@ -109,7 +109,6 @@ export const DashboardSidebar = () => {
                   step: currentStep,
                   courses: courses,
                   editorString: currentStep.editor_string,
-                  ids: currentStep.id,
                   onFocus: handleEditorFocus,
                 })
               ) : (

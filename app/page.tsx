@@ -10,7 +10,7 @@ const Page = () => {
   const storedUserDetails = localStorage.getItem('token');
 
   if(storedUserDetails) {
-    router.push("/course")
+    router.push("/dashboard")
   } 
 
   const [email, setEmail] = useState('');
@@ -26,7 +26,7 @@ const Page = () => {
       const { token } = response.data;
       localStorage.setItem('token', token);
 
-      window.location.href = '/course';
+      window.location.href = '/dashboard';
     } catch (err: any) {
       setError(err.response?.data?.message || 'An error occurred. Please try again.');
     }

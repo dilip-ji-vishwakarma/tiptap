@@ -12,7 +12,7 @@ export const Header = () => {
     const navigationmenu = [
         {
             label: "Courses",
-            href: "/courses",
+            href: "/course",
         },
         {
             label: "My Account",

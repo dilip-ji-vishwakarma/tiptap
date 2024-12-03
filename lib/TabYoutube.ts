@@ -1,4 +1,3 @@
-import { Questionnaire } from '@/components/core';
 import { VideoTimeframe } from '@/components/CustomNode/VideoTimeframe';
 import { mergeAttributes, Node } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
