@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import connection from '@/lib/mysql';
 
-const JWT_SECRET = '4e8f517f-d76b-4d75-bae4-9977f67c3075bbdb3f62b8b7c1e8d91b97a497b3e4b9bce8b072b6f9a8f90c58c0';
+const JWT_SECRET = process.env.JWT_SECRET || "";
 
 export async function GET(req: NextRequest) {
   try {
@@ -32,7 +32,37 @@ export async function GET(req: NextRequest) {
     );
 
     if (!courses || courses.length === 0) {
-      return NextResponse.json({ message: 'No courses found for this category' }, { status: 404 });
+      // Prepare dummy course data
+      const dummyCourse = {
+        label: 'Tab',
+        template: 'tiptap-editor',
+        editor_string: JSON.stringify({}),
+        category_id: categoryId,
+        bookmark: false,
+        url: `/course?category_id=${categoryId}&id=tab`,
+      };
+
+      // Insert dummy course into the database
+      const result: any = await connection.query(
+        'INSERT INTO np_courses (label, template, url, editor_string, category_id, bookmark) VALUES (?, ?, ?, ?, ?, ?)',
+        [
+          dummyCourse.label,
+          dummyCourse.template,
+          dummyCourse.url,
+          dummyCourse.editor_string,
+          dummyCourse.category_id,
+          dummyCourse.bookmark,
+        ]
+      );
+
+      const insertedCourse = {
+        id: result.insertId, 
+        ...dummyCourse,
+      };
+
+      return NextResponse.json({
+        courses: [insertedCourse],
+      });
     }
 
     return NextResponse.json({

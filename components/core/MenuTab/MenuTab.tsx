@@ -134,7 +134,7 @@ export const MenuTab = ({ data }: MenuTabProps) => {
           </DrawerHeader>
           <div className="p-4 space-y-4">
             {data.map((item, index) => (
-              <div key={item.id} className="space-y-2">
+              <div key={index} className="space-y-2">
                 {/* Main Menu Item */}
                 <div
                   className="cursor-pointer p-2 hover:bg-gray-200 rounded-md font-semibold flex justify-between items-center"

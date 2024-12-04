@@ -13,6 +13,10 @@ body {
   background-color: #F9FBFD;
 }
 
+.sanse {
+  font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
 .containers {
   width: 100%;
   padding: 0px 20px;

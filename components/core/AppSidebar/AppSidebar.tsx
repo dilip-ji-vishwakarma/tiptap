@@ -134,12 +134,13 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
               <span>Document Tabs</span>
               <MenuMaker />
             </SidebarGroupLabel>
+            {courses.length > 0 ? (
             <SidebarGroupContent className="mt-3">
               <SidebarMenu className="px-1">
-                {courses?.map((item) => {
+                {courses?.map((item, index) => {
                   console.log(item.url); 
                   return (
-                    <SidebarMenuItem key={item.id}>
+                    <SidebarMenuItem key={index}>
                       <SidebarMenuButton
                         asChild
                         className={`rounded-full mb-2 text-base font-medium h-[41px] p-[15px] ${isActive(item.url) ? "bg-[#D3E3FD]" : "bg-[#F4F4F5]"
@@ -217,7 +218,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                 })}
               </SidebarMenu>
             </SidebarGroupContent>
-
+) : null}
           </div>
         </SidebarGroup>
       </SidebarContent>

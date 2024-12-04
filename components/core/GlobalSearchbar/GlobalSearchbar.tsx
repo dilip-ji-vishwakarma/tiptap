@@ -1,39 +1,48 @@
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+"use client";
+import { useState } from "react";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
+import { Search } from "lucide-react";
 
-export const GlobalSearchbar = () => {
+type GlobalSearchbarProps = {
+  data: any[];
+  onSearch: (filteredData: any[]) => void;
+};
+
+export const GlobalSearchbar = ({ data, onSearch }: GlobalSearchbarProps) => {
+  const [searchTerm, setSearchTerm] = useState("");
+
+  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value.toLowerCase();
+    setSearchTerm(term);
+
+    // Show full data if search term is empty
+    if (term.trim() === "") {
+      onSearch(data); // Reset to full data
+      return;
+    }
+
+    // Filter data based on the search term
+    const filteredData = data.filter((item) =>
+      JSON.stringify(item).toLowerCase().includes(term)
+    );
+
+    onSearch(filteredData);
+  };
+
   return (
     <div className="relative flex items-center rounded-full bg-[#F0F4F9] h-[60px]">
       <Input
         type="search"
+        value={searchTerm}
+        onChange={handleSearch}
         placeholder="Search..."
         className="w-full rounded-lg bg-background px-5 items-center border-none shadow-none"
       />
       <div className="h-6 border-l border-solid border-black"></div>
       <Button variant="ghost" size="icon" className="rounded-full px-10">
-        <SearchIcon className="h-5 w-5" />
+        <Search className="h-5 w-5" />
       </Button>
     </div>
-
-  )
-}
-
-function SearchIcon(props: any) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <circle cx="11" cy="11" r="8" />
-      <path d="m21 21-4.3-4.3" />
-    </svg>
-  )
-}
+  );
+};

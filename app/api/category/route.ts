@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import connection from '@/lib/mysql';
 
-const JWT_SECRET = '4e8f517f-d76b-4d75-bae4-9977f67c3075bbdb3f62b8b7c1e8d91b97a497b3e4b9bce8b072b6f9a8f90c58c0'; 
+const JWT_SECRET = process.env.JWT_SECRET || "";
 
 export async function GET(req: NextRequest) {
   try {
