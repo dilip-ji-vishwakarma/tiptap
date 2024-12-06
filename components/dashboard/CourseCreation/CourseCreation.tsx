@@ -33,6 +33,7 @@ export const CourseCreation = () => {
       const data = await response.json();
       if (response.ok) {
         console.log('Category added successfully:', data);
+        window.location.reload();
       } else {
         console.log('Error:', data.message);
       }

@@ -83,19 +83,19 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   };
 
   const isActive = (itemUrl: string) => {
-    const url = new URL(itemUrl, window.location.origin); 
+    const url = new URL(itemUrl, window.location.origin);
     const itemPath = url.pathname;
     const itemQuery = new URLSearchParams(url.search);
-  
+
     const currentPath = pathName;
     const currentQuery = new URLSearchParams(window.location.search);
-  
+
     return (
-      currentPath === itemPath && 
+      currentPath === itemPath &&
       [...itemQuery.entries()].every(([key, value]) => currentQuery.get(key) === value)
     );
   };
-  
+
 
   const handleBookmarkToggle = async (dataId: number) => {
     const updatedCourses = courses.map((course) =>
@@ -135,90 +135,90 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
               <MenuMaker />
             </SidebarGroupLabel>
             {courses.length > 0 ? (
-            <SidebarGroupContent className="mt-3">
-              <SidebarMenu className="px-1">
-                {courses?.map((item, index) => {
-                  console.log(item.url); 
-                  return (
-                    <SidebarMenuItem key={index}>
-                      <SidebarMenuButton
-                        asChild
-                        className={`rounded-full mb-2 text-base font-medium h-[41px] p-[15px] ${isActive(item.url) ? "bg-[#D3E3FD]" : "bg-[#F4F4F5]"
-                          }`}
-                      >
-                        <div>
-                          <div className="flex justify-between w-full items-center">
-                            <span className="flex gap-3 w-full items-center">
-                              <button
-                                onClick={() => handleBookmarkToggle(item.id)}
-                                className={`ml-2 ${item.id}`}
-                              >
-                                {item.bookmark === 1 ? (
-                                  <Heart className="fill-red-500 text-red-500 w-4 h-4" />
-                                ) : (
-                                  <Heart className="text-gray-500 w-4 h-4" />
-                                )}
-                              </button>
-                              <Link
-                                href={item.url}
-                                className=""
-                                onClick={() => handleSubmenuToggle(item.id)}
-                              >
-                                <span>{item.label}</span>
-                              </Link>
-                            </span>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger className="focus:outline-none">
-                                <EllipsisVertical className="w-4 h-4" />
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent className="bg-white">
-                                <DropdownMenuItem>
-                                  <button
-                                    onClick={() =>
-                                      openRenameDialog(item.id, item.label, item.url, item.bookmark)
-                                    }
-                                    className="w-full text-left"
-                                  >
-                                    Rename
-                                  </button>
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <button
-                                    onClick={() => openDeleteDialog(item.id)}
-                                    className="w-full text-left"
-                                  >
-                                    Delete
-                                  </button>
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </div>
-                        </div>
-                      </SidebarMenuButton>
-                      {item.submenu && item.submenu.length > 0 && (
-                        <SidebarMenu
-                          className={`ml-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${openSubmenuId === item.id
-                              ? "max-h-[1000px] opacity-100"
-                              : "max-h-0 opacity-0"
+              <SidebarGroupContent className="mt-3">
+                <SidebarMenu className="px-1">
+                  {courses?.map((item, index) => {
+                    console.log(item.url);
+                    return (
+                      <SidebarMenuItem key={index}>
+                        <SidebarMenuButton
+                          asChild
+                          className={`rounded-full mb-2 text-base font-medium h-[41px] p-[15px] ${isActive(item.url) ? "bg-[#D3E3FD]" : "bg-[#F4F4F5]"
                             }`}
                         >
-                          {item.submenu.map((submenuItem) => (
-                            <SidebarMenuItem key={submenuItem.id}>
-                              <SidebarMenuButton asChild>
-                                <Link href={submenuItem.url}>
-                                  <span>{submenuItem.label}</span>
+                          <div>
+                            <div className="flex justify-between w-full items-center">
+                              <span className="flex gap-3 w-full items-center">
+                                <button
+                                  onClick={() => handleBookmarkToggle(item.id)}
+                                  className={`ml-2 ${item.id}`}
+                                >
+                                  {item.bookmark === 1 ? (
+                                    <Heart className="fill-red-500 text-red-500 w-4 h-4" />
+                                  ) : (
+                                    <Heart className="text-gray-500 w-4 h-4" />
+                                  )}
+                                </button>
+                                <Link
+                                  href={item.url}
+                                  className=""
+                                  onClick={() => handleSubmenuToggle(item.id)}
+                                >
+                                  <span>{item.label}</span>
                                 </Link>
-                              </SidebarMenuButton>
-                            </SidebarMenuItem>
-                          ))}
-                        </SidebarMenu>
-                      )}
-                    </SidebarMenuItem>
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-) : null}
+                              </span>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger className="focus:outline-none">
+                                  <EllipsisVertical className="w-4 h-4" />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent className="bg-white">
+                                  <DropdownMenuItem>
+                                    <button
+                                      onClick={() =>
+                                        openRenameDialog(item.id, item.label, item.url, item.bookmark)
+                                      }
+                                      className="w-full text-left"
+                                    >
+                                      Rename
+                                    </button>
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <button
+                                      onClick={() => openDeleteDialog(item.id)}
+                                      className="w-full text-left"
+                                    >
+                                      Delete
+                                    </button>
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </div>
+                          </div>
+                        </SidebarMenuButton>
+                        {item.submenu && item.submenu.length > 0 && (
+                          <SidebarMenu
+                            className={`ml-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${openSubmenuId === item.id
+                              ? "max-h-[1000px] opacity-100"
+                              : "max-h-0 opacity-0"
+                              }`}
+                          >
+                            {item.submenu.map((submenuItem) => (
+                              <SidebarMenuItem key={submenuItem.id}>
+                                <SidebarMenuButton asChild>
+                                  <Link href={submenuItem.url}>
+                                    <span>{submenuItem.label}</span>
+                                  </Link>
+                                </SidebarMenuButton>
+                              </SidebarMenuItem>
+                            ))}
+                          </SidebarMenu>
+                        )}
+                      </SidebarMenuItem>
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            ) : null}
           </div>
         </SidebarGroup>
       </SidebarContent>
@@ -228,7 +228,6 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
           onClose={closeRenameDialog}
           id={renameItem.id}
           label={renameItem.label}
-          url={renameItem.url}
         />
       )}
       {deleteItem && (

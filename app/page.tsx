@@ -20,14 +20,20 @@ const Page = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    console.log('Login button clicked');  // Log when the login button is clicked
 
     try {
+      console.log('Sending login request...'); // Log before making the API request
       const response = await axios.post('/api/login', { email, password });
       const { token } = response.data;
+      
+      console.log('Login successful, token received:', token);  // Log the token received
+
       localStorage.setItem('token', token);
 
       window.location.href = '/dashboard';
     } catch (err: any) {
+      console.error('Login failed:', err.response?.data?.message || err); // Log the error if login fails
       setError(err.response?.data?.message || 'An error occurred. Please try again.');
     }
   };
@@ -61,7 +67,6 @@ const Page = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="placeholder-gray-400 w-full px-4 py-3 rounded-md border focus:outline-none focus:ring-2 focus:ring-blue-500 border-gray-300 text-gray-800"
-              
               placeholder="Enter your password"
               required
             />

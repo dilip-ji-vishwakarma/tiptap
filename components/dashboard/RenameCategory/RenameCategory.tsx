@@ -8,9 +8,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import { InputText } from "../input";
 import { useForm } from "react-hook-form";
-import { useSearchParams } from "next/navigation";
+import { InputText } from "@/components/core";
 
 type RenameTabProps = {
   id: number;
@@ -19,35 +18,43 @@ type RenameTabProps = {
   onClose: () => void;
 };
 
-export const RenameTab = ({ id, label, isOpen, onClose }: RenameTabProps) => {
+export const RenameCategory = ({ id, label, isOpen, onClose }: RenameTabProps) => {
   const { handleSubmit, control, formState: { errors } } = useForm({
     mode: "onChange",
   });
-  const searchParams = useSearchParams();
-  const categoryId = searchParams.get("category_id");
 
   const handleForm = async (data: any) => {
     try {
-      const payload: any = { label: data.label };
       const token = localStorage.getItem('token');
-      const response = await fetch(`/api/petchcourses?category_id=${categoryId}&id=${id}`, {
-        method: "PATCH",
+      if (!token) {
+        console.error('Token is missing');
+        return;
+      }
+  
+      const response = await fetch('/api/patchcategory', {
+        method: 'PATCH',
         headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
         },
-        body: JSON.stringify(payload),
+        body: JSON.stringify({
+          action: 'rename',
+          category_id: id,
+          category_name: data.label,
+        }),
       });
   
       if (!response.ok) {
-        throw new Error("Failed to rename tab");
+        const errorData = await response.json();
+        console.error(errorData.message || 'Failed to rename category');
+        return;
       }
-
-      window.location.reload();
-      onClose(); 
+  
+      onClose();
+      window.location.reload(); 
+      console.log('Category renamed successfully');
     } catch (error) {
-      console.error("Error renaming tab:", error);
-      alert("Failed to rename the tab. Please try again.");
+      console.error('Error renaming category:', error);
     }
   };
 
