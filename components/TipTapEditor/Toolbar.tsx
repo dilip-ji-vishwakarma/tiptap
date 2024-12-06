@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Braces, MessageCircleQuestion, Youtube, BetweenHorizontalStart  } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Braces, MessageCircleQuestion, Youtube, BetweenHorizontalStart, Table } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {
@@ -10,6 +10,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+
 
 
 export const Toolbar = () => {
@@ -343,6 +345,34 @@ export const Toolbar = () => {
         <ToolTip title="Unlink"><Toggle onClick={handleRemoveLink} pressed={activeFormats.link}>
           <Link2Off className="h-4 w-4" />
         </Toggle></ToolTip>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger>
+            <ToolTip title="Table"><Table className="h-4 w-4" /></ToolTip>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-white">
+            <DropdownMenuLabel>Table</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().insertTable({ rows: 3, cols: 3, withHeaderRow: true }).run()}>Insert table</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().addColumnBefore().run()}>Add column before</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().addColumnAfter().run()}>Add column after</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().deleteColumn().run()}>Delete column</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().addRowBefore().run()}>Add row before</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().addRowAfter().run()}>Add row after</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().deleteRow().run()}>Delete row</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().deleteTable().run()}>Delete table</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().mergeCells().run()}>Merge cells</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().splitCell().run()}>Split cell</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().toggleHeaderColumn().run()}>Toggle header column</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().toggleHeaderRow().run()}>Toggle header row</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().toggleHeaderCell().run()}>Toggle header cell</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().mergeOrSplit().run()}>Merge or split</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().setCellAttribute('colspan', 2).run()}>Set cell attribute</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().fixTables().run()}>Fix tables</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().goToNextCell().run()}>Go to next cell</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => currentEditor?.chain().focus().goToPreviousCell().run()}>Go to previous cell</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <Popover>
           <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Components"><Plus className="h-4 w-4" /></ToolTip></PopoverTrigger>

@@ -172,3 +172,54 @@ body {
 .draggable-video-container {
   position: relative; /* Ensure container holds position for drag functionality */
 }
+
+.tiptap table {
+  border-collapse: collapse;
+  border-spacing: 0;
+  width: 100%;
+  display: table;
+  border: 1px solid #ccc;
+}
+
+.tiptap th, .tiptap td {
+  border: 1px solid #ddd; /* Add borders to the header and data cells */
+  padding: 12px 15px;
+  text-align: left;
+}
+
+.tiptap th {
+  background-color: #F5F4F3;
+  color: black;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+
+.tiptap td {
+  background-color: white;
+}
+
+.tiptap tr:hover {
+  background-color: #f1f1f1;
+}
+
+.tiptap tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+@media (max-width: 768px) {
+  .tiptap table {
+    width: 100%;
+    display: block;
+    overflow-x: auto;
+  }
+
+  .tiptap th, .tiptap td {
+    padding: 8px;
+    font-size: 14px;
+  }
+}
+
+.tiptap.resize-cursor {
+  cursor: ew-resize;
+  cursor: col-resize;
+}
