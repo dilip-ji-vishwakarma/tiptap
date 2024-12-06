@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import jwt from 'jsonwebtoken';
 import connection from '@/lib/mysql';
 
-const JWT_SECRET = process.env.JWT_SECRET || "";
+const JWT_SECRET = process.env.JWT_SECRET || '';
 
 export async function GET(req: NextRequest) {
   try {
@@ -56,8 +56,9 @@ export async function GET(req: NextRequest) {
       );
 
       const insertedCourse = {
-        id: result.insertId, 
+        id: result.insertId,
         ...dummyCourse,
+        submenus: [], // Dummy course won't have submenus initially
       };
 
       return NextResponse.json({
@@ -65,11 +66,22 @@ export async function GET(req: NextRequest) {
       });
     }
 
+    // Fetch submenus for each course
+    const courseIds = courses.map((course: any) => course.id);
+    const [submenus]: any = await connection.query(
+      'SELECT * FROM np_submenu WHERE course_id IN (?)',
+      [courseIds]
+    );
+
+    // Map submenus to their respective courses
+    const coursesWithSubmenus = courses.map((course: any) => ({
+      ...course,
+      url: `/course?category_id=${categoryId}&id=${course.id}`, // Add URL for client matching
+      submenus: submenus.filter((submenu: any) => submenu.course_id === course.id),
+    }));
+
     return NextResponse.json({
-      courses: courses.map((course: any) => ({
-        ...course,
-        url: `/course?category_id=${categoryId}&id=${course.id}`, // Add URL for client matching
-      })),
+      courses: coursesWithSubmenus,
     });
   } catch (error) {
     console.error('Error during GET request:', error);

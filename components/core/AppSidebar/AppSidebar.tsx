@@ -30,6 +30,9 @@ type SubmenuItem = {
   course_id: number;
   label: string;
   url: string;
+  template: string;
+  editor_string: any;
+  bookmark: boolean;
 };
 
 type CourseItem = {
@@ -37,7 +40,7 @@ type CourseItem = {
   label: string;
   url: string;
   bookmark: number;
-  submenu?: SubmenuItem[];
+  submenus?: SubmenuItem[];
 };
 
 
@@ -193,16 +196,17 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </div>
+                            
                           </div>
                         </SidebarMenuButton>
-                        {item.submenu && item.submenu.length > 0 && (
+                        {item.submenus && item.submenus.length > 0 && (
                           <SidebarMenu
                             className={`ml-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${openSubmenuId === item.id
                               ? "max-h-[1000px] opacity-100"
                               : "max-h-0 opacity-0"
                               }`}
                           >
-                            {item.submenu.map((submenuItem) => (
+                            {item.submenus.map((submenuItem) => (
                               <SidebarMenuItem key={submenuItem.id}>
                                 <SidebarMenuButton asChild>
                                   <Link href={submenuItem.url}>
