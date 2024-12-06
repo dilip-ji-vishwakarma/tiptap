@@ -17,6 +17,7 @@ export const DashboardSidebar = () => {
   const searchParams = useSearchParams();
   const courseId = searchParams.get("id");
   const categoryId = searchParams.get("category_id");
+  const submenuId = searchParams.get("submenu");
   const [courses, setCourses] = useState<any[]>([]);
   const [currentStep, setCurrentStep] = useState<any>(undefined);
   const [loading, setLoading] = useState(false);
@@ -65,13 +66,24 @@ export const DashboardSidebar = () => {
 
   useEffect(() => {
     if (courses.length > 0) {
-      const tempStartStep = courses.find(course => 
-        course.url === `/course?category_id=${categoryId}&id=${courseId}`
+      const selectedCourse = courses.find(
+        (course) => course.id === parseInt(courseId || "")
       );
-      console.log(tempStartStep, "tempStartStep");      
-      setCurrentStep(tempStartStep);
+
+      if (selectedCourse) {
+        if (submenuId) {
+          // Find submenu by ID
+          const selectedSubmenu = selectedCourse.submenus.find(
+            (submenu: any) => submenu.id === parseInt(submenuId || "")
+          );
+          setCurrentStep(selectedSubmenu);
+        } else {
+          // Use the main course if no submenu is selected
+          setCurrentStep(selectedCourse);
+        }
+      }
     }
-  }, [courseId, courses]);
+  }, [courseId, submenuId, courses]);
 
   const toggleSidebar = () => {
     setToolbar(!toolbar);
@@ -108,7 +120,7 @@ export const DashboardSidebar = () => {
               {templates[currentStep?.template] ? (
                 React.createElement(templates[currentStep.template], {
                   step: currentStep,
-                  courses: courses,
+                  courses,
                   editorString: currentStep.editor_string,
                   onFocus: handleEditorFocus,
                 })

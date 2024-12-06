@@ -30,13 +30,19 @@ import MonacoComponent from "@/lib/MonacoExtension";
 import debounce from "lodash/debounce";
 import YoutubeDraggable from "@/lib/YoutubeDraggable";
 import TabYoutube from "@/lib/TabYoutube";
+import Table from '@tiptap/extension-table'
+import TableCell from '@tiptap/extension-table-cell'
+import TableHeader from '@tiptap/extension-table-header'
+import TableRow from '@tiptap/extension-table-row'
+import Gapcursor from '@tiptap/extension-gapcursor'
 
 interface TipTapEditorProps {
   editorString: any;
   onFocus: () => void;
+  courses: any;
 }
 
-const TipTapEditor = ({ editorString, onFocus }: TipTapEditorProps) => {
+const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => {
   const [content, setContent] = useState<string>(editorString);
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
@@ -58,6 +64,13 @@ const TipTapEditor = ({ editorString, onFocus }: TipTapEditorProps) => {
       Paragraph,
       Text,
       TabYoutube,
+      Gapcursor,
+      Table.configure({
+        resizable: true,
+      }),
+      TableRow,
+      TableHeader,
+      TableCell,
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
       }),

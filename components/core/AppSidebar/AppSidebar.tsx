@@ -32,7 +32,7 @@ type SubmenuItem = {
   url: string;
   template: string;
   editor_string: any;
-  bookmark: boolean;
+  bookmark: number;
 };
 
 type CourseItem = {
@@ -100,22 +100,40 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   };
 
 
-  const handleBookmarkToggle = async (dataId: number) => {
-    const updatedCourses = courses.map((course) =>
-      course.id === dataId
+  const handleBookmarkToggle = async (dataId: number, isSubmenu: boolean = false) => {
+    const updatedCourses = courses.map((course) => {
+      if (isSubmenu) {
+        const updatedSubmenus = course.submenus?.map((submenu) =>
+          submenu.id === dataId
+            ? { ...submenu, bookmark: course.bookmark === 0 ? 1 : 0 }
+            : submenu
+        );
+        return { ...course, submenus: updatedSubmenus };
+      }
+      return course.id === dataId
         ? { ...course, bookmark: course.bookmark === 0 ? 1 : 0 }
-        : course
-    );
-    const token = localStorage.getItem('token');
+        : course;
+    });
+
+    const token = localStorage.getItem("token");
     try {
-      const response = await fetch(`/api/petchcourses?category_id=${categoryId}&id=${dataId}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ bookmark: updatedCourses.find((c) => c.id === dataId)?.bookmark }),
-      });
+      const response = await fetch(
+        `/api/petchcourses?category_id=${categoryId}&id=${dataId}`,
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            bookmark: isSubmenu
+              ? updatedCourses
+                .flatMap((course) => course.submenus || [])
+                .find((submenu) => submenu.id === dataId)?.bookmark
+              : updatedCourses.find((course) => course.id === dataId)?.bookmark,
+          }),
+        }
+      );
 
       if (response.ok) {
         setCourses(updatedCourses);
@@ -126,6 +144,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
       console.error("Error updating bookmark:", err);
     }
   };
+
 
   return (
     <Sidebar className="border-none mt-[122px]">
@@ -196,7 +215,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </div>
-                            
+
                           </div>
                         </SidebarMenuButton>
                         {item.submenus && item.submenus.length > 0 && (
@@ -209,9 +228,52 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                             {item.submenus.map((submenuItem) => (
                               <SidebarMenuItem key={submenuItem.id}>
                                 <SidebarMenuButton asChild>
-                                  <Link href={submenuItem.url}>
-                                    <span>{submenuItem.label}</span>
-                                  </Link>
+                                  <div className="flex justify-between w-full items-center">
+                                    <span className="flex gap-3 w-full items-center">
+                                      <button
+                                        onClick={() => handleBookmarkToggle(submenuItem.id, true)}
+                                        className={`ml-2 ${submenuItem.id}`}
+                                      >
+                                        {submenuItem.bookmark ? (
+                                          <Heart className="fill-red-500 text-red-500 w-4 h-4" />
+                                        ) : (
+                                          <Heart className="text-gray-500 w-4 h-4" />
+                                        )}
+                                      </button>
+                                      <Link
+                                        href={submenuItem.url}
+                                        className=""
+                                        onClick={() => handleSubmenuToggle(submenuItem.id)}
+                                      >
+                                        <span>{submenuItem.label}</span>
+                                      </Link>
+                                    </span>
+                                    <DropdownMenu>
+                                      <DropdownMenuTrigger className="focus:outline-none">
+                                        <EllipsisVertical className="w-4 h-4" />
+                                      </DropdownMenuTrigger>
+                                      <DropdownMenuContent className="bg-white">
+                                        <DropdownMenuItem>
+                                          <button
+                                            onClick={() =>
+                                              openRenameDialog(submenuItem.id, submenuItem.label, submenuItem.url, submenuItem.bookmark)
+                                            }
+                                            className="w-full text-left"
+                                          >
+                                            Rename
+                                          </button>
+                                        </DropdownMenuItem>
+                                        <DropdownMenuItem>
+                                          <button
+                                            onClick={() => openDeleteDialog(submenuItem.id)}
+                                            className="w-full text-left"
+                                          >
+                                            Delete
+                                          </button>
+                                        </DropdownMenuItem>
+                                      </DropdownMenuContent>
+                                    </DropdownMenu>
+                                  </div>
                                 </SidebarMenuButton>
                               </SidebarMenuItem>
                             ))}
