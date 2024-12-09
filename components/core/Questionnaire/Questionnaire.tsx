@@ -1,4 +1,3 @@
-// components/SurveyComponent.tsx
 "use client";
 
 import React from "react";
@@ -7,7 +6,6 @@ import { Survey } from "survey-react-ui";
 import "survey-core/defaultV2.min.css";
 import { NodeViewWrapper, NodeViewContent } from '@tiptap/react';
 
-// Apply SurveyJS modern theme
 StylesManager.applyTheme("defaultV2");
 
 const surveyJson = {
@@ -25,8 +23,6 @@ const surveyJson = {
                         "Hyper Text Markup Language",
                         "Home Testing Mixed Language",
                     ],
-                    showOtherItem: true,
-                    otherText: "Other",
                 },
             ],
         },

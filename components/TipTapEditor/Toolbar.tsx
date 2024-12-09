@@ -266,6 +266,15 @@ export const Toolbar = () => {
       .run();
   };
 
+  const LineEditorComponent = (type: string) => {
+    console.log(type)
+    currentEditor
+      ?.chain()
+      .focus()
+      .insertContent(`<lineEditor-component></lineEditor-component>`)
+      .run();
+  };
+
   // const addBox = () => {
   //   currentEditor?.chain().focus().insertContent({
   //     type: 'drawBox',
@@ -364,7 +373,7 @@ export const Toolbar = () => {
         </Toggle></ToolTip>
 
         <DropdownMenu>
-          <DropdownMenuTrigger>
+          <DropdownMenuTrigger className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-[#E7E7E7] hover:text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-[#D3E3FD] data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-transparent h-9 px-2 min-w-9">
             <ToolTip title="Table"><Table className="h-4 w-4" /></ToolTip>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="bg-white">
@@ -390,19 +399,22 @@ export const Toolbar = () => {
             <DropdownMenuItem onClick={() => currentEditor?.chain().focus().goToPreviousCell().run()}>Go to previous cell</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
-
-        <Popover>
-          <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Components"><Plus className="h-4 w-4" /></ToolTip></PopoverTrigger>
-          <PopoverContent className="w-full bg-white">
-            <div className="gap-3 flex">
-              <Toggle onClick={() => insertComponent('questionnaire')}><MessageCircleQuestion className="h-4 w-4" /></Toggle>
-              <Toggle onClick={() => MonacoComponent('monaco')}><Braces className="h-4 w-4" /></Toggle>
-              <Toggle onClick={() => YoutubeComponent('youtube')}><Youtube className="h-4 w-4" /></Toggle>
-              <Toggle onClick={() => TabComponent('TabYoutube')}><BetweenHorizontalStart className="h-4 w-4" /></Toggle>
-              <Toggle onClick={() => NoticeComponent('Notice')}><BetweenHorizontalStart className="h-4 w-4" /></Toggle>
-            </div>
-          </PopoverContent>
-        </Popover>
+      
+        <DropdownMenu >
+          <DropdownMenuTrigger className="inline-flex items-center justify-center gap-2 rounded-md text-sm font-medium transition-colors hover:bg-[#E7E7E7] hover:text-black focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 data-[state=on]:bg-[#D3E3FD] data-[state=on]:text-accent-foreground [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 bg-transparent h-9 px-2 min-w-9">
+            <ToolTip title="Components"><Plus className="h-4 w-4" /></ToolTip>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent className="bg-white">
+            <DropdownMenuLabel>Components</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onClick={() => insertComponent('questionnaire')}>Questionnaire</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => MonacoComponent('monaco')}>Monaco</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => YoutubeComponent('youtube')}>Youtube</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => TabComponent('TabYoutube')}>Youtube Version</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => NoticeComponent('Notice')}>Notice</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => LineEditorComponent('Notice')}>Line Editor</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
 
         <Popover>
           <PopoverTrigger className="hover:bg-[#E7E7E7] h-9 px-2 min-w-9 flex justify-center items-center rounded-md"><ToolTip title="Heading"><Heading className="h-4 w-4" /></ToolTip></PopoverTrigger>

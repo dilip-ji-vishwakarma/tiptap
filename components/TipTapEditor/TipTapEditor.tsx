@@ -37,6 +37,7 @@ import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import Gapcursor from '@tiptap/extension-gapcursor'
 import { DrawBox } from "@/lib/DrawBox";
+import Lineeditor from "@/lib/Lineeditor";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -68,6 +69,7 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       TabYoutube,
       Gapcursor,
       DrawBox,
+      Lineeditor,
       NoticeComponent,
       Table.configure({
         resizable: true,

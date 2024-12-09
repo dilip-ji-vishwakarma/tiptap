@@ -8,7 +8,7 @@ export default Node.create({
   // Set it to be an inline node
   group: 'inline', // Inline group
 
-  inline: true, 
+  inline: true, // Specify that this is an inline node
 
   addAttributes() {
     return {

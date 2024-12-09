@@ -31,7 +31,7 @@ export const ToolTip = ({ title, children }: ToolTipProps) => {
     if (!isMounted) return null;
 
     return (
-        <div>
+        <>
             <div
                 onMouseEnter={handleMouseEnter}
                 onMouseLeave={handleMouseLeave}
@@ -60,6 +60,6 @@ export const ToolTip = ({ title, children }: ToolTipProps) => {
                     {title}
                 </div>
             )}
-        </div>
+        </>
     );
 };

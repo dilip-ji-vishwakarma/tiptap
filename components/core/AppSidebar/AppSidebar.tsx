@@ -148,17 +148,17 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
 
   return (
     <Sidebar className="border-none mt-[122px]">
-      <SidebarContent className="bg-[#F9FBFD]">
+      <SidebarContent className="bg-[#F9FBFD] ">
         <SidebarTrigger className="fixed z-[1] left-[25px] top-[145px]" />
         <SidebarGroup className="relative">
-          <div className="mt-[100px]">
+          <div className="mt-[100px] ">
             <SidebarGroupLabel className="flex items-center justify-between text-[#444746] text-md font-light leading-5">
               <span>Document Tabs</span>
               <MenuMaker />
             </SidebarGroupLabel>
             {courses.length > 0 ? (
-              <SidebarGroupContent className="mt-3">
-                <SidebarMenu className="px-1">
+              <SidebarGroupContent className="mt-3 pb-[150px]">
+                <SidebarMenu className="px-1 min-h-svh overflow-y-auto">
                   {courses?.map((item, index) => {
                     console.log(item.url);
                     return (

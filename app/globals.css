@@ -236,3 +236,28 @@ body {
   margin: 2rem 0;
   padding: 16px 32px;
 }
+
+.lineEditor-component {
+  display: flex;
+  align-items: center;
+  background-color: #f5f7f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  padding: 8px;
+  font-family: 'Courier New', Courier, monospace;
+  color: #000;
+}
+
+.lineEditor-container {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+
+.lineeditor {
+  outline: none;
+  flex-grow: 1;
+  font-size: 14px;
+  color: red; /* For the red HTML syntax in your example */
+}
