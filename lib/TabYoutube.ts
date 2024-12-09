@@ -12,6 +12,7 @@ export default Node.create({
 
   addAttributes() {
     return {
+      content: { default: '', },
       count: {
         default: 0,
       },

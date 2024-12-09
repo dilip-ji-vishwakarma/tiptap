@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
       'SELECT * FROM np_category WHERE user_id = ?',
       [userId]
     );
+    
     if (categories.length === 0) {
       return NextResponse.json({ message: 'No categories found for this user' }, { status: 404 });
     }
@@ -59,7 +60,8 @@ export async function POST(req: NextRequest) {
     if (!category_name) {
       return NextResponse.json({ message: 'Category name is required' }, { status: 400 });
     }
-    const result: any = await connection.query(
+
+    const [result]: any = await connection.query(
       'INSERT INTO np_category (user_id, category_name) VALUES (?, ?)',
       [userId, category_name]
     );
@@ -68,7 +70,10 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ message: 'Failed to add category' }, { status: 500 });
     }
 
-    return NextResponse.json({ message: 'Category added successfully', category_id: result.insertId }, { status: 201 });
+    return NextResponse.json({ 
+      message: 'Category added successfully', 
+      category_id: result.insertId 
+    }, { status: 201 });
 
   } catch (error) {
     console.error('Error during POST request:', error);

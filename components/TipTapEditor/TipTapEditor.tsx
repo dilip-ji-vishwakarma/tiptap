@@ -25,6 +25,7 @@ import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import questionnaireComponent from "@/lib/Questionnaire"
+import NoticeComponent from "@/lib/Notice"
 import Heading from '@tiptap/extension-heading';
 import MonacoComponent from "@/lib/MonacoExtension";
 import debounce from "lodash/debounce";
@@ -35,6 +36,7 @@ import TableCell from '@tiptap/extension-table-cell'
 import TableHeader from '@tiptap/extension-table-header'
 import TableRow from '@tiptap/extension-table-row'
 import Gapcursor from '@tiptap/extension-gapcursor'
+import { DrawBox } from "@/lib/DrawBox";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -65,6 +67,8 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       Text,
       TabYoutube,
       Gapcursor,
+      DrawBox,
+      NoticeComponent,
       Table.configure({
         resizable: true,
       }),

@@ -257,6 +257,23 @@ export const Toolbar = () => {
       .run();
   };
 
+  const NoticeComponent = (type: string) => {
+    console.log(type)
+    currentEditor
+      ?.chain()
+      .focus()
+      .insertContent(`<react-component><p>This is editable. You can create a new component by pressing Mod+Enter.</p></react-component>`)
+      .run();
+  };
+
+  // const addBox = () => {
+  //   currentEditor?.chain().focus().insertContent({
+  //     type: 'drawBox',
+  //     attrs: { width: 200, height: 150, borderColor: 'green' },
+  //   })
+  //     .run();
+  // };
+
   const inputClass = "w-full border-[#c7c7c7] border p-2 placeholder:text-sm rounded-md";
 
   return (
@@ -382,6 +399,7 @@ export const Toolbar = () => {
               <Toggle onClick={() => MonacoComponent('monaco')}><Braces className="h-4 w-4" /></Toggle>
               <Toggle onClick={() => YoutubeComponent('youtube')}><Youtube className="h-4 w-4" /></Toggle>
               <Toggle onClick={() => TabComponent('TabYoutube')}><BetweenHorizontalStart className="h-4 w-4" /></Toggle>
+              <Toggle onClick={() => NoticeComponent('Notice')}><BetweenHorizontalStart className="h-4 w-4" /></Toggle>
             </div>
           </PopoverContent>
         </Popover>
@@ -521,6 +539,7 @@ export const Toolbar = () => {
           </PopoverContent>
         </Popover>
       </div>
+      {/* <button onClick={addBox}>Add Box</button> */}
     </div>
   );
 };

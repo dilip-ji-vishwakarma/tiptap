@@ -223,3 +223,16 @@ body {
   cursor: ew-resize;
   cursor: col-resize;
 }
+
+.tiptap .react-component .content.is-editable {
+  border: 2px dashed gray;
+  border-radius: .5rem;
+  padding: .5rem;
+}
+
+.tiptap .react-component {
+  background-color: #FFFFCC;
+  border-radius: .5rem;
+  margin: 2rem 0;
+  padding: 16px 32px;
+}
