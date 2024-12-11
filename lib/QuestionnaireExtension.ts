@@ -2,7 +2,6 @@ import { DynamicQuestionnaire } from '@/components/core';
 import { Node, mergeAttributes } from '@tiptap/core';
 import { ReactNodeViewRenderer } from '@tiptap/react';
 
-
 export default Node.create({
   name: 'questionnaireComponent',
   group: 'inline',

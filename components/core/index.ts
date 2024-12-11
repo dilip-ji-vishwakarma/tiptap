@@ -25,3 +25,4 @@ export * from "./Video";
 export * from "./Tab";
 export * from "./GlobalSearchbar";
 export * from "./Avtar";
+export * from "./SurveyFrom";
