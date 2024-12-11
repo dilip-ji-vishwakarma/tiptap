@@ -24,10 +24,10 @@ import Blockquote from '@tiptap/extension-blockquote';
 import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
-import questionnaireComponent from "@/lib/Questionnaire"
 import NoticeComponent from "@/lib/Notice"
 import Heading from '@tiptap/extension-heading';
 import MonacoComponent from "@/lib/MonacoExtension";
+import questionnaireComponent from "@/lib/QuestionnaireExtension";
 import debounce from "lodash/debounce";
 import YoutubeDraggable from "@/lib/YoutubeDraggable";
 import TabYoutube from "@/lib/TabYoutube";
@@ -38,6 +38,7 @@ import TableRow from '@tiptap/extension-table-row'
 import Gapcursor from '@tiptap/extension-gapcursor'
 import { DrawBox } from "@/lib/DrawBox";
 import Lineeditor from "@/lib/Lineeditor";
+import BGColorExtesnion from "@/lib/BGColorExtesnion";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -71,6 +72,7 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       DrawBox,
       Lineeditor,
       NoticeComponent,
+      BGColorExtesnion,
       Table.configure({
         resizable: true,
       }),

@@ -152,13 +152,21 @@ body {
   font-size: 4rem;
 }
 .tiptap h2 {
-  font-size: 1.2rem;
+  font-size: 1.9rem;
 }
 .tiptap h3 {
   font-size: 1.1rem;
 }
-.tiptap h4, h5, h6 {
+.tiptap h4 {
   font-size: 1rem;
+}
+
+.tiptap h5  {
+  font-size: 0.8rem;
+}
+
+.tiptap h6  {
+  font-size: 0.5rem;
 }
 
 .tiptap iframe {

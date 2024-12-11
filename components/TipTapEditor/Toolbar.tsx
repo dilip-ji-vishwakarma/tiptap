@@ -221,12 +221,37 @@ export const Toolbar = () => {
     }
   }
 
-  const insertComponent = (type: string) => {
-    console.log(type)
+  const insertQuestionnaire = () => {
+    // Example dynamic questionnaire JSON
+    const dynamicQuestionnaireData = {
+      pages: [
+        {
+            name: "page1",
+            elements: [
+                {
+                    type: "radiogroup",
+                    name: "learning-source",
+                    title: "What is the correct tag name for a table-cell in HTML?",
+                    choices: [
+                        "<tc>",
+                        "<td>",
+                        "<tr>",
+                    ],
+                },
+            ],
+        },
+    ],
+    };
+  
     currentEditor
       ?.chain()
       .focus()
-      .insertContent(`<questionnaire-component></questionnaire-component>`)
+      .insertContent({
+        type: 'questionnaireComponent',
+        attrs: { 
+          questionnaire: dynamicQuestionnaireData 
+        }
+      })
       .run();
   };
 
@@ -272,6 +297,15 @@ export const Toolbar = () => {
       ?.chain()
       .focus()
       .insertContent(`<lineEditor-component></lineEditor-component>`)
+      .run();
+  };
+
+  const BgComponent = (type: string) => {
+    console.log(type)
+    currentEditor
+      ?.chain()
+      .focus()
+      .insertContent(`<bgbox-component></bgbox-component>`)
       .run();
   };
 
@@ -407,12 +441,13 @@ export const Toolbar = () => {
           <DropdownMenuContent className="bg-white">
             <DropdownMenuLabel>Components</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => insertComponent('questionnaire')}>Questionnaire</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => insertQuestionnaire()}>Questionnaire</DropdownMenuItem>
             <DropdownMenuItem onClick={() => MonacoComponent('monaco')}>Monaco</DropdownMenuItem>
             <DropdownMenuItem onClick={() => YoutubeComponent('youtube')}>Youtube</DropdownMenuItem>
             <DropdownMenuItem onClick={() => TabComponent('TabYoutube')}>Youtube Version</DropdownMenuItem>
             <DropdownMenuItem onClick={() => NoticeComponent('Notice')}>Notice</DropdownMenuItem>
             <DropdownMenuItem onClick={() => LineEditorComponent('Notice')}>Line Editor</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => BgComponent('bgbox')}>Bg Box</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
@@ -435,7 +470,7 @@ export const Toolbar = () => {
           <PopoverContent className="w-full bg-white">
             <div className="space-y-3">
               <div className="gap-3 flex">
-                {['#958DF1', '#F98181', '#FBBC88', '#FAF594', '#70CFF8', '#94FADB', '#B9F18D'].map(color => (
+                {['#FF6347', '#FFA500', '#1E90FF', '#3CB371', '#808080', '#6A5ACD', '#EE82EE', '#D3D3D3'].map(color => (
                   <Toggle
                     key={color}
                     className="p-0 min-w-[15px] h-[15px] rounded-none"
@@ -473,7 +508,7 @@ export const Toolbar = () => {
                 <Toggle className="p-0 bg-[#B9F18D] min-w-[15px] h-[15px] rounded-none hover:bg-[#B9F18D]" onClick={() => currentEditor?.chain().focus().setColor('#B9F18D').run()} />
               </div>
               <div className="flex items-center gap-3">
-                <label>Inset Color</label>
+                <label>Insert Color</label>
                 <input
                   type="color"
                   onInput={event => currentEditor?.chain().focus().setColor((event.target as HTMLInputElement).value).run()}
