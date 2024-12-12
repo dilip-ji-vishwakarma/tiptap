@@ -1,7 +1,7 @@
 "use client"
 import React, { useEffect, useCallback, useState } from "react";
 import { Toggle } from "@/components/ui/toggle";
-import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Braces, MessageCircleQuestion, Youtube, BetweenHorizontalStart, Table } from "lucide-react";
+import { BoldIcon, ItalicIcon, UnderlineIcon, StrikethroughIcon, SubscriptIcon, SuperscriptIcon, CodeIcon, Pilcrow, Highlighter, AlignLeft, AlignRight, AlignCenter, AlignJustify, SquareMinus, Undo2, Redo2, ListOrdered, List, Link2, Link2Off, Palette, Image, Film, PaintBucket, CodeXml, MessageSquareQuote, Plus, Heading, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Table } from "lucide-react";
 import { useEditorContext } from "./EditorContext";
 import { ToolTip } from "../core";
 import {

@@ -19,7 +19,6 @@ export const DeleteCategory = ({ id, isOpen, onClose }: DeleteTabProps) => {
 
     const searchParams = useSearchParams();
     const router = useRouter();
-    const categoryId = searchParams.get("category_id");
 
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
