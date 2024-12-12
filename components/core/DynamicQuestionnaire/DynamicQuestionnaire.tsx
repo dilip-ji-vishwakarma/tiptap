@@ -21,12 +21,12 @@ interface QuestionnaireData {
   }[];
 }
 
-export const DynamicQuestionnaire = ({ node, updateAttributes }:any) => {
+export const DynamicQuestionnaire = ({ node, updateAttributes }: any) => {
   const [surveyModel, setSurveyModel] = useState<Model | null>(null);
   const [jsonInput, setJsonInput] = useState<string>('');
   const [parseError, setParseError] = useState<string | null>(null);
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  
+
   // Get the questionnaire data from node attributes
   const questionnaireData: QuestionnaireData | null = node.attrs.questionnaire;
 
@@ -62,7 +62,7 @@ export const DynamicQuestionnaire = ({ node, updateAttributes }:any) => {
   const handleJsonSubmit = () => {
     try {
       const parsedJson = JSON.parse(jsonInput);
-      
+
       // Basic validation
       if (!parsedJson.pages || !Array.isArray(parsedJson.pages)) {
         throw new Error('Invalid JSON structure');
@@ -75,7 +75,7 @@ export const DynamicQuestionnaire = ({ node, updateAttributes }:any) => {
 
       // Create survey model
       createSurveyModel(parsedJson);
-      
+
       // Exit editing mode
       setIsEditing(false);
     } catch (error) {
@@ -88,7 +88,7 @@ export const DynamicQuestionnaire = ({ node, updateAttributes }:any) => {
     return (
       <NodeViewWrapper className="questionnaire-component">
         <div className="p-4 bg-gray-100 border rounded">
-          <textarea 
+          <textarea
             className="w-full p-2 border rounded mb-2"
             rows={10}
             placeholder='Paste your survey JSON here. Example:
@@ -129,14 +129,14 @@ export const DynamicQuestionnaire = ({ node, updateAttributes }:any) => {
             </div>
           )}
           <div className="flex gap-2">
-            <button 
+            <button
               className="bg-blue-500 text-white px-4 py-2 rounded"
               onClick={handleJsonSubmit}
             >
               Create Survey
             </button>
             {questionnaireData && (
-              <button 
+              <button
                 className="bg-gray-500 text-white px-4 py-2 rounded"
                 onClick={() => setIsEditing(false)}
               >
@@ -151,7 +151,7 @@ export const DynamicQuestionnaire = ({ node, updateAttributes }:any) => {
 
   return (
     <NodeViewWrapper className="questionnaire-component relative">
-      <button 
+      <button
         className="absolute top-2 right-2 bg-gray-200 px-2 py-1 rounded text-xs z-10"
         onClick={() => setIsEditing(true)}
       >
