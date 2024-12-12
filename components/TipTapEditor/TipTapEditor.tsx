@@ -25,6 +25,7 @@ import Document from '@tiptap/extension-document';
 import Paragraph from '@tiptap/extension-paragraph';
 import Text from '@tiptap/extension-text';
 import NoticeComponent from "@/lib/Notice"
+import VideoYoutube from "@/lib/VideoStep"
 import Heading from '@tiptap/extension-heading';
 import MonacoComponent from "@/lib/MonacoExtension";
 import questionnaireComponent from "@/lib/QuestionnaireExtension";
@@ -67,6 +68,7 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       Blockquote,
       Paragraph,
       Text,
+      VideoYoutube,
       TabYoutube,
       Gapcursor,
       DrawBox,

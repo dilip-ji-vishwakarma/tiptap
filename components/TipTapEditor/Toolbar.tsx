@@ -309,6 +309,15 @@ export const Toolbar = () => {
       .run();
   };
 
+  const VideoComponent = (type: string) => {
+    console.log(type)
+    currentEditor
+      ?.chain()
+      .focus()
+      .insertContent(`<video-component></video-component>`)
+      .run();
+  };
+
   // const addBox = () => {
   //   currentEditor?.chain().focus().insertContent({
   //     type: 'drawBox',
@@ -448,6 +457,7 @@ export const Toolbar = () => {
             <DropdownMenuItem onClick={() => NoticeComponent('Notice')}>Notice</DropdownMenuItem>
             <DropdownMenuItem onClick={() => LineEditorComponent('Notice')}>Line Editor</DropdownMenuItem>
             <DropdownMenuItem onClick={() => BgComponent('bgbox')}>Bg Box</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => VideoComponent('VideoYoutube')}>Video Youtube</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
 
