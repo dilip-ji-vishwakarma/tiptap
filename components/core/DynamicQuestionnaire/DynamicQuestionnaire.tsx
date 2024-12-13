@@ -87,7 +87,7 @@ export const DynamicQuestionnaire = ({ node, updateAttributes }: any) => {
   if (!questionnaireData || isEditing) {
     return (
       <NodeViewWrapper className="questionnaire-component">
-        <div className="p-4 bg-gray-100 border rounded">
+        <div className=" bg-gray-100 border rounded">
           <textarea
             className="w-full p-2 border rounded mb-2"
             rows={10}

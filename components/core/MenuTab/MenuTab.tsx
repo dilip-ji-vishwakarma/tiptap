@@ -132,7 +132,7 @@ export const MenuTab = ({ data }: MenuTabProps) => {
             <DrawerDescription>Select a menu or submenu item below:</DrawerDescription>
             <DrawerClose />
           </DrawerHeader>
-          <div className="p-4 space-y-4">
+          <div className="p-4 space-y-4 overflow-scroll h-[300px]">
             {data.map((item, index) => (
               <div key={index} className="space-y-2">
                 {/* Main Menu Item */}

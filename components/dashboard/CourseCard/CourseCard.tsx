@@ -128,7 +128,7 @@ export const CourseCard = () => {
                 className="overflow-hidden border bg-white text-[#444] rounded-[3px] border-solid border-[#dfe1e5] w-[19%]"
                 key={index}
               >
-                <div className="p-4 space-y-4">
+                <div className="p-4 space-y-4 ">
                   <a
                     href={`/course?category_id=${item.id}`}
                     className="text-black text-[18px] font-medium tracking-[0.15px] leading-[18px] align-top whitespace-nowrap ml-0.5 hover:text-[#2684FC]"

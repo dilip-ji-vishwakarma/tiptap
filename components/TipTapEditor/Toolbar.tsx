@@ -273,14 +273,14 @@ export const Toolbar = () => {
       .run();
   };
 
-  const TabComponent = (type: string) => {
-    console.log(type)
-    currentEditor
-      ?.chain()
-      .focus()
-      .insertContent(`<tabs-youtube></tabs-youtube>`)
-      .run();
-  };
+  // const TabComponent = (type: string) => {
+  //   console.log(type)
+  //   currentEditor
+  //     ?.chain()
+  //     .focus()
+  //     .insertContent(`<tabs-youtube></tabs-youtube>`)
+  //     .run();
+  // };
 
   const NoticeComponent = (type: string) => {
     console.log(type)
@@ -453,7 +453,7 @@ export const Toolbar = () => {
             <DropdownMenuItem onClick={() => insertQuestionnaire()}>Questionnaire</DropdownMenuItem>
             <DropdownMenuItem onClick={() => MonacoComponent('monaco')}>Monaco</DropdownMenuItem>
             <DropdownMenuItem onClick={() => YoutubeComponent('youtube')}>Youtube</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => TabComponent('TabYoutube')}>Youtube Version</DropdownMenuItem>
+            {/* <DropdownMenuItem onClick={() => TabComponent('TabYoutube')}>Youtube Version</DropdownMenuItem> */}
             <DropdownMenuItem onClick={() => NoticeComponent('Notice')}>Notice</DropdownMenuItem>
             <DropdownMenuItem onClick={() => LineEditorComponent('Notice')}>Line Editor</DropdownMenuItem>
             <DropdownMenuItem onClick={() => BgComponent('bgbox')}>Bg Box</DropdownMenuItem>

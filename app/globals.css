@@ -225,6 +225,23 @@ body {
     padding: 8px;
     font-size: 14px;
   }
+
+  .youtube-embed-style > div {
+    height: fit-content !important;
+  }
+
+  .tiptap h1 {
+    font-size: 2rem;
+  }
+
+  .tiptap h2 {
+    font-size: 1.4rem;
+  }
+
+  .tiptap table {
+    overflow-x: scroll;
+    width: 100% !important;
+  }
 }
 
 .tiptap.resize-cursor {
@@ -269,3 +286,4 @@ body {
   font-size: 14px;
   color: red; /* For the red HTML syntax in your example */
 }
+
