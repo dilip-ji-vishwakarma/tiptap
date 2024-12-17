@@ -7,7 +7,7 @@ import { SidebarProvider } from "@/components/ui/sidebar";
 import { Header } from "@/components/Header";
 import { ChevronDown, ChevronUp, TableOfContents } from 'lucide-react';
 import { MenuTab } from "../MenuTab";
-
+import { Commet } from "react-loading-indicators";
 
 const templates: any = {
   "tiptap-editor": React.lazy(() => import("@/components/TipTapEditor/TipTapEditor")),
@@ -96,7 +96,7 @@ export const DashboardSidebar = () => {
   };
 
 
-  if (loading) return <div>Loading.....</div>;
+  if (loading) return <div className="flex justify-center items-center h-screen"><Commet color="#6B46C1" size="medium" text="" speedPlus={3} textColor="" /></div>;
   if (error && courses.length === 0) return <div>Error: {error}</div>;
 
   return (

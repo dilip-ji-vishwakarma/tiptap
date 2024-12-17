@@ -1,6 +1,7 @@
 "use client"
 import React, { useEffect, useState } from 'react';
 import { Preloader } from '../Preloader';
+import { Commet } from 'react-loading-indicators';
 
 type ClientProviderProps = {
     children: React.ReactNode
@@ -18,7 +19,7 @@ export const ClientProvider = ({ children }: ClientProviderProps) => {
 
     return (
         <>
-            {isLoading && <Preloader />}
+            {isLoading && <div className="flex justify-center items-center h-screen"><Commet color="#6B46C1" size="medium" text="" speedPlus={3} textColor="" /></div>}
             {!isLoading && children}
         </>
     );

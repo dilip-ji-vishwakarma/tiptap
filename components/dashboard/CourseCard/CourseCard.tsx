@@ -12,6 +12,7 @@ import {
 import { CourseCreation } from '../CourseCreation';
 import { RenameCategory } from '../RenameCategory';
 import { DeleteCategory } from '../DeleteCategory';
+import { Commet } from 'react-loading-indicators';
 
 type RenameItem = {
   id: number;
@@ -105,7 +106,7 @@ export const CourseCard = () => {
       .replace(/^\w/, (c) => c.toUpperCase());
   };
 
-  if (loading) return <Preloader />;
+  if (loading) return <div className="flex justify-center items-center h-screen"><Commet color="#6B46C1" size="medium" text="" speedPlus={3} textColor="" /></div>;
 
   return (
     <>

@@ -79,6 +79,12 @@ body {
   background-color: black;
 }
 
+@media only screen and (min-width: 1536px) {
+  .container {
+    max-width: 1350px;
+  }
+}
+
 
 .dropdown-menu {
   background: white;
