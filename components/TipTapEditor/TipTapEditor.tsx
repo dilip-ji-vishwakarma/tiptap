@@ -182,10 +182,10 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
     <div className="mt-5 mb-20">
       <DocBreadcrumb path={`skilline.ai/course?id=${id}`} />
       <Portal id='tiptap-toc'>
-        <ul className="p-[10px] space-y-4 max-h-[180px] overflow-y-auto min-h-[auto]" >
+        <ul className="p-[10px] space-y-4 max-h-[178px] overflow-y-auto min-h-[auto] md:block hidden" >
           {toc.map((heading, index) => (
             <li key={index} className="text-[16px]" style={{ marginLeft: `${heading.level * 10}px` }}>
-              <a href={`${heading.id}`}>{heading.text}</a>
+              <a href={`#${heading.id}`}>{heading.text}</a>
             </li>
           ))}
         </ul>

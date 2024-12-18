@@ -11,7 +11,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { MenuMaker } from "./MenuMaker";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { EllipsisVertical, Heart } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -24,22 +24,12 @@ import {
 import { RenameTab } from "./RenameTab";
 import { DeleteTab } from "./DeleteTab";
 
-type SubmenuItem = {
-  id: number;
-  course_id: number;
-  label: string;
-  url: string;
-  template: string;
-  editor_string: any;
-  bookmark: number;
-};
 
 type CourseItem = {
   id: number;
   label: string;
   url: string;
   bookmark: number;
-  submenus?: SubmenuItem[];
 };
 
 type AppSidebarProps = {
@@ -91,20 +81,12 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
     );
   };
 
-  const handleBookmarkToggle = async (dataId: number, isSubmenu: boolean = false) => {
-    const updatedCourses = courses.map((course) => {
-      if (isSubmenu) {
-        const updatedSubmenus = course.submenus?.map((submenu) =>
-          submenu.id === dataId
-            ? { ...submenu, bookmark: course.bookmark === 0 ? 1 : 0 }
-            : submenu
-        );
-        return { ...course, submenus: updatedSubmenus };
-      }
-      return course.id === dataId
+  const handleBookmarkToggle = async (dataId: number) => {
+    const updatedCourses = courses.map((course) => 
+      course.id === dataId
         ? { ...course, bookmark: course.bookmark === 0 ? 1 : 0 }
-        : course;
-    });
+        : course
+    );
 
     const token = localStorage.getItem("token");
     try {
@@ -117,11 +99,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
-            bookmark: isSubmenu
-              ? updatedCourses
-                .flatMap((course) => course.submenus || [])
-                .find((submenu) => submenu.id === dataId)?.bookmark
-              : updatedCourses.find((course) => course.id === dataId)?.bookmark,
+            bookmark: updatedCourses.find((course) => course.id === dataId)?.bookmark,
           }),
         }
       );
@@ -205,12 +183,8 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                             </div>
                           </div>
                         </SidebarMenuButton>
-
-                        {/* Always show submenu if the tab is active */}
                         {isActive(item.url) && (
-                          <div id="tiptap-toc">
-                            {/* You can add your submenu content here */}
-                          </div>
+                          <div id="tiptap-toc"></div>
                         )}
                       </SidebarMenuItem>
                     );
