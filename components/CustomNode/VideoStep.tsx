@@ -4,8 +4,6 @@ import ReactPlayer from 'react-player';
 import { Tab, TabList, Tabs as ReactTabs } from 'react-tabs';
 import 'react-tabs/style/react-tabs.css';
 import { AlignVerticalSpaceAround, Grid2x2, Plus, Trash } from 'lucide-react';
-import { ShadeCnTab } from '../core/Tabs/ShadeCnTab';
-
 
 interface TabData {
     name: string;
@@ -14,7 +12,6 @@ interface TabData {
 }
 
 export const VideoStep = ({ node, updateAttributes }: any) => {
-    // For video: initialize `url` directly with `node.attrs.url`
     const [url, setUrl] = useState(node.attrs.url || '');
 
     const handleUrlChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,14 +20,9 @@ export const VideoStep = ({ node, updateAttributes }: any) => {
         updateAttributes({ url: newUrl });
     };
 
-    // For timeline
     const [activeTab, setActiveTab] = useState(0);
     const [isVerticalLayout, setIsVerticalLayout] = useState(true);
-
-    // Initialize tabData only if node.attrs.tabs is available
     const [tabData, setTabData] = useState<TabData[]>(node.attrs.tabs && Array.isArray(node.attrs.tabs) && node.attrs.tabs.length > 0 ? node.attrs.tabs : []);
-
-
 
     const handleAddTab = () => {
         const newTab: TabData = {
@@ -58,7 +50,7 @@ export const VideoStep = ({ node, updateAttributes }: any) => {
         updateAttributes({ tabs: updatedTabs });
     };
 
-    const ChangeLayout = () => {
+    const handleLayoutChange = () => {
         setIsVerticalLayout((prev) => !prev);
     };
 
@@ -85,7 +77,7 @@ export const VideoStep = ({ node, updateAttributes }: any) => {
             <div className="my-5 flex justify-between items-center">
                 <button
                     className="bg-[#D3E3FD] p-[5px] rounded-[5px]"
-                    onClick={ChangeLayout}
+                    onClick={handleLayoutChange}
                 >
                     {isVerticalLayout ? <Grid2x2 /> : <AlignVerticalSpaceAround />}
                 </button>
@@ -98,13 +90,13 @@ export const VideoStep = ({ node, updateAttributes }: any) => {
             </div>
 
             <div className={`flex ${isVerticalLayout ? 'flex-col' : 'flex-row'} max-w-4xl mx-auto`}>
-                <div className={`${isVerticalLayout ? 'w-full border-b border-gray-200' : 'w-[45%] border-r border-gray-200'} overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200`}>
+                <div className={`${isVerticalLayout ? 'w-full border-b border-gray-200' : 'w-[47%]'} overflow-x-auto scrollbar-thin scrollbar-thumb-gray-400 scrollbar-track-gray-200`}>
                     <ReactTabs selectedIndex={activeTab} onSelect={(index) => setActiveTab(index)}>
                         <TabList className={`flex ${isVerticalLayout ? 'flex-row space-x-4' : 'flex-col space-y-4'}`}>
                             {tabData.map((tab, index) => (
                                 <Tab
                                     key={index}
-                                    className={`relative px-4 py-2 cursor-pointer flex flex-col focus-visible:outline-none whitespace-nowrap ${activeTab === index ? 'bg-blue-500 text-white' : 'text-gray-500 hover:text-gray-900'}`}
+                                    className={`relative  py-2 cursor-pointer flex flex-col focus-visible:outline-none whitespace-nowrap ${activeTab === index ? 'bg-blue-500 text-white' : 'text-gray-500 hover:text-gray-900'}`}
                                 >
                                     <div className="font-medium flex justify-between items-center">
                                         <input
@@ -139,19 +131,25 @@ export const VideoStep = ({ node, updateAttributes }: any) => {
                     </ReactTabs>
                 </div>
                 <div className={`${isVerticalLayout ? 'w-full' : 'w-full'}`}>
-                    <ReactTabs selectedIndex={activeTab} onSelect={(index) => setActiveTab(index)}>
-                        <div className={`${isVerticalLayout ? 'w-full py-4' : 'w-full'} px-4`}>
+                    <div className={`${isVerticalLayout ? 'w-full py-4 ' : 'w-full pl-4'}`}>
+                        <ReactTabs selectedIndex={activeTab} onSelect={(index) => setActiveTab(index)}>
                             {tabData.map((tab, index) => (
                                 activeTab === index && (
-                                    <ShadeCnTab key={index} node={node} updateAttributes={updateAttributes} />
+                                    <textarea
+                                        key={index}
+                                        value={tab.content}
+                                        onChange={(e) => handleTabChange(index, 'content', e.target.value)}
+                                        placeholder="Tab Content"
+                                        className="w-full h-52 p-2 border rounded mt-2"
+                                    />
                                 )
                             ))}
-                        </div>
-                    </ReactTabs>
+                        </ReactTabs> 
+                    </div>
                 </div>
             </div>
 
-            <NodeViewContent className="content" />
+            <NodeViewContent className="content hidden" />
         </NodeViewWrapper>
     );
 };
