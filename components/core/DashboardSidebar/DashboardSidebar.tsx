@@ -43,7 +43,6 @@ export const DashboardSidebar = () => {
             'Authorization': `Bearer ${token}`, // Add the token in the Authorization header
           },
         });
-        console.log("response", response)
 
         if (!response.ok) {
           throw new Error('Failed to fetch courses data');

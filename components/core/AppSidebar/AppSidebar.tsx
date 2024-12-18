@@ -1,5 +1,4 @@
-"use client";
-
+"use client"
 import {
   Sidebar,
   SidebarContent,
@@ -12,7 +11,7 @@ import {
   SidebarTrigger,
 } from "@/components/ui/sidebar";
 import { MenuMaker } from "./MenuMaker";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { EllipsisVertical, Heart } from "lucide-react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
@@ -43,23 +42,20 @@ type CourseItem = {
   submenus?: SubmenuItem[];
 };
 
-
 type AppSidebarProps = {
   data: CourseItem[];
 };
 
 export const AppSidebar = ({ data }: AppSidebarProps) => {
-  console.log(data, "data")
   const pathName = usePathname();
   const searchParams = useSearchParams();
   const categoryId = searchParams.get("category_id");
-
-  const [openSubmenuId, setOpenSubmenuId] = useState<number | null>(null);
   const [courses, setCourses] = useState(data);
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const [renameItem, setRenameItem] = useState<CourseItem | null>(null);
   const [deleteItem, setDeleteItem] = useState<{ id: number } | null>(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
+  const [editorContent, setEditorContent] = useState<string>(''); // Initialize with an empty string or a default value
 
   const openDeleteDialog = (id: number) => {
     setDeleteItem({ id });
@@ -81,10 +77,6 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
     setRenameItem(null);
   };
 
-  const handleSubmenuToggle = (id: number) => {
-    setOpenSubmenuId((prevId) => (prevId === id ? null : id));
-  };
-
   const isActive = (itemUrl: string) => {
     const url = new URL(itemUrl, window.location.origin);
     const itemPath = url.pathname;
@@ -98,7 +90,6 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
       [...itemQuery.entries()].every(([key, value]) => currentQuery.get(key) === value)
     );
   };
-
 
   const handleBookmarkToggle = async (dataId: number, isSubmenu: boolean = false) => {
     const updatedCourses = courses.map((course) => {
@@ -145,7 +136,6 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
     }
   };
 
-
   return (
     <Sidebar className="border-none mt-[122px]">
       <SidebarContent className="bg-[#F9FBFD] ">
@@ -160,7 +150,6 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
               <SidebarGroupContent className="mt-3 pb-[150px]">
                 <SidebarMenu className="px-1 min-h-svh overflow-y-auto">
                   {courses?.map((item, index) => {
-                    console.log(item.url);
                     return (
                       <SidebarMenuItem key={index}>
                         <SidebarMenuButton
@@ -184,7 +173,6 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                                 <Link
                                   href={item.url}
                                   className=""
-                                  onClick={() => handleSubmenuToggle(item.id)}
                                 >
                                   <span>{item.label}</span>
                                 </Link>
@@ -215,69 +203,14 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                                 </DropdownMenuContent>
                               </DropdownMenu>
                             </div>
-
                           </div>
                         </SidebarMenuButton>
-                        {item.submenus && item.submenus.length > 0 && (
-                          <SidebarMenu
-                            className={`ml-2 space-y-1 overflow-hidden transition-all duration-300 ease-in-out ${openSubmenuId === item.id
-                              ? "max-h-[1000px] opacity-100"
-                              : "max-h-0 opacity-0"
-                              }`}
-                          >
-                            {item.submenus.map((submenuItem) => (
-                              <SidebarMenuItem key={submenuItem.id}>
-                                <SidebarMenuButton asChild>
-                                  <div className="flex justify-between w-full items-center">
-                                    <span className="flex gap-3 w-full items-center">
-                                      <button
-                                        onClick={() => handleBookmarkToggle(submenuItem.id, true)}
-                                        className={`ml-2 ${submenuItem.id}`}
-                                      >
-                                        {submenuItem.bookmark ? (
-                                          <Heart className="fill-red-500 text-red-500 w-4 h-4" />
-                                        ) : (
-                                          <Heart className="text-gray-500 w-4 h-4" />
-                                        )}
-                                      </button>
-                                      <Link
-                                        href={submenuItem.url}
-                                        className=""
-                                        onClick={() => handleSubmenuToggle(submenuItem.id)}
-                                      >
-                                        <span>{submenuItem.label}</span>
-                                      </Link>
-                                    </span>
-                                    <DropdownMenu>
-                                      <DropdownMenuTrigger className="focus:outline-none">
-                                        <EllipsisVertical className="w-4 h-4" />
-                                      </DropdownMenuTrigger>
-                                      <DropdownMenuContent className="bg-white">
-                                        <DropdownMenuItem>
-                                          <button
-                                            onClick={() =>
-                                              openRenameDialog(submenuItem.id, submenuItem.label, submenuItem.url, submenuItem.bookmark)
-                                            }
-                                            className="w-full text-left"
-                                          >
-                                            Rename
-                                          </button>
-                                        </DropdownMenuItem>
-                                        <DropdownMenuItem>
-                                          <button
-                                            onClick={() => openDeleteDialog(submenuItem.id)}
-                                            className="w-full text-left"
-                                          >
-                                            Delete
-                                          </button>
-                                        </DropdownMenuItem>
-                                      </DropdownMenuContent>
-                                    </DropdownMenu>
-                                  </div>
-                                </SidebarMenuButton>
-                              </SidebarMenuItem>
-                            ))}
-                          </SidebarMenu>
+
+                        {/* Always show submenu if the tab is active */}
+                        {isActive(item.url) && (
+                          <div id="tiptap-toc">
+                            {/* You can add your submenu content here */}
+                          </div>
                         )}
                       </SidebarMenuItem>
                     );

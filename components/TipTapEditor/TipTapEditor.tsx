@@ -14,7 +14,7 @@ import TextStyle from '@tiptap/extension-text-style';
 import Mention from '@tiptap/extension-mention';
 import suggestion from '../core/Mention/Suggestion';
 import { CommentMark } from "@/lib/CommentMark";
-import { DocBreadcrumb } from "../core";
+import { DocBreadcrumb, Portal } from "../core";
 import { useSearchParams } from "next/navigation";
 import Image from '@tiptap/extension-image';
 import ResizeImage from "tiptap-extension-resize-image";
@@ -40,6 +40,7 @@ import Gapcursor from '@tiptap/extension-gapcursor'
 import { DrawBox } from "@/lib/DrawBox";
 import Lineeditor from "@/lib/Lineeditor";
 import BGColorExtesnion from "@/lib/BGColorExtesnion";
+import { extractHeadings } from "@/lib/toc";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -49,10 +50,13 @@ interface TipTapEditorProps {
 
 const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => {
   const [content, setContent] = useState<string>(editorString);
+  const [toc, setToc] = useState<{ text: string; level: number; id: string }[]>([]);
+
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
   const id = searchParams.get("id");
   const categoryId = searchParams.get("category_id");
+
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -83,6 +87,7 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       TableCell,
       Heading.configure({
         levels: [1, 2, 3, 4, 5, 6],
+
       }),
       questionnaireComponent,
       YoutubeDraggable,
@@ -123,10 +128,17 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       CustomHeading,
     ],
     content: editorString,
-    onCreate: () => {
+    onCreate: ({ editor }) => {
+      const jsonContent = editor.getJSON();
+      const headings = extractHeadings(jsonContent);
+      console.log('Initial Headings:', headings);
+      setToc(headings);
     },
     onUpdate: ({ editor }) => {
       const newContent = editor.getJSON();
+      const headings = extractHeadings(newContent);
+      console.log('Updated Headings:', headings);
+      setToc(headings);  // Update the headings when content changes
       setContent(JSON.stringify(newContent));
       saveEditorContent(newContent);
     },
@@ -136,6 +148,8 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       }
     },
   });
+
+
 
   const saveEditorContent = useCallback(
     debounce(async (updatedContent: any) => {
@@ -161,12 +175,21 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
     []
   );
 
-  
+
 
 
   return (
     <div className="mt-5 mb-20">
       <DocBreadcrumb path={`skilline.ai/course?id=${id}`} />
+      <Portal id='tiptap-toc'>
+        <ul className="p-[10px] space-y-4 max-h-[180px] overflow-y-auto min-h-[auto]" >
+          {toc.map((heading, index) => (
+            <li key={index} className="text-[16px]" style={{ marginLeft: `${heading.level * 10}px` }}>
+              <a href={`${heading.id}`}>{heading.text}</a>
+            </li>
+          ))}
+        </ul>
+      </Portal>
       <div className="editor-container w-full bg-white border mt-3 pb-[150px] border-[#c7c7c7]" onClick={() => { setCurrentEditor(editor); }}>
         <EditorContent
           editor={editor}

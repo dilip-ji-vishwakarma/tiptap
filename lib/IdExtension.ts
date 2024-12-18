@@ -1,29 +1,50 @@
 import { Heading } from '@tiptap/extension-heading';
+import { v4 as uuidv4 } from 'uuid';
 
 export const CustomHeading = Heading.extend({
   addAttributes() {
     return {
-      ...this.parent?.(),  
+      ...this.parent?.(),
       id: {
         default: null,
-        parseHTML: (element) => element.id || null,  
+        // Ensure an ID is always generated if not present
         renderHTML: (attributes) => {
-          if (attributes.id) {
-            return { id: attributes.id };  
-          }
-          return {}; 
+          const id = attributes.id || uuidv4();
+          // Modify the attributes to always include the ID
+          attributes.id = id;
+          return { id };
         },
+        parseHTML: (element) => element.id || uuidv4(),
       },
       class: {
         default: null,
-        parseHTML: (element) => element.className || null, 
+        parseHTML: (element) => element.className || null,
         renderHTML: (attributes) => {
-          if (attributes.class) {
-            return { class: attributes.class };  
-          }
-          return {};  
+          return attributes.class ? { class: attributes.class } : {};
         },
       },
     };
+  },
+
+  // Ensure that the `id` is preserved when parsing HTML
+  parseHTML() {
+    return [
+      {
+        tag: 'h1, h2, h3, h4, h5, h6',
+        getAttrs: (element) => {
+          return {
+            id: element.id || uuidv4(),
+          };
+        },
+      },
+    ];
+  },
+
+  // Optional: Add a method to ensure ID is added during node creation
+  addNodeAttributes(node:any) {
+    if (!node.attrs.id) {
+      node.attrs.id = uuidv4();
+    }
+    return node;
   },
 });
