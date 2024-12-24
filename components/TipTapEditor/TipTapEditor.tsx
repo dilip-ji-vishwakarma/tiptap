@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useEditor, EditorContent, mergeAttributes } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Underline from "@tiptap/extension-underline";
@@ -41,6 +41,7 @@ import { DrawBox } from "@/lib/DrawBox";
 import Lineeditor from "@/lib/Lineeditor";
 import BGColorExtesnion from "@/lib/BGColorExtesnion";
 import { extractHeadings } from "@/lib/toc";
+import { useUser } from "../context/UserContext";
 
 interface TipTapEditorProps {
   editorString: any;
@@ -51,6 +52,14 @@ interface TipTapEditorProps {
 const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => {
   const [content, setContent] = useState<string>(editorString);
   const [toc, setToc] = useState<{ text: string; level: number; id: string }[]>([]);
+  const [isAdmin, setIsAdmin] = useState(false);
+  const { user, loading } = useUser();
+
+  useEffect(() => {
+    if (user && user.role === "admin") {
+      setIsAdmin(true);
+    }
+  }, [user]);
 
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
@@ -147,6 +156,7 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
         onFocus();
       }
     },
+    editable: isAdmin,
   });
 
 

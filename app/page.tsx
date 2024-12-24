@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import axios from 'axios';
 import { Eye, EyeOff } from 'lucide-react'; 
+import { useUser } from '@/components/context/UserContext';
 
 const Page = () => {
   const router = useRouter();
@@ -11,8 +12,10 @@ const Page = () => {
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  
+  const { user, loading } = useUser();
   const [showPassword, setShowPassword] = useState(false);
+
+  const role = user?.role
 
   useEffect(() => {
     const checkExistingToken = () => {
@@ -59,6 +62,13 @@ const Page = () => {
       if (typeof window !== 'undefined') {
         localStorage.setItem('token', token);
         setIsAuthenticated(true);
+        // if (role === 'user') {
+        //   router.push('/user-dashboard');
+        // } else if (role === 'admin') {
+        //   router.push('/dashboard');
+        // } else {
+        //   throw new Error('Unauthorized role');
+        // }
       }
     } catch (err: any) {
       let errorMessage = 'An unexpected error occurred';

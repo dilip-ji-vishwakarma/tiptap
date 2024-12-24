@@ -20,7 +20,7 @@ export async function GET(request: Request) {
 
     // Fetch user details from the database
     const [rows]: any = await connection.query(
-      'SELECT id, fullname, email FROM np_users WHERE id = ?',
+      'SELECT id, fullname, email, role FROM np_users WHERE id = ?',
       [userId]
     );
 
