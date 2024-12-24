@@ -43,6 +43,7 @@ import BGColorExtesnion from "@/lib/BGColorExtesnion";
 import { extractHeadings } from "@/lib/toc";
 import { useUser } from "../context/UserContext";
 
+
 interface TipTapEditorProps {
   editorString: any;
   onFocus: () => void;
@@ -52,14 +53,8 @@ interface TipTapEditorProps {
 const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => {
   const [content, setContent] = useState<string>(editorString);
   const [toc, setToc] = useState<{ text: string; level: number; id: string }[]>([]);
-  const [isAdmin, setIsAdmin] = useState(false);
-  const { user, loading } = useUser();
+  const { user } = useUser();
 
-  useEffect(() => {
-    if (user && user.role === "admin") {
-      setIsAdmin(true);
-    }
-  }, [user]);
 
   const { setCurrentEditor } = useEditorContext();
   const searchParams = useSearchParams();
@@ -137,6 +132,8 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       CustomHeading,
     ],
     content: editorString,
+    editable: user?.role === "admin" ? true : false,
+    autofocus: true,
     onCreate: ({ editor }) => {
       const jsonContent = editor.getJSON();
       const headings = extractHeadings(jsonContent);
@@ -151,12 +148,11 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
       setContent(JSON.stringify(newContent));
       saveEditorContent(newContent);
     },
-    onFocus: () => {
-      if (onFocus) {
-        onFocus();
-      }
-    },
-    editable: isAdmin,
+    // onFocus: () => {
+    //   if (onFocus) {
+    //     onFocus();
+    //   }
+    // },
   });
 
 
@@ -164,26 +160,34 @@ const TipTapEditor = ({ editorString, onFocus, courses }: TipTapEditorProps) => 
   const saveEditorContent = useCallback(
     debounce(async (updatedContent: any) => {
       const token = localStorage.getItem('token');
+      if (!token) {
+        console.error('No token found in localStorage');
+        return;
+      }
+  
       try {
-        const response = await fetch(`/api/petchcourses?category_id=${categoryId}&id=${id}`, {
+        const response = await fetch(`/api/petchcourses?category_id=${categoryId || ''}&id=${id || ''}`, {
           method: "PATCH",
           headers: {
             "Content-Type": "application/json",
-            'Authorization': `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({ editor_string: updatedContent }),
         });
-
+  
         if (!response.ok) {
-          throw new Error("Failed to save content");
+          const error = await response.json();
+          console.error("Failed to save content:", error.message || "Unknown error");
+        } else {
+          console.log("Content saved successfully");
         }
-        console.log("Content saved successfully");
       } catch (error) {
         console.error("Error saving content:", error);
       }
     }, 1000),
-    []
+    [categoryId, id] // Dependencies for debounce
   );
+  
 
 
 

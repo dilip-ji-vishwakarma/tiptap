@@ -13,6 +13,7 @@ import { CourseCreation } from '../CourseCreation';
 import { RenameCategory } from '../RenameCategory';
 import { DeleteCategory } from '../DeleteCategory';
 import { Commet } from 'react-loading-indicators';
+import { useUser } from '@/components/context/UserContext';
 
 type RenameItem = {
   id: number;
@@ -28,7 +29,7 @@ export const CourseCard = () => {
   const [isRenameOpen, setIsRenameOpen] = useState(false);
   const [deleteItem, setDeleteItem] = useState<{ id: number } | null>(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
-
+const { user } = useUser();
   useEffect(() => {
     const fetchUserData = async () => {
       const token = localStorage.getItem('token');
@@ -111,9 +112,11 @@ export const CourseCard = () => {
   return (
     <>
       <DashboardHeader data={originalData} onSearch={handleSearch} />
+      {user?.role === "admin" ? (
       <div>
         <CourseCreation />
       </div>
+      ): null}
       <div className="container mx-auto space-y-5 mt-5">
         <Heading className="md:text-[17px] md:leading-6">
           Recent documents
@@ -146,6 +149,7 @@ export const CourseCard = () => {
                         <span>{formatDate(item.updated_at)}</span>
                       </div>
                     </div>
+                    {user?.role === "admin" ? (
                     <span>
                       <DropdownMenu>
                         <DropdownMenuTrigger className="focus:outline-none">
@@ -176,6 +180,7 @@ export const CourseCard = () => {
                         </DropdownMenuContent>
                       </DropdownMenu>
                     </span>
+                    ): null}
                   </div>
                 </div>
               </div>

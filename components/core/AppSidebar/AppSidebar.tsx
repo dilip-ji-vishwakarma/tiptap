@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { RenameTab } from "./RenameTab";
 import { DeleteTab } from "./DeleteTab";
+import { useUser } from "@/components/context/UserContext";
 
 
 type CourseItem = {
@@ -46,7 +47,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   const [deleteItem, setDeleteItem] = useState<{ id: number } | null>(null);
   const [isDeleteOpen, setIsDeleteOpen] = useState(false);
   const [editorContent, setEditorContent] = useState<string>(''); // Initialize with an empty string or a default value
-
+const { user } = useUser();
   const openDeleteDialog = (id: number) => {
     setDeleteItem({ id });
     setIsDeleteOpen(true);
@@ -115,15 +116,17 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
   };
 
   return (
-    <Sidebar className="border-none mt-[122px]">
+    <Sidebar className={`border-none   ${user?.role === "admin" ? "mt-[122px]" : "mt-[50px]"}`}>
       <SidebarContent className="bg-[#F9FBFD] ">
-        <SidebarTrigger className="fixed z-[1] left-[25px] top-[145px]" />
+        <SidebarTrigger className={`fixed z-[1] left-[25px]  ${user?.role === "admin" ? "top-[145px]" : "top-[100px]"}`} />
         <SidebarGroup className="relative">
           <div className="mt-[100px] ">
+            {user?.role === "admin" ? (
             <SidebarGroupLabel className="flex items-center justify-between text-[#444746] text-md font-light leading-5">
               <span>Document Tabs</span>
               <MenuMaker />
             </SidebarGroupLabel>
+            ): null}
             {courses.length > 0 ? (
               <SidebarGroupContent className="mt-3 pb-[150px]">
                 <SidebarMenu className="px-1 min-h-svh overflow-y-auto">
@@ -155,6 +158,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                                   <span>{item.label}</span>
                                 </Link>
                               </span>
+                              {user?.role === "admin" ? (
                               <DropdownMenu>
                                 <DropdownMenuTrigger className="focus:outline-none">
                                   <EllipsisVertical className="w-4 h-4" />
@@ -180,6 +184,7 @@ export const AppSidebar = ({ data }: AppSidebarProps) => {
                                   </DropdownMenuItem>
                                 </DropdownMenuContent>
                               </DropdownMenu>
+                              ) : null}
                             </div>
                           </div>
                         </SidebarMenuButton>

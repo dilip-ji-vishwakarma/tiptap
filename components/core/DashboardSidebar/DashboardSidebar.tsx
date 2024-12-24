@@ -8,6 +8,7 @@ import { Header } from "@/components/Header";
 import { ChevronDown, ChevronUp, TableOfContents } from 'lucide-react';
 import { MenuTab } from "../MenuTab";
 import { Commet } from "react-loading-indicators";
+import { useUser } from "@/components/context/UserContext";
 
 const templates: any = {
   "tiptap-editor": React.lazy(() => import("@/components/TipTapEditor/TipTapEditor")),
@@ -25,6 +26,7 @@ export const DashboardSidebar = () => {
   const [toolbar, setToolbar] = useState(false);
   const [menutool, setMenuTool] = useState(false);
   const [toc, setToc] = useState(false);
+  const { user } = useUser();
 
   useEffect(() => {
     const fetchStepsData = async () => {
@@ -103,13 +105,15 @@ export const DashboardSidebar = () => {
       <div className="relative">
         <div className="space-y-3 fixed top-0 z-[1] bg-white w-full">
           <Header />
+          {user?.role === "admin" ? (
           <div className="lg:block hidden">
             <Toolbar />
           </div>
+          ): null}
           <div className="border-b  border-[#c7c7c7]"></div>
         </div>
       </div>
-      <div className="flex md:gap-5 md:px-5 px-3 fixed md:top-[122px] top-[70px] h-[100vh] overflow-scroll w-full">
+      <div className={`flex md:gap-5 md:px-5 px-3 fixed ${user?.role === "admin" ? "md:top-[122px] top-[70px]" : "md:top-[78px]"}  h-[100vh] overflow-scroll w-full`}>
         <div className="md:max-w-[20%] w-full lg:block hidden">
           <SidebarProvider><AppSidebar data={courses} /></SidebarProvider>
         </div>

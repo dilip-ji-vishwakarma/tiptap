@@ -32,7 +32,7 @@ const Page = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      router.push("/dashboard");
+      window.location.href = '/dashboard';
     }
   }, [isAuthenticated, router]);
 
